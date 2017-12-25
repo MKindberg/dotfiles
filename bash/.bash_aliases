@@ -9,6 +9,8 @@ alias la='ls -A'                              # all but . and ..
 alias df='df -h'
 alias du='du -h'
 
+alias cd..='cd ..'
+
 alias grep='grep --color'                     # show differences in colour
 
 # git related
