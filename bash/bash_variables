@@ -5,29 +5,42 @@ export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 export HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
 export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
 
-# colors
-export black="\[\033[0;38;5;0m\]"
-export red="\[\033[0;38;5;1m\]"
-export orange="\[\033[0;38;5;130m\]"
-export green="\[\033[0;38;5;2m\]"
-export yellow="\[\033[0;38;5;3m\]"
-export blue="\[\033[0;38;5;4m\]"
-export bblue="\[\033[0;38;5;12m\]"
-export magenta="\[\033[0;38;5;55m\]"
-export cyan="\[\033[0;38;5;6m\]"
-export white="\[\033[0;38;5;7m\]"
-export coldblue="\[\033[0;38;5;33m\]"
-export smoothblue="\[\033[0;38;5;111m\]"
-export iceblue="\[\033[0;38;5;45m\]"
-export turqoise="\[\033[0;38;5;50m\]"
-export smoothgreen="\[\033[0;38;5;42m\]"
+__prompt_command() {
+
+  local EXIT="$?"
+
+  # colors
+  black="\[\033[0;38;5;0m\]"
+  red="\[\033[0;38;5;1m\]"
+  orange="\[\033[0;38;5;130m\]"
+  green="\[\033[0;38;5;2m\]"
+  yellow="\[\033[0;38;5;3m\]"
+  blue="\[\033[0;38;5;4m\]"
+  bblue="\[\033[0;38;5;12m\]"
+  magenta="\[\033[0;38;5;55m\]"
+  cyan="\[\033[0;38;5;6m\]"
+  white="\[\033[0;38;5;7m\]"
+  coldblue="\[\033[0;38;5;33m\]"
+  smoothblue="\[\033[0;38;5;111m\]"
+  iceblue="\[\033[0;38;5;45m\]"
+  turqoise="\[\033[0;38;5;50m\]"
+  smoothgreen="\[\033[0;38;5;42m\]"
+
+  if [ $EXIT != 0 ]; then
+    status="[Error: "$EXIT"]"
+  else
+    status=""
+  fi
 
 # data
-export user="\u@\h"
-export path="\w"
-export processes="ps: `pscount`"
-export status="\$?"
-export time="\$(date +%k:%M)"
-export end="\$"
+  user="\u@\h"
+  path="\w"
+  processes="ps: `PS1_pscount`"
+  time="\$(date +%k:%M)"
+  end="\$"
 
-export PS1="$green$user $iceblue$path $magenta[ $status ]\n$yellow$time $white$end "
+  PS1="$green$user $iceblue$path $magenta $status \n$yellow$time $white$end "
+
+}
+
+PROMPT_COMMAND=__prompt_command

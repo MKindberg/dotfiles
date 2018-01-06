@@ -12,6 +12,6 @@ function back {
   cd $back
 }
 
-function pscount {
+function PS1_pscount {
   ps -a | wc -l
 }
