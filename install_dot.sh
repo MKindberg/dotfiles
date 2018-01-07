@@ -1,5 +1,7 @@
 #!/bin/bash
 DOT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+echo "Moving folder to home folder"
+mv $DOT_DIR ~
 
 function backup {
   backup_folder="$HOME/dotfiles_backup"
@@ -34,8 +36,8 @@ function install {
     echo "Invalid first argument, must be \'bash\', \'vim\' or \'all\'"
   fi
 }
-
+echo "Backing up old scipts"
 backup
-
+echo "Installing new scripts"
 install $1 $2
 
