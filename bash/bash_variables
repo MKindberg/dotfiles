@@ -37,7 +37,7 @@ __prompt_command() {
   path="\w"
   processes="ps: `PS1_pscount`"
   time="\$(date +%k:%M)"
-  end="\$"
+  end="∫"
 
   PS1="$green$user $iceblue$path $magenta $status \n$yellow$time $white$end "
 
