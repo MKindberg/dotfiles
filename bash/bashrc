@@ -11,6 +11,9 @@ bind '"\t": menu-complete'
 bind '"\e[Z": menu-complete-backward'
 set show-all-if-ambiguous on
 
+# Possibility to enter vi mode
+set -o vi
+
 # History Options
 #
 # Don't put duplicate lines in the history.
