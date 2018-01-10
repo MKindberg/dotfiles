@@ -1,2 +1,4 @@
 source ~/dotfiles/vim/keybind.vim
 source ~/dotfiles/vim/miscset.vim
+source ~/dotfiles/vim/saveactions.vim
+source ~/dotfiles/vim/autocorrect.vim

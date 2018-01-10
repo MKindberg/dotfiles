@@ -11,18 +11,18 @@ __prompt_command() {
 
   # colors
   black="\[\033[0;38;5;0m\]"
-  red="\[\033[0;38;5;1m\]"
+  red="\[\033[01;31m\]"
   orange="\[\033[0;38;5;130m\]"
-  green="\[\033[0;38;5;2m\]"
-  yellow="\[\033[0;38;5;3m\]"
+  green="\[\033[01;32;1m\]"
+  yellow="\[\033[01;33m\]"
   blue="\[\033[0;38;5;4m\]"
   bblue="\[\033[0;38;5;12m\]"
   magenta="\[\033[0;38;5;55m\]"
   cyan="\[\033[0;38;5;6m\]"
-  white="\[\033[0;38;5;7m\]"
+  white="\[\033[0;0m\]"
   coldblue="\[\033[0;38;5;33m\]"
   smoothblue="\[\033[0;38;5;111m\]"
-  iceblue="\[\033[0;38;5;45m\]"
+  iceblue="\[\033[01;34m\]"
   turqoise="\[\033[0;38;5;50m\]"
   smoothgreen="\[\033[0;38;5;42m\]"
 
@@ -37,9 +37,10 @@ __prompt_command() {
   path="\w"
   processes="ps: `PS1_pscount`"
   time="\$(date +%k:%M)"
-  end="∫"
+  gitbranch="\$(__git_ps1)"
+  end="$(tput bold)∫$(tput sgr0)"
 
-  PS1="$green$user $iceblue$path $magenta $status \n$yellow$time $white$end "
+  export PS1="$green$user $iceblue$path $red$gitbranch $magenta$status \n$yellow$time $white$end "
 
 }
 
