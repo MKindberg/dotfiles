@@ -1,4 +1,5 @@
 set cursorline " set line highlight
+hi CursorLine cterm=NONE ctermbg=black ctermfg=white
 
 set showmatch " show matching brackets
 
@@ -21,8 +22,6 @@ set splitright
 set splitbelow
 
 set showmode
-
-" Key mappings
 
 " Statusline
 set laststatus=2
