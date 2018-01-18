@@ -36,11 +36,11 @@ __prompt_command() {
   user="\u@\h"
   path="\w"
   processes="ps: `PS1_pscount`"
-  time="\$(date +%k:%M)"
+  time="\D{%H:%M}"
   gitbranch="\$(__git_ps1)"
-  end="$(tput bold)∫$(tput sgr0)"
+  end="\$"
 
-  export PS1="$green$user $iceblue$path $red$gitbranch $magenta$status \n$yellow$time $white$end "
+  export PS1="\n$green$user $iceblue$path $red$gitbranch $magenta$status \n$yellow$time $white$end "
 
 }
 
