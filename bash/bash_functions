@@ -1,11 +1,12 @@
 # Bash functions
 function up {
   export back=$PWD
-
-  for i in {1..$1}
+  newDir=$PWD
+  for (( c=0; c<$1; c++ ))
   do
-    cd ..
+    newDir=$newDir/..
   done
+  cd $newDir
 }
 
 function back {
