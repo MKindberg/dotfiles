@@ -22,8 +22,6 @@ set splitbelow
 
 set showmode
 
-" Key mappings
-
 " Statusline
 set laststatus=2
 set statusline=%<%F\ %h%m%r%y%=%-14.(%l,%c%V%)\ %P
@@ -33,4 +31,6 @@ set list
 
 set noerrorbells
 
+" Colorscheme
 colorscheme desert
+hi CursorLine cterm=bold ctermbg=black
