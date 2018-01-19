@@ -22,7 +22,7 @@ __prompt_command() {
   white="\[\033[0;0m\]"
   coldblue="\[\033[0;38;5;33m\]"
   smoothblue="\[\033[0;38;5;111m\]"
-  iceblue="\[\033[01;34m\]"
+  iceblue="\[\033[01;36m\]"
   turqoise="\[\033[0;38;5;50m\]"
   smoothgreen="\[\033[0;38;5;42m\]"
 
