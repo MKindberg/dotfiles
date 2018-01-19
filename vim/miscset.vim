@@ -1,5 +1,4 @@
 set cursorline " set line highlight
-hi CursorLine cterm=NONE ctermbg=black ctermfg=white
 
 set showmatch " show matching brackets
 
@@ -32,4 +31,6 @@ set list
 
 set noerrorbells
 
+" Colorscheme
 colorscheme desert
+hi CursorLine cterm=bold ctermbg=black
