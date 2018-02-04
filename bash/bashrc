@@ -8,14 +8,6 @@ source ~/dotfiles/bash/bash_git
 # for example, cd /vr/lgo/apaache would find /var/log/apache
 shopt -s cdspell
 
-# Completion options
-bind TAB:menu-complete
-bind '"\e[Z": menu-complete-backward'
-bind "set show-all-if-ambiguous on"
-
-# Possibility to enter vi mode
-set -o vi
-
 # History Options
 #
 # Don't put duplicate lines in the history.
@@ -38,3 +30,8 @@ fi
 if [ -f "${BASH_DIR}/bash_aliases" ]; then
   source "${BASH_DIR}/bash_aliases"
 fi
+
+# Completion options
+bind TAB:menu-complete
+bind '"\e[Z": menu-complete-backward'
+bind "set show-all-if-ambiguous on"
