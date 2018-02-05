@@ -16,6 +16,11 @@ shopt -s cdspell
 # HISTIGNORE is a colon-delimited list of patterns which should be excluded.
 # The '&' is a special pattern which suppresses duplicate entries.
 
+# Aliases
+if [ -f "${BASH_DIR}/bash_aliases" ]; then
+  source "${BASH_DIR}/bash_aliases"
+fi
+
 # Functions
 if [ -f "${BASH_DIR}/bash_functions" ]; then
   source "${BASH_DIR}/bash_functions"
@@ -24,11 +29,6 @@ fi
 # Variables
 if [ -f "${BASH_DIR}/bash_variables" ]; then
   source "${BASH_DIR}/bash_variables"
-fi
-
-# Aliases
-if [ -f "${BASH_DIR}/bash_aliases" ]; then
-  source "${BASH_DIR}/bash_aliases"
 fi
 
 # Completion options
