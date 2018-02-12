@@ -1,2 +1,6 @@
 PROMPT='%B%F{green}%n@%m %F{cyan}%~/ 
-%F{yellow}%D{%I:%M}%}%b%k%f $ '
+%F{yellow}%D{%H:%M}%}%b%k%f $ '
+
+source variables.sh
+source aliases.sh
+source functions.sh
