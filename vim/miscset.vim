@@ -23,8 +23,8 @@ set splitbelow
 set showmode
 
 " Statusline
-set laststatus=2
-set statusline=%<%F\ %h%m%r%y%=%-14.(%l,%c%V%)\ %P
+"set laststatus=2
+"set statusline=%<%F\ %h%m%r%y%=%-14.(%l,%c%V%)\ %P
 
 set listchars=tab:>>,trail:.,
 set list
