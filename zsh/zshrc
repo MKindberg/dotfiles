@@ -1,0 +1,2 @@
+PROMPT='%B%F{green}%n@%m %F{cyan}%~/ 
+%F{yellow}%D{%I:%M}%}%b%k%f $ '
