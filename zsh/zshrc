@@ -1,6 +1,29 @@
+
+source ~/dotfiles/zsh/variables.sh
+source ~/dotfiles/zsh/aliases.sh
+source ~/dotfiles/zsh/functions.sh
+
+setopt hist_ignore_all_dups
+
+setopt autocd
+
+export ZSH=/home/marcu/.oh-my-zsh
+
+# ZSH_THEME="robbyrussell"
+CASE_SENSITIVE="false" # Case insensitive completion
+
+DISABLE_AUTO_UPDATE="true" # No autoupdate off oh-my-zsh
+ENABLE_CORRECTION="true" # Command autocorrection
+# DISABLE_UNTRACKED_FILES_DIRTY="true" #To make git addon faster for large repos
+
+plugins=(
+  git
+)
+
+source $ZSH/oh-my-zsh.sh
+
+# export LANG=en_US.UTF-8
+export EDITOR='vim'
+
 PROMPT='%B%F{green}%n@%m %F{cyan}%~/ 
 %F{yellow}%D{%H:%M}%}%b%k%f $ '
-
-source variables.sh
-source aliases.sh
-source functions.sh
