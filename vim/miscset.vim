@@ -32,5 +32,5 @@ set list
 set noerrorbells
 
 " Colorscheme
-colorscheme desert
+colorscheme peachpuff
 hi CursorLine cterm=bold ctermbg=black
