@@ -7,7 +7,7 @@ setopt hist_ignore_all_dups
 
 setopt autocd
 
-export ZSH=/home/marcu/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 
 # ZSH_THEME="robbyrussell"
 CASE_SENSITIVE="false" # Case insensitive completion
@@ -25,5 +25,12 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 export EDITOR='vim'
 
-PROMPT='%B%F{green}%n@%m %F{cyan}%~/ 
+function git_branch() {
+git rev-parse --abbrev-ref HEAD > /dev/null 2>&1
+if [[ $? == 0 ]] ; then
+  echo -n "(`git rev-parse --abbrev-ref HEAD`)"
+fi
+}
+
+PROMPT='%B%F{green}%n@%m %F{cyan}%~/ %F{red}`git_branch`
 %F{yellow}%D{%H:%M}%}%b%k%f $ '
