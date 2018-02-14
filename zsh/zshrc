@@ -17,7 +17,7 @@ ENABLE_CORRECTION="true" # Command autocorrection
 # DISABLE_UNTRACKED_FILES_DIRTY="true" #To make git addon faster for large repos
 
 plugins=(
-
+  zsh-autosuggestionsa #git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
