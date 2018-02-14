@@ -53,6 +53,7 @@ function last_status() {
 
 function preexec() {
   timer=${timer:-$SECONDS}
+  echo ""
 }
 
 function precmd() {
@@ -69,5 +70,6 @@ function precmd() {
 
 local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
 local ret_num="%(?: :%F{red} [%?] )"
-PROMPT='%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}`git_branch`${timer_show}
+PROMPT='
+%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}`git_branch`${timer_show}
 %F{yellow}%D{%H:%M}%}%b${ret_num}${ret_status}%b%k%f '
