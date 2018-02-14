@@ -17,7 +17,7 @@ ENABLE_CORRECTION="true" # Command autocorrection
 # DISABLE_UNTRACKED_FILES_DIRTY="true" #To make git addon faster for large repos
 
 plugins=(
-  git
+
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -25,10 +25,12 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 export EDITOR='vim'
 
+zstyle ':completion:*' special-dirs true
+
 function git_branch() {
-git rev-parse --abbrev-ref HEAD > /dev/null 2>&1
-if [[ $? == 0 ]] ; then
-  echo -n "(`git rev-parse --abbrev-ref HEAD`)"
+local branch=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
+if [[ -n $branch ]] ; then
+  echo -n "($branch)"
 fi
 }
 
