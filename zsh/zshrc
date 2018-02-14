@@ -58,7 +58,7 @@ function preexec() {
 function precmd() {
   if [ $timer ]; then
     local timer_time=$(($SECONDS - $timer))
-    if [[ $timer_time > 10 ]] ; then
+    if (( $timer_time > 10 )) ; then
       timer_show=" %b%F{yellow}(${timer_time}s)%B"
     else
       timer_show=""
