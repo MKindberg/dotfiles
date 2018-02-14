@@ -6,6 +6,7 @@ source ~/dotfiles/zsh/functions.sh
 setopt hist_ignore_all_dups
 
 setopt autocd
+setopt menu_complete
 
 export ZSH=~/.oh-my-zsh
 
@@ -14,10 +15,12 @@ CASE_SENSITIVE="true" # Case insensitive completion
 
 DISABLE_AUTO_UPDATE="true" # No autoupdate off oh-my-zsh
 ENABLE_CORRECTION="true" # Command autocorrection
+
+
 # DISABLE_UNTRACKED_FILES_DIRTY="true" #To make git addon faster for large repos
 
 plugins=(
-  zsh-autosuggestionsa #git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+  zsh-autosuggestions #git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
