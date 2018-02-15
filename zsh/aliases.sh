@@ -30,3 +30,8 @@ alias gti='git'
 alias fn='find -name'
 
 alias cim='vim'
+
+alias -s c=vim
+alias -s h=vim
+alias -s cpp=vim
+alias -s sh=vim
