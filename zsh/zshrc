@@ -1,20 +1,21 @@
+#! /bin/zsh
 source ~/dotfiles/zsh/variables.sh
 source ~/dotfiles/zsh/aliases.sh
 source ~/dotfiles/zsh/functions.sh
+source ~/dotfiles/zsh/prompt.sh
 
 setopt hist_ignore_all_dups
 
 setopt autocd
 setopt menu_complete
 
-export ZSH=~/.oh-my-zsh
 
 # ZSH_THEME="robbyrussell"
 CASE_SENSITIVE="true" # Case insensitive completion
 
-DISABLE_AUTO_UPDATE="true" # No autoupdate off oh-my-zsh
 ENABLE_CORRECTION="true" # Command autocorrection
 
+#autoload -U compaudit compinit
 
 # DISABLE_UNTRACKED_FILES_DIRTY="true" #To make git addon faster for large repos
 
@@ -22,56 +23,9 @@ plugins=(
   zsh-autosuggestions #git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
 )
 
-source $ZSH/oh-my-zsh.sh
 
 # export LANG=en_US.UTF-8
 export EDITOR='vim'
 
 zstyle ':completion:*' special-dirs true
 
-function git_branch() {
-  local branch=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
-  if [[ -n $branch ]] ; then
-    if [[ -n $(git status --porcelain) ]] ; then
-      echo -n "(*"
-    else
-      echo -n "("
-    fi
-    echo -n "$branch)"
-  fi
-}
-
-function last_status() {
-  export res=$?
-  echo -n $res
-  if [[ $res == 0 ]] then;
-    echo -n \$
-  else
-    echo -n ($res)\$
-  fi
-}
-
-function preexec() {
-  timer=${timer:-$SECONDS}
-  echo ""
-}
-
-function precmd() {
-  if [ $timer ]; then
-    local timer_time=$(($SECONDS - $timer))
-    _lineup=$'\e[1A'
-    _linedown=$'\e[1B'
-    if (( $timer_time > 5 )) ; then
-      RPROMPT="%{${_lineup}%} %b%F{yellow}(${timer_time}s)%B%{${_linedown}%}"
-    else
-      RPROMPT=""
-    fi
-    unset timer
-  fi
-}
-
-local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
-local ret_num="%(?: :%F{red} [%?] )"
-PROMPT='
-%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}`git_branch`${timer_show}
-%F{yellow}%D{%H:%M}%}%b${ret_num}${ret_status}%b%k%f '
