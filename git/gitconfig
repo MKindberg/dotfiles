@@ -1,0 +1,16 @@
+[alias]
+	cp = cherry-pick
+[user]
+	name = Marcus
+	email = marcus.kindberg@outlook.com
+[core]
+	editor = vim
+	pager = less
+[merge]
+	tool = vimdiff
+[color]
+	diff = auto
+[grep]
+	lineNumber = true
+[help]
+	autocorrect = 30
