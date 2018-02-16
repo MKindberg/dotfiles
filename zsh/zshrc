@@ -15,7 +15,8 @@ CASE_SENSITIVE="true" # Case insensitive completion
 
 ENABLE_CORRECTION="true" # Command autocorrection
 
-#autoload -U compaudit compinit
+autoload -U compinit
+compinit
 
 # DISABLE_UNTRACKED_FILES_DIRTY="true" #To make git addon faster for large repos
 
