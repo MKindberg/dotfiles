@@ -38,7 +38,7 @@ function precmd() {
     unset timer
   fi
 }
-local ret_status="%(?:%{%F{green}:%F{red})\$"
+local ret_status="%(?:%{%F{green}:%F{red}%})\$"
 local ret_num="%(?: :%F{red} [%?] )"
 PROMPT='
 %B%F{green}%n@%m %F{cyan}%~/ %F{magenta}$(git_branch) %b%F{yellow}${timer_show}%B
