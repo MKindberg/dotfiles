@@ -43,6 +43,6 @@ function precmd() {
 local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
 local ret_num="%(?: :%F{red} [%?] )"
 PROMPT='
-%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}`git_branch`${timer_show}
+%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}`git_branch`
 %F{yellow}%D{%H:%M}%}%b${ret_num}${ret_status}%b%k%f '
 
