@@ -20,10 +20,7 @@ compinit
 
 # DISABLE_UNTRACKED_FILES_DIRTY="true" #To make git addon faster for large repos
 
-plugins=(
-  zsh-autosuggestions #git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
-)
-
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # export LANG=en_US.UTF-8
 export EDITOR='vim'
