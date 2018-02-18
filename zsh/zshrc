@@ -26,4 +26,3 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 export EDITOR='vim'
 
 zstyle ':completion:*' special-dirs true
-

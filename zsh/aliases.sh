@@ -34,5 +34,4 @@ alias cim='vim'
 alias -s c=vim
 alias -s h=vim
 alias -s cpp=vim
-alias -s sh=vim
 alias -s html=firefox
