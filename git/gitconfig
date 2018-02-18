@@ -6,9 +6,6 @@
   di = diff
   unstash = stash pop
   unadd = git reset HEAD
-[user]
-	name = Marcus
-	email = marcus.kindberg@outlook.com
 [core]
 	editor = vim
 	pager = less
