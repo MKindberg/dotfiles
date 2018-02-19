@@ -1,15 +1,14 @@
 #! bin/zsh
-function git_branch() {
-  local branch=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
-  if [[ -n $branch ]] ; then
-    if [[ -n $(git status --porcelain) ]] ; then
-      echo -n "(*"
-    else
-      echo -n "("
-    fi
-    echo -n "$branch)"
-  fi
-}
+
+setopt PROMPT_SUBST
+
+GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWSTASHSTATE=1
+GIT_PS1_SHOWUNTRACKEDFILES=1
+GIT_PS1_SHOWUPSTREAM="auto"
+GIT_PS1_SHOWCOLORHINTS=1
+
+source ~/dotfiles/git/git-prompt.sh
 
 function last_status() {
   export res=$?
@@ -23,26 +22,23 @@ function last_status() {
 
 function preexec() {
   timer=${timer:-$SECONDS}
-  echo ""
 }
 
 function precmd() {
   if [ $timer ]; then
-    local timer_time=$(($SECONDS - $timer))
-    _lineup=$'\e[1A'
-    _linedown=$'\e[1B'
-    if (( $timer_time > 5 )) ; then
-      RPROMPT="%{${_lineup}%} %b%F{yellow}(${timer_time}s)%B%{${_linedown}%}"
+    if [[ $(($SECONDS - $timer)) > 10 ]]; then
+      timer_show=$(($SECONDS - $timer))s
     else
-      RPROMPT=""
+      timer_show=""
     fi
     unset timer
   fi
 }
-
-local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
+local ret_status="%(?:%{%F{green}:%F{red}%})\$"
 local ret_num="%(?: :%F{red} [%?] )"
+gitbranch=`__git_ps1`
+
 PROMPT='
-%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}`git_branch`
+%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}$gitbranch %b%F{yellow}${timer_show}%B
 %F{yellow}%D{%H:%M}%}%b${ret_num}${ret_status}%b%k%f '
 

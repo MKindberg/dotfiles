@@ -1,43 +1,87 @@
 #!/bin/bash
-DOT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-echo "Moving folder to home folder"
-mv $DOT_DIR ~
 
-function backup {
-  backup_folder="$HOME/dotfiles_backup"
+programs=( "vim" "bash" "zsh" "tmux" "git" )
+files=( "vimrc" "bashrc" "zshrc" "tmux.conf" "gitconfig" )
+CLEAN=0
+BACKUP=1
+ALL=0
+
+function backup () {
+  local filename=$1
+  local backup_folder=~/.dotfiles_backup
   mkdir -p $backup_folder
-  if [ $1 == "bash" ] || [ $1 == "all" ]; then
-    cp ~/.bashrc ${backup_folder}/
+  cp ~/.${filename} ${backup_folder}/
+}
+
+function getInstallCmd () {
+  local program=$1
+  case $program in
+    vim)
+      echo 'source ~/dotfiles/vim/vimrc'
+    ;;
+    bash)
+      echo 'source ~/dotfiles/bash/bashrc'
+    ;;
+    zsh)
+      echo 'source ~/dotfiles/zsh/zshrc'
+    ;;
+    tmux)
+      echo 'source-file ~/dotfiles/tmux/tmux.conf'
+    ;;
+    git)
+      echo "[include]\n\tpath=~/dotfiles/git/gitconfig"
+    ;;
+  esac
+}
+
+function getFilename () {
+  local program=$1
+  local j=0
+  for prog in "${programs[@]}"
+  do
+    if [[ $program == $prog ]]; then
+      echo $j
+      return
+    fi
+    j=$((j+1))
+  done
+}
+
+function installDotfile () {
+  local program=$1
+  local num=$(getFilename $program)
+  local filename="${files[${num}]}"
+  if [[ -z $filename ]]; then
+    echo "Invalid argument $program"
+    return
   fi
-  if [ $1 == "vim" ] || [ $1 == "all" ]; then
-    cp ~/.vimrc ${backup_folder}/
+  if [[ $BACKUP == 1 ]]; then
+    backup $filename
+  fi
+  if [[ $CLEAN == 1 ]]; then
+    echo -e "$(getInstallCmd $program)" > ~/.$filename
+  else
+    echo -e "$(getInstallCmd $program)\n\n$(cat ~/.$filename)" > ~/.$filename
   fi
 }
 
-function install {
-  if [ -n $2 -a $2 == "clean" ]; then
-    if [ $1 == "bash" ] || [ $1 == "all" ]; then
-      echo "" > ~/.bashrc
-    fi
-    if [ $1 == "vim" ] || [ $1 == "all" ]; then
-      echo "" > ~/.vimrc
-    fi
+for arg in $@
+do
+  if [[ $arg == "-c" || $arg == "--clean" ]]; then
+    CLEAN=1
+  elif [[ $arg == "-n" || $arg == "--no-backup" ]]; then
+    BACKUP=0
+  elif [[ $arg == "all" ]]; then
+    ALL=1
+  else
+    p+=$arg
   fi
+done
+if [[ $ALL == 1 ]]; then
+  p=("${programs[@]}")
+fi
 
-  if [ $1 == "bash" ] || [ $1 == "all" ]; then
-    echo -e "source ${DOT_DIR}/bash/bashrc\n$(cat $HOME/.bashrc)" > ~/.bashrc
-    installed=1
-  fi
-  if [ $1 == "vim" ] || [ $1 == "all" ]; then
-    echo -e "source ${DOT_DIR}/vim/vimrc\n$(cat $HOME/.vimrc)" > ~/.vimrc
-    installed=1
-  fi
-  if [ -z $installed ]; then
-    echo "Invalid first argument, must be \'bash\', \'vim\' or \'all\'"
-  fi
-}
-echo "Backing up old scipts"
-backup
-echo "Installing new scripts"
-install $1 $2
-
+for prog in "${p[@]}"
+do
+  installDotfile $prog
+done

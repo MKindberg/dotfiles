@@ -1,0 +1,22 @@
+[alias]
+	cp = cherry-pick
+  ci = commit
+  co = checkout
+  br = branch
+  di = diff
+  unstash = stash pop
+	unstage = reset HEAD --
+	unadd = reset HEAD --
+[core]
+	editor = vim
+	pager = less
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+[color]
+	diff = auto
+	status = auto
+[grep]
+	lineNumber = true
+[help]
+	autocorrect = 30
