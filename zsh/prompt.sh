@@ -36,9 +36,8 @@ function precmd() {
 }
 local ret_status="%(?:%{%F{green}:%F{red}%})\$"
 local ret_num="%(?: :%F{red} [%?] )"
-gitbranch=`__git_ps1`
 
 PROMPT='
-%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}$gitbranch %b%F{yellow}${timer_show}%B
+%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}`__git_ps1` %b%F{yellow}${timer_show}%B
 %F{yellow}%D{%H:%M}%}%b${ret_num}${ret_status}%b%k%f '
 
