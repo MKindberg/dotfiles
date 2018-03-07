@@ -26,6 +26,8 @@ alias gci='git commit'
 alias grm='git-rm'
 alias gmv='git-mv'
 alias gti='git'
+alias gco='git commit'
+alias gcom='git commit -m'
 
 alias fn='find -name'
 
