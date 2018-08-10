@@ -16,7 +16,7 @@ alias grep='grep --color'                     # show differences in colour
 # git related
 alias gs='git status'
 alias gb='git branch'
-alias go='git checkout'
+#alias go='git checkout'
 alias gl='git log'
 alias ga='git add'
 alias gaa='git add --all'
