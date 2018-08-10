@@ -8,6 +8,7 @@ setopt hist_ignore_all_dups
 
 setopt autocd
 setopt menu_complete
+bindkey '^[[Z' reverse-menu-complete
 
 
 # ZSH_THEME="robbyrussell"
@@ -26,4 +27,3 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 export EDITOR='vim'
 
 zstyle ':completion:*' special-dirs true
-

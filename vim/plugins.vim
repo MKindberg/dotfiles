@@ -5,13 +5,15 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
-Plug 'ctrlpvim/ctrlp.vim' " Makes it easier to open files
 Plug 'scrooloose/nerdtree' " A better file explorer
 Plug 'vim-airline/vim-airline' " A nicer status line
 "Plug 'vim-syntastic/syntastic' " Syntax checker
 "Plug 'Valloric/YouCompleteMe' " Always on autocomplete
-"Plug 'Raimondi/delimitMate' " Automatically close parantheses etc.
-Plug 'docunext/closetag.vim' " Automatically close html tags
+Plug 'Raimondi/delimitMate' " Automatically close parantheses etc.
+"Plug 'docunext/closetag.vim' " Automatically close html tags
 "Plug 'ervandew/supertab' " Autocomplete with tab
 Plug 'majutsushi/tagbar' " Show tags in current file
+Plug '~/.fzf' " Fuzzy finding
+Plug 'junegunn/fzf.vim' " Fuzzy finding
+Plug 'tpope/vim-fugitive'
 call plug#end()
