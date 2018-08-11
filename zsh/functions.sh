@@ -57,3 +57,10 @@ function go {
     git checkout "$@"
   fi
 }
+function ga {
+  if [ $# -eq 0 ]; then
+    git ls-files -m -o --exclude-standard | fzf -m --print0 | xargs -0 git add
+  else
+    git add "$@"
+  fi
+}
