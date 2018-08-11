@@ -27,3 +27,5 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 export EDITOR='vim'
 
 zstyle ':completion:*' special-dirs true
+
+source ~/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

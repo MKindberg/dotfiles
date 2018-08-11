@@ -50,7 +50,7 @@ goc() { #checkout commit
   git checkout $(echo "$commit" | sed "s/ .*//")
 }
 
-go() {
+function go {
   if [ $# -eq 0 ]; then
     fbr
   else
