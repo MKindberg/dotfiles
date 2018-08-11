@@ -3,7 +3,7 @@ source ~/dotfiles/zsh/variables.sh
 source ~/dotfiles/zsh/aliases.sh
 source ~/dotfiles/zsh/functions.sh
 source ~/dotfiles/zsh/prompt.sh
-source ~/dotfiles/zsh&keybind.sh
+source ~/dotfiles/zsh/keybind.sh
 
 setopt hist_ignore_all_dups
 
