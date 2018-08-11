@@ -16,6 +16,7 @@ map <F3> :TagbarToggle<CR>
 map <C-L> :set relativenumber! <CR>
 map <S-H> :set cursorline! <CR>
 map <C-P> :FZF <CR>
+map <C-_> :Lines <CR>
 
 map <Space>h :set cursorline! <CR>
 map <Space>rn :set relativenumber! <CR>
