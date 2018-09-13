@@ -59,7 +59,7 @@ function go {
 }
 function ga {
   if [ $# -eq 0 ]; then
-    git ls-files -m -o --exclude-standard | fzf -m --print0 | xargs -0 git add
+    git ls-files -m -o --exclude-standard -x "*" | fzf -m --print0 | xargs -0 git add
   else
     git add "$@"
   fi
