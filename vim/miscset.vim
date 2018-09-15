@@ -9,6 +9,10 @@ set wildmenu " show options when completing
 
 set scrolloff=3 " min lines above and below cursor
 
+set lazyredraw
+
+set spell
+
 " Tabs
 set shiftwidth=2
 set autoindent
