@@ -9,6 +9,10 @@ function! ToggleH()
   endif
 endfunction
 
+map :Q :q
+map :W :w
+map :WQ :wq
+
 set pastetoggle=<F12>
 map <F5> :e <CR>
 map <F2> :NERDTreeToggle <CR>
