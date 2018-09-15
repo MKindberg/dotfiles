@@ -13,7 +13,7 @@ map :Q :q
 map :W :w
 map :WQ :wq
 
-set pastetoggle=<F12>
+set pastetoggle=<F12n
 map <F5> :e <CR>
 map <F2> :NERDTreeToggle <CR>
 map <F3> :TagbarToggle<CR>
@@ -22,7 +22,8 @@ map <S-H> :set cursorline! <CR>
 map <C-P> :FZF <CR>
 map <C-_> :Lines <CR>
 
-map <Space>h :set cursorline! <CR>
+map <Space>h :hi CursorLine cterm=bold ctermbg=black <CR>
+            \:set cursorline! <CR>
 map <Space>rn :set relativenumber! <CR>
 map <Space>n :set number! <CR>
 map <Space>l :call ToggleH() <CR>
@@ -31,6 +32,8 @@ map <Space>s :if exists("g:syntax_on") <Bar>
             \ else <Bar>
             \ syntax enable <Bar>
             \ endif <CR>
+            \ :hi CursorLine cterm=bold ctermbg=black <CR>
+map <Space>t :terminal<CR>
 
 " Cscope bindings
 nmap <C-c>s :cs find s <C-R>=expand("<cword>")<CR><CR>
