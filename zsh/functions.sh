@@ -59,7 +59,8 @@ function go {
 }
 function ga {
   if [ $# -eq 0 ]; then
-    git ls-files -m -o --exclude-standard -x "*" | fzf -m --print0 | xargs -0 git add
+    local files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}')
+    [[ -n "$files" ]] && echo "$files" | xargs -I{} git add {} && git status --short --ignored=no --untracked=no
   else
     git add "$@"
   fi
