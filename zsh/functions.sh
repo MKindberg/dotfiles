@@ -46,7 +46,7 @@ gor() { #checkout remote brach or tag
 goc() { #checkout commit
   local commits commit
   commits=$(git log --pretty=oneline --abbrev-commit --reverse) &&
-  commit=$(echo "$commits" | fzf --tac +s +m -e) &&
+  commit=$(echo "$commits" | fzf --tac +s +m -e --preview 'git show {+1}') &&
   git checkout $(echo "$commit" | sed "s/ .*//")
 }
 
@@ -57,6 +57,12 @@ function go {
     git checkout "$@"
   fi
 }
+function gof {
+  local file=$1
+  local entries=$(git log --pretty=oneline --abbrev-commit)
+  local cmd='git diff --color=always {+1} '"$file"
+  echo $entries | fzf --preview $cmd | git checkout
+}
 function ga {
   if [ $# -eq 0 ]; then
     local files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}')
@@ -64,4 +70,20 @@ function ga {
   else
     git add "$@"
   fi
+}
+
+function gd {
+  local files=""
+  if [ $# -eq 0 ]; then
+    files=$(git ls-files -m -o --exclude-standard -x "*")
+  else
+    files=$(git log --name-only --pretty=oneline --full-index $1..HEAD | grep -vE '^[0-9a-f]{40} ' | sort | uniq)
+  fi
+  local cmd="git diff --color=always $@ {} "
+  echo "$files" | fzf -0 --preview $cmd --bind="enter:execute($cmd)"
+}
+
+function glo {
+  local entries=$(git log --pretty=oneline --abbrev-commit)
+  echo $entries | fzf --preview 'git show --color=always {+1}'
 }
