@@ -23,7 +23,6 @@ compinit
 
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-source ~/dotfiles/forgit/forgit.plugin.zsh
 # export LANG=en_US.UTF-8
 export EDITOR='vim'
 
