@@ -58,14 +58,16 @@ function go {
   fi
 }
 function gof {
-  local file=$1
-  local entries=$(git log --pretty=oneline --abbrev-commit)
-  local cmd='git diff --color=always {+1} '"$file"
+  local files entries cmd
+  file=$1
+  entries=$(git log --pretty=oneline --abbrev-commit)
+  cmd='git diff --color=always {+1} '"$file"
   echo $entries | fzf --preview $cmd | git checkout
 }
 function ga {
+  local files
   if [ $# -eq 0 ]; then
-    local files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}')
+    files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}')
     [[ -n "$files" ]] && echo "$files" | xargs -I{} git add {} && git status --short --ignored=no --untracked=no
   else
     git add "$@"
@@ -73,17 +75,18 @@ function ga {
 }
 
 function gd {
-  local files=""
+  local files cmd
   if [ $# -eq 0 ]; then
     files=$(git ls-files -m -o --exclude-standard -x "*")
   else
     files=$(git log --name-only --pretty=oneline --full-index $1..HEAD | grep -vE '^[0-9a-f]{40} ' | sort | uniq)
   fi
-  local cmd="git diff --color=always $@ {} "
+  cmd="git diff --color=always $@ {} "
   echo "$files" | fzf -0 --preview $cmd --bind="enter:execute($cmd)"
 }
 
 function glo {
-  local entries=$(git log --pretty=oneline --abbrev-commit)
+  local entries
+  entries=$(git log --pretty=oneline --abbrev-commit)
   echo $entries | fzf --preview 'git show --color=always {+1}'
 }
