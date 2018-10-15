@@ -6,7 +6,12 @@ export HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
 export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
 export LESS=R
 
-export TERM=xterm-256color
+if [[ -n $TMUX ]]; then
+  export TERM=screen-256color
+else
+  export TERM=xterm-256color
+fi
+
 
 # ls --color
 ls_dir="di=1;95:" # Directories are bold and pink 
