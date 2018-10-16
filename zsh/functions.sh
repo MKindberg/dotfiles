@@ -46,7 +46,11 @@ gor() { #checkout remote brach or tag
 goc() { #checkout commit
   local commits commit
   commits=$(git log --pretty=oneline --abbrev-commit --reverse) &&
-  commit=$(echo "$commits" | fzf --tac +s +m -e --preview 'git show {+1}') &&
+  if [[ $FZF_PREVIEW == 0 ]]; then
+    commit=$(echo "$commits" | fzf --tac +s +m -e ) &&
+  else
+    commit=$(echo "$commits" | fzf --tac +s +m -e --preview 'git show {+1}') &&
+  fi
   git checkout $(echo "$commit" | sed "s/ .*//")
 }
 
@@ -61,32 +65,49 @@ function gof {
   local files entries cmd
   file=$1
   entries=$(git log --pretty=oneline --abbrev-commit)
-  cmd='git diff --color=always {+1} '"$file"
-  echo $entries | fzf --preview $cmd | git checkout
+  if [[ $FZF_PREVIEW == 0 ]]; then
+    echo $entries | fzf | git checkout
+  else
+    cmd='git diff --color=always {+1} '"$file"
+    echo $entries | fzf --preview $cmd | git checkout
+  fi
 }
 function ga {
   local files
   if [ $# -eq 0 ]; then
-    files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}')
-    [[ -n "$files" ]] && echo "$files" | xargs -I{} git add {} && git status --short --ignored=no --untracked=no
+    if [[ $FZF_PREVIEW == 0 ]]; then
+      files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 )
+    else
+      files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}')
+    fi
+    [[ -n "$files" ]] && echo "$files" | xargs -I{} git add {} && git status --short --untracked=no
   else
     git add "$@"
   fi
 }
 
 function gd {
-  local files cmd
-  if [ $# -eq 0 ]; then
-    files=$(git ls-files -m -o --exclude-standard -x "*")
+  if [[ $FZF_PREVIEW == 0 ]]; then
+    git diff --color=always $@
   else
-    files=$(git log --name-only --pretty=oneline --full-index $1..HEAD | grep -vE '^[0-9a-f]{40} ' | sort | uniq)
+    local files cmd
+    cmd="git diff --color=always $@ {} "
+    if [ $# -eq 0 ]; then
+      files=$(git ls-files -m -o --exclude-standard -x "*")
+    else
+      files=$(git log --name-only --pretty=oneline --full-index $1..HEAD | grep -vE '^[0-9a-f]{40} ' | sort | uniq)
+    fi
+    echo "$files" | fzf -0 --preview $cmd --bind="enter:execute($cmd)"
   fi
-  cmd="git diff --color=always $@ {} "
-  echo "$files" | fzf -0 --preview $cmd --bind="enter:execute($cmd)"
 }
 
 function glo {
   local entries
   entries=$(git log --pretty=oneline --abbrev-commit)
-  echo $entries | fzf --preview 'git show --color=always {+1}'
+  cmd='git show --color=always {+1}'
+  if [[ $FZF_PREVIEW == 0 ]]; then
+    echo $entries | fzf --bind="enter:execute($cmd)"
+  else
+    echo $entries | fzf --preview $cmd
+  fi
 }
