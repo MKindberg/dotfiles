@@ -15,6 +15,7 @@ alias grep='grep --color'                     # show differences in colour
 
 # git related
 alias gs='git status'
+alias gst='git status --untracked-files=no'
 alias gb='git branch'
 #alias go='git checkout'
 alias gl='git log'
