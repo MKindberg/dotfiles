@@ -9,6 +9,7 @@ setopt hist_ignore_all_dups
 
 setopt autocd
 setopt menu_complete
+setopt correct_all
 
 
 # ZSH_THEME="robbyrussell"
