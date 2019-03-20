@@ -20,7 +20,7 @@ map <F3> :TagbarToggle<CR>
 map <C-L> :set relativenumber! <CR>
 map <S-H> :set cursorline! <CR>
 map <C-P> :FZF <CR>
-map <C-_> :Lines <CR>
+map & :Lines <CR>
 
 map <Space>h :hi CursorLine cterm=bold ctermbg=black <CR>
             \:set cursorline! <CR>
@@ -44,16 +44,25 @@ nmap <C-c>e :cs find e <C-R>=expand("<cword>")<CR><CR>
 nmap <C-c>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
 nmap <C-c>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 nmap <C-c>d :cs find d <C-R>=expand("<cword>")<CR><CR>
-
-nmap <C-c><C-c>s :vert scs find s <C-R>=expand("<cword>")<CR><CR>
-nmap <C-c><C-c>g :vert scs find g <C-R>=expand("<cword>")<CR><CR>
-nmap <C-c><C-c>c :vert scs find c <C-R>=expand("<cword>")<CR><CR>
-nmap <C-c><C-c>t :vert scs find t <C-R>=expand("<cword>")<CR><CR>
-nmap <C-c><C-c>e :vert scs find e <C-R>=expand("<cword>")<CR><CR>
-nmap <C-c><C-c>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>
-nmap <C-c><C-c>i :vert scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-nmap <C-c><C-c>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
 nmap <C-c>h :cs help <CR>
+
+nmap <C-c><C-v>s :vert scs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-v>g :vert scs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-v>c :vert scs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-v>t :vert scs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-v>e :vert scs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-v>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-c><C-v>i :vert scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-c><C-v>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
+
+nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-h>g scs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-h>c scs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-h>t scs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-h>e scs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-h>f scs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-c><C-h>i scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-c><C-h>d scs find d <C-R>=expand("<cword>")<CR><CR>
 
 nmap <C-c><C-s> :cs find s 
 nmap <C-c><C-g> :cs find g 
