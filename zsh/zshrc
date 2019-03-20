@@ -8,8 +8,10 @@ source ~/dotfiles/zsh/keybind.sh
 setopt hist_ignore_all_dups
 
 setopt autocd
-setopt menu_complete
 setopt correct_all
+setopt AUTO_LIST
+setopt AUTO_MENU
+setopt LIST_AMBIGUOUS
 
 
 # ZSH_THEME="robbyrussell"
