@@ -48,6 +48,8 @@ goc() { #checkout commit
   commits=$(git log --pretty=oneline --abbrev-commit --reverse) &&
   if [[ $FZF_PREVIEW == 0 ]]; then
     commit=$(echo "$commits" | fzf --tac +s +m -e ) &&
+  elif [[ $FZF_TMUX == 1 ]]; then
+    commit=$(echo "$commits" | fzf-tmux -r '100%' --tac +s +m -e --preview 'git show {+1}') &&
   else
     commit=$(echo "$commits" | fzf --tac +s +m -e --preview 'git show {+1}') &&
   fi
@@ -67,6 +69,9 @@ function gof {
   entries=$(git log --pretty=oneline --abbrev-commit)
   if [[ $FZF_PREVIEW == 0 ]]; then
     echo $entries | fzf | git checkout
+  elif [[ $FZF_TMUX == 1 ]]; then
+    cmd='git diff --color=always {+1} '"$file"
+    echo $entries | fzf-tmux -r '100%' --preview $cmd | git checkout
   else
     cmd='git diff --color=always {+1} '"$file"
     echo $entries | fzf --preview $cmd | git checkout
@@ -77,6 +82,8 @@ function ga {
   if [ $# -eq 0 ]; then
     if [[ $FZF_PREVIEW == 0 ]]; then
       files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 )
+    elif [[ $FZF_TMUX == 1 ]]; then
+      files=$(git ls-files -m -o --exclude-standard -x "*" | fzf-tmux -r '100%' -m -0 --preview 'git diff --color=always {}')
     else
       files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}')
     fi
@@ -89,6 +96,15 @@ function ga {
 function gd {
   if [[ $FZF_PREVIEW == 0 ]]; then
     git diff --color=always $@
+  elif [[ $FZF_TMUX == 1 ]]; then
+    local files cmd
+    cmd="git diff --color=always $@ {} "
+    if [ $# -eq 0 ]; then
+      files=$(git ls-files -m -o --exclude-standard -x "*")
+    else
+      files=$(git log --name-only --pretty=oneline --full-index $1..HEAD | grep -vE '^[0-9a-f]{40} ' | sort | uniq)
+    fi
+    echo "$files" | fzf-tmux -r '100%' -0 --preview $cmd --bind="enter:execute($cmd)"
   else
     local files cmd
     cmd="git diff --color=always $@ {} "
@@ -97,7 +113,13 @@ function gd {
     else
       files=$(git log --name-only --pretty=oneline --full-index $1..HEAD | grep -vE '^[0-9a-f]{40} ' | sort | uniq)
     fi
-    echo "$files" | fzf -0 --preview $cmd --bind="enter:execute($cmd)"
+    file=" "
+    while [ $file ]; do
+      file=$(echo "$files" | fzf -0 --preview $cmd)
+      if [ $file ]; then
+        vim ${file}
+      fi
+    done
   fi
 }
 
@@ -107,6 +129,8 @@ function glo {
   cmd='git show --color=always {+1}'
   if [[ $FZF_PREVIEW == 0 ]]; then
     echo $entries | fzf --bind="enter:execute($cmd)"
+  elif [[ $FZF_TMUX == 1 ]]; then
+    echo $entries | fzf-tmux -r '100%' --preview $cmd
   else
     echo $entries | fzf --preview $cmd
   fi

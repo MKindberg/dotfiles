@@ -33,3 +33,5 @@ man() {
     LESS_TERMCAP_us=$'\e[01;32m' \
     command man "$@"
 }
+
+FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --no-mouse"
