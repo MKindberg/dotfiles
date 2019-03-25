@@ -135,3 +135,18 @@ function glo {
     echo $entries | fzf --preview $cmd
   fi
 }
+
+function gsh {
+  local rev="HEAD"
+  if [[ $# > 0 ]]; then
+    rev=$1
+  fi
+
+  file=" "
+  while [ $file ]; do
+    file=$(git show --format=oneline --name-only ${rev} | fzf --preview "git diff --color ${rev}~1 $rev {}")
+    if [ $file ]; then
+      vim ${file}
+    fi
+  done
+}
