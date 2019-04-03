@@ -32,3 +32,7 @@ export EDITOR='vim'
 zstyle ':completion:*' special-dirs true
 
 source ~/dotfiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+__git_files () {
+  _wanted files expl 'local files' _files
+}
