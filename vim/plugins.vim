@@ -13,7 +13,7 @@ Plug 'Raimondi/delimitMate' " Automatically close parantheses etc.
 "Plug 'docunext/closetag.vim' " Automatically close html tags
 "Plug 'ervandew/supertab' " Autocomplete with tab
 Plug 'majutsushi/tagbar' " Show tags in current file
-Plug '~/dotfiles/fzf' " Fuzzy finding
+Plug '~/dotfiles/modules/fzf' " Fuzzy finding
 Plug 'junegunn/fzf.vim' " Fuzzy finding
 Plug 'tpope/vim-fugitive'
 call plug#end()
