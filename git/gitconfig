@@ -33,4 +33,4 @@
 	new = green bold
 	whitespace = red reverse
 [core]
-	pager = ~/dotfiles/diff-so-fancy | less --tabs=4 -R
+	pager = ~/dotfiles/modules/diff-so-fancy/diff-so-fancy | less --tabs=4 -R

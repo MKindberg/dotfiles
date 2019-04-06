@@ -10,3 +10,6 @@
 [submodule "modules/zsh-syntax-highlighting"]
 	path = modules/zsh-syntax-highlighting
 	url = https://github.com/zsh-users/zsh-syntax-highlighting
+[submodule "modules/diff-so-fancy"]
+	path = modules/diff-so-fancy
+	url = https://github.com/so-fancy/diff-so-fancy
