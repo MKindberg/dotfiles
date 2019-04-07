@@ -150,3 +150,12 @@ function gsh {
     fi
   done
 }
+
+function nvim {
+  local cmd
+  local nvim=$(whence -p nvim)
+  for arg in $@; do
+    cmd="$cmd \"${arg/:/\" \"+:}\""
+  done
+  eval $nvim $cmd
+}
