@@ -10,3 +10,6 @@
 [submodule "modules/zsh-autosuggestions"]
 	path = modules/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule "modules/alias-tips"]
+	path = modules/alias-tips
+	url = https://github.com/djui/alias-tips
