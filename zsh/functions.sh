@@ -154,8 +154,12 @@ function gsh {
 function nvim {
   local cmd
   local nvim=$(whence -p nvim)
-  for arg in $@; do
-    cmd="$cmd \"${arg/:/\" \"+:}\""
-  done
-  eval $nvim $cmd
+  if [ $nvim ]; then
+    for arg in $@; do
+      cmd="$cmd \"${arg/:/\" \"+:}\""
+    done
+    eval $nvim $cmd
+  else
+    eval vim $cmd
+  fi
 }
