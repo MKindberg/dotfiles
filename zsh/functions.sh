@@ -151,6 +151,10 @@ function gsh {
   done
 }
 
+function ggg {
+  git grep -l $1 | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}"
+}
+
 function nvim {
   local cmd
   local nvim=$(whence -p nvim)
