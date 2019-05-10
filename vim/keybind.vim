@@ -9,6 +9,8 @@ function! ToggleH()
   endif
 endfunction
 
+imap ^_ <esc>wdbi
+
 map :Q :q
 map :W :w
 map :WQ :wq
