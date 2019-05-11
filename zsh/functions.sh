@@ -152,7 +152,11 @@ function gsh {
 }
 
 function ggg {
-  git grep -l $1 | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}"
+  local file=$(git grep -l $1 | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
+  while [[ $file ]]; do
+    vim -o $file
+    local file=$(git grep -l $1 | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
+  done
 }
 
 function nvim {
