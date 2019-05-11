@@ -153,3 +153,12 @@ function nvim {
     eval vim $cmd
   fi
 }
+
+function root {
+  local gitroot=$(git rev-parse --show-toplevel 2> /dev/null)
+  if [[ $gitroot ]]; then
+    cd $gitroot
+  else
+    cd /
+  fi
+}
