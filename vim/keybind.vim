@@ -23,6 +23,7 @@ map <C-L> :set relativenumber! <CR>
 map <S-H> :set cursorline! <CR>
 map <C-P> :FZF <CR>
 map & :Lines <CR>
+map ¤ $
 
 map <Space>h :hi CursorLine cterm=bold ctermbg=black <CR>
             \:set cursorline! <CR>
@@ -75,3 +76,4 @@ nmap <C-c><C-f> :cs find f
 nmap <C-c><C-i> :cs find i 
 nmap <C-c><C-d> :cs find d 
 
+nmap <M-m> :Man <C-R>=expand("<cword>")<CR><CR>
