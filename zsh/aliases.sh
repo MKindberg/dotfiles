@@ -1,6 +1,7 @@
 # Bash aliases
 
-alias ls='echo '' && ls -hF --color=tty'                 # classify files in colour
+alias ls='echo '' && ls -hFH --color=tty'                 # classify files in colour
+alias l='ls'
 alias dir='ls --color=auto --format=vertical'
 alias vdir='ls --color=auto --format=long'
 alias ll='ls -l'                              # long list

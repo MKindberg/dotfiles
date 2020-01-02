@@ -134,24 +134,15 @@ function gsh {
 }
 
 function ggg {
-  local file=$(git grep -l $1 | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
-  while [[ $file ]]; do
+  local file=$(git grep -l "$@" | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
+  while [ $file ]; do
     vim -o $file
     local file=$(git grep -l $1 | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
   done
 }
 
-function nvim {
-  local cmd
-  local nvim=$(whence -p nvim)
-  for arg in $@; do
-    cmd="$cmd \"${arg/:/\" \"+:}\""
-  done
-  if [ $nvim ]; then
-    eval $nvim $cmd
-  else
-    eval vim $cmd
-  fi
+function gshs {
+  git stash list | fzf --preview 'git show $(echo {} | cut -f 1 -d :) '
 }
 
 function root {
