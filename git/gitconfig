@@ -1,9 +1,13 @@
 [alias]
 	cp = cherry-pick
   ci = commit
+  cia = commit --amend
   co = checkout
   br = branch
   di = diff
+  re = rebase
+  rei = rebase -i
+  rec = rebase --continue
   unstash = stash pop
 	unstage = reset HEAD --
 	unadd = reset HEAD --
