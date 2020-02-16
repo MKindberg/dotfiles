@@ -77,7 +77,7 @@ if [[ $installed == "" ]]; then
   echo #newline
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo > ~/.tmux.conf
-    sed -i "1i source $dot_dir/bash/tmux.conf" ~/.tmux.conf
+    sed -i "1i source $dot_dir/tmux/tmux.conf" ~/.tmux.conf
   fi
 else
   echo "tmux dotfile already installed"
