@@ -35,9 +35,6 @@ alias gap='git add -p'
 
 alias fn='find -name'
 
-if [[ -e ~/.config/nvim ]]; then
-  alias vim='nvim'
-fi
 alias cim='vim'
 
 alias -s c=vim
