@@ -15,8 +15,9 @@ map :Q :q
 map :W :w
 map :WQ :wq
 
-set pastetoggle=<F12n
+set pastetoggle=<F12>
 map <F5> :e <CR>
+map <F4> :RainbowToggle <CR>
 map <F2> :NERDTreeToggle <CR>
 map <F3> :TagbarToggle<CR>
 map <C-L> :set relativenumber! <CR>
@@ -77,3 +78,8 @@ nmap <C-c><C-i> :cs find i
 nmap <C-c><C-d> :cs find d 
 
 nmap <M-m> :Man <C-R>=expand("<cword>")<CR><CR>
+
+
+let g:EasyMotion_do_mapping = 0
+nmap <Space>f <Plug>(easymotion-overwin-f)
+nmap <Space>w <Plug>(easymotion-overwin-w)

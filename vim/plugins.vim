@@ -16,4 +16,7 @@ Plug 'majutsushi/tagbar' " Show tags in current file
 Plug '~/dotfiles/modules/fzf' " Fuzzy finding
 Plug 'junegunn/fzf.vim' " Fuzzy finding
 Plug 'tpope/vim-fugitive'
+Plug 'szw/vim-tags'
+Plug 'easymotion/vim-easymotion'
+Plug 'luochen1990/rainbow'
 call plug#end()
