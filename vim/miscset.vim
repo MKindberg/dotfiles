@@ -1,13 +1,14 @@
-set cursorline " set line highlight
+set cursorline " Set line highlight.
 
-set showmatch " show matching brackets
+set showmatch " Show matching brackets.
 
-set incsearch " search when typing
-set hlsearch  " highlight search matches
+set incsearch " Search when typing.
+set hlsearch  " Highlight search matches.
+set nowrapscan " Don't wrap when searching.
 
-set wildmenu " show options when completing
+set wildmenu " Show options when completing.
 
-set scrolloff=3 " min lines above and below cursor
+set scrolloff=3 " Min lines above and below cursor.
 
 set lazyredraw
 
@@ -18,6 +19,10 @@ set tabstop=2
 set softtabstop=2
 set expandtab
 
+set linebreak " Don't break words when wrapping.
+set breakindent " Keep indentation for wrapped lines.
+
+set nojoinspaces " Only insert one space when joining lines.
 " Window splitting
 set splitright
 set splitbelow

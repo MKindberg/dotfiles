@@ -33,11 +33,13 @@ function precmd() {
     fi
     unset timer
   fi
-}
+  dirs="$(dirs -v | tr '\t' ' ' | tr '\n' '\t' | cut -f 2,3,4,5)"
+ }
 local ret_status="%(?:%{%F{green}:%F{red}%})\$"
 local ret_num="%(?: :%F{red} [%?] )"
 
 PROMPT='
+%B%F{blue}${dirs}
 %B%F{green}%n@%m %F{cyan}%~/ %F{magenta}`__git_ps1` %b%F{yellow}${timer_show}%B
 %F{yellow}%D{%H:%M}%}%b${ret_num}${ret_status}%b%k%f '
 

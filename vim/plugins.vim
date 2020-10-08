@@ -19,4 +19,5 @@ Plug 'tpope/vim-fugitive'
 Plug 'szw/vim-tags'
 Plug 'easymotion/vim-easymotion'
 Plug 'luochen1990/rainbow'
+Plug 'nbardiuk/vim-gol'
 call plug#end()

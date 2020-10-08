@@ -83,3 +83,5 @@ nmap <M-m> :Man <C-R>=expand("<cword>")<CR><CR>
 let g:EasyMotion_do_mapping = 0
 nmap <Space>f <Plug>(easymotion-overwin-f)
 nmap <Space>w <Plug>(easymotion-overwin-w)
+
+imap jj <Esc>
