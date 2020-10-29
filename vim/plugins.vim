@@ -20,4 +20,5 @@ Plug 'szw/vim-tags'
 Plug 'easymotion/vim-easymotion'
 Plug 'luochen1990/rainbow'
 Plug 'nbardiuk/vim-gol'
+Plug 'blueyed/vim-diminactive'
 call plug#end()
