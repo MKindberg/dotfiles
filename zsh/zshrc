@@ -1,4 +1,10 @@
 #! /bin/zsh
+if [[ -a ~/.zinit/bin/zinit.zsh ]]; then
+  source ~/.zinit/bin/zinit.zsh
+  source ~/dotfiles/zsh/plugins.sh
+else
+  echo "zinit not installed"
+fi
 source ~/dotfiles/zsh/variables.sh
 source ~/dotfiles/zsh/aliases.sh
 source ~/dotfiles/zsh/functions.sh
@@ -25,17 +31,10 @@ ENABLE_CORRECTION="true" # Command autocorrection
 autoload -U compinit
 compinit
 
-# DISABLE_UNTRACKED_FILES_DIRTY="true" #To make git addon faster for large repos
-
-source ~/dotfiles/modules/zsh-autosuggestions/zsh-autosuggestions.zsh
-source ~/dotfiles/modules/alias-tips/alias-tips.plugin.zsh
-
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 export EDITOR='vim'
 
 zstyle ':completion:*' special-dirs true
-
-source ~/dotfiles/modules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 __git_files () {
   _wanted files expl 'local files' _files

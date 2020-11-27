@@ -14,8 +14,8 @@ function back {
 }
 
 function cdd () {
-    cd $1
-    ls
+  cd $1
+  ls
 }
 
 function PS1_pscount {
