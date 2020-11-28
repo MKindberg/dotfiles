@@ -4,6 +4,16 @@
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 export HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
 export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
+export HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+export SAVEHIST=5000
+export HISTSIZE=2000
+setopt EXTENDED_HISTORY
+setopt SHARE_HISTORY
+setopt APPEND_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_REDUCE_BLANKS
+
+
 export LESS=R
 
 if [[ -n $TMUX ]]; then
