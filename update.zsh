@@ -8,3 +8,6 @@ do
   git pull origin master
   cd ..
 done
+
+cd fzf
+yes -n | ./install
