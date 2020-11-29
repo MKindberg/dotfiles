@@ -1,17 +1,18 @@
 # Bash variables
 
 # history
-export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
-export HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
-export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
-export HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
-export SAVEHIST=5000
-export HISTSIZE=2000
-setopt EXTENDED_HISTORY
+HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
+HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
+HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
+HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+SAVEHIST=500
+HISTSIZE=2000
 setopt SHARE_HISTORY
 setopt APPEND_HISTORY
-setopt HIST_IGNORE_DUPS
+setopt HIST_SAVE_NO_DUPS
 setopt HIST_REDUCE_BLANKS
+setopt HIST_VERIFY
+#setopt INC_APPEND_HISTORY
 
 
 export LESS=R
