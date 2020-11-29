@@ -10,16 +10,6 @@ GIT_PS1_SHOWCOLORHINTS=1
 
 source ~/dotfiles/git/git-prompt.sh
 
-function last_status() {
-  export res=$?
-  echo -n $res
-  if [[ $res == 0 ]] then;
-    echo -n \$
-  else
-    echo -n ($res)\$
-  fi
-}
-
 function preexec() {
   timer=${timer:-$SECONDS}
 }
