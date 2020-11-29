@@ -10,4 +10,4 @@ do
 done
 
 cd fzf
-yes -n | ./install
+./install --bin
