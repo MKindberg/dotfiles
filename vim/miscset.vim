@@ -39,8 +39,10 @@ set list
 set noerrorbells
 
 " Colorscheme
-colorscheme peachpuff
+colorscheme eclipse
 hi CursorLine cterm=bold ctermbg=black
+hi ColorColumn ctermbg=none ctermfg=darkgrey " Needed for vim-diminactive plugin
+
 
 " => Turn persistent undo on
 " "    means that you can undo even when you close a buffer/VIM
