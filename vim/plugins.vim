@@ -21,4 +21,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'luochen1990/rainbow'
 Plug 'nbardiuk/vim-gol'
 Plug 'blueyed/vim-diminactive'
+Plug 'sainnhe/sonokai'
+Plug 'sheerun/vim-polyglot'
 call plug#end()
+PlugInstall

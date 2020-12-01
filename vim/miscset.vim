@@ -39,9 +39,10 @@ set list
 set noerrorbells
 
 " Colorscheme
-colorscheme eclipse
+colorscheme sonokai
 hi CursorLine cterm=bold ctermbg=black
 hi ColorColumn ctermbg=none ctermfg=darkgrey " Needed for vim-diminactive plugin
+hi Normal ctermbg=None
 
 
 " => Turn persistent undo on
