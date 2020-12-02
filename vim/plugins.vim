@@ -24,4 +24,3 @@ Plug 'blueyed/vim-diminactive'
 Plug 'sainnhe/sonokai'
 Plug 'sheerun/vim-polyglot'
 call plug#end()
-PlugInstall
