@@ -23,4 +23,6 @@ Plug 'nbardiuk/vim-gol'
 Plug 'blueyed/vim-diminactive'
 Plug 'sainnhe/sonokai'
 Plug 'sheerun/vim-polyglot'
+Plug 'Yggdroot/indentLine'
+"Plug 'garbas/vim-snipmate' " Autogenerate code
 call plug#end()
