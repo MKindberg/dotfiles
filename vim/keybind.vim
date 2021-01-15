@@ -50,7 +50,7 @@ nmap <C-c>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 nmap <C-c>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 nmap <C-c>h :cs help <CR>
 
-nmap <C-c><C-v>s :vert scs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-v>s :vert scs find s <C-R>=expand("<cword>")<CR><CR> 
 nmap <C-c><C-v>g :vert scs find g <C-R>=expand("<cword>")<CR><CR>
 nmap <C-c><C-v>c :vert scs find c <C-R>=expand("<cword>")<CR><CR>
 nmap <C-c><C-v>t :vert scs find t <C-R>=expand("<cword>")<CR><CR>
@@ -59,7 +59,7 @@ nmap <C-c><C-v>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>
 nmap <C-c><C-v>i :vert scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 nmap <C-c><C-v>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
 
-nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR> nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>
 nmap <C-c><C-h>g scs find g <C-R>=expand("<cword>")<CR><CR>
 nmap <C-c><C-h>c scs find c <C-R>=expand("<cword>")<CR><CR>
 nmap <C-c><C-h>t scs find t <C-R>=expand("<cword>")<CR><CR>
@@ -78,6 +78,10 @@ nmap <C-c><C-i> :cs find i
 nmap <C-c><C-d> :cs find d 
 
 nmap <M-m> :Man <C-R>=expand("<cword>")<CR><CR>
+
+" For moving in wrapped text
+map <Esc>k gk
+map <Esc>j gj
 
 let g:EasyMotion_do_mapping = 0
 nmap <Space>f <Plug>(easymotion-overwin-f)

@@ -14,10 +14,11 @@ set lazyredraw
 
 " Tabs
 set shiftwidth=2
-set autoindent
 set tabstop=2
 set softtabstop=2
+set autoindent
 set expandtab
+set shiftround
 
 set linebreak " Don't break words when wrapping.
 set breakindent " Keep indentation for wrapped lines.
