@@ -59,7 +59,7 @@ nmap <C-c><C-v>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>
 nmap <C-c><C-v>i :vert scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 nmap <C-c><C-v>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
 
-nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR> nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>
 nmap <C-c><C-h>g scs find g <C-R>=expand("<cword>")<CR><CR>
 nmap <C-c><C-h>c scs find c <C-R>=expand("<cword>")<CR><CR>
 nmap <C-c><C-h>t scs find t <C-R>=expand("<cword>")<CR><CR>
@@ -79,9 +79,17 @@ nmap <C-c><C-d> :cs find d
 
 nmap <M-m> :Man <C-R>=expand("<cword>")<CR><CR>
 
-" For moving in wrapped text
-map <Esc>k gk
-map <Esc>j gj
+if has('nvim')
+  " For moving in wrapped text
+  map <A-k> gk
+  map <A-j> gj
+  " Execute current file
+  map <A-r> :!./%<CR>
+else
+  map <Esc>k gk
+  map <Esc>j gj
+  map <Esc>r :!./%<CR>
+endif
 
 let g:EasyMotion_do_mapping = 0
 nmap <Space>f <Plug>(easymotion-overwin-f)
