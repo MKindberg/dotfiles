@@ -7,32 +7,33 @@ endif
 
 let g:polyglot_disabled = ['markdown']
 call plug#begin('~/.vim/plugged')
-"Plug 'scrooloose/nerdtree' " A better file explorer
 Plug 'vim-airline/vim-airline' " A nicer status line
-Plug 'vim-syntastic/syntastic' " Syntax checker
-"Plug 'Valloric/YouCompleteMe' " Always on autocomplete
 Plug 'Raimondi/delimitMate' " Automatically close parantheses etc.
-"Plug 'docunext/closetag.vim' " Automatically close html tags
 Plug 'ervandew/supertab' " Autocomplete with tab
 Plug 'majutsushi/tagbar' " Show tags in current file
 Plug '~/dotfiles/modules/fzf' " Fuzzy finding
 Plug 'junegunn/fzf.vim' " Fuzzy finding
-Plug 'tpope/vim-fugitive'
-Plug 'szw/vim-tags'
-Plug 'easymotion/vim-easymotion'
-Plug 'luochen1990/rainbow'
-Plug 'nbardiuk/vim-gol'
-Plug 'blueyed/vim-diminactive'
-Plug 'sainnhe/sonokai'
-Plug 'sheerun/vim-polyglot'
-Plug 'Yggdroot/indentLine'
+Plug 'tpope/vim-fugitive' " Git commands
+Plug 'szw/vim-tags' " Show all tags in file
+Plug 'luochen1990/rainbow' " Rainbow paranthesis
+Plug 'blueyed/vim-diminactive' " Dim inactive splits
+Plug 'sainnhe/sonokai' " Colorscheme
+Plug 'Yggdroot/indentLine' " Show indentation markers
 if has('nvim-0.5')
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'nvim-treesitter/nvim-treesitter-refactor'
   Plug 'romgrk/nvim-treesitter-context'
-  Plug 'neovim/nvim-lspconfig'
+  "Plug 'neovim/nvim-lspconfig'
+else
+  Plug 'sheerun/vim-polyglot' " Better syntax highlight
 endif
 "Plug 'garbas/vim-snipmate' " Autogenerate code
+"Plug 'scrooloose/nerdtree' " A better file explorer
+"Plug 'vim-syntastic/syntastic' " Syntax checker
+"Plug 'Valloric/YouCompleteMe' " Always on autocomplete
+"Plug 'docunext/closetag.vim' " Automatically close html tags
+"Plug 'easymotion/vim-easymotion'
+"Plug 'nbardiuk/vim-gol'
 call plug#end()
 
 if has('nvim-0.5')
