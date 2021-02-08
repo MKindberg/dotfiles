@@ -1,5 +1,268 @@
-source ~/dotfiles/vim/plugins.vim
-source ~/dotfiles/vim/keybind.vim
-source ~/dotfiles/vim/miscset.vim
-source ~/dotfiles/vim/language_specific.vim
-source ~/dotfiles/vim/autocorrect.vim
+" Plugins {{{
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+let g:polyglot_disabled = ['markdown']
+call plug#begin('~/.vim/plugged')
+"Plug 'scrooloose/nerdtree' " A better file explorer
+Plug 'vim-airline/vim-airline' " A nicer status line
+Plug 'vim-syntastic/syntastic' " Syntax checker
+"Plug 'Valloric/YouCompleteMe' " Always on autocomplete
+Plug 'Raimondi/delimitMate' " Automatically close parantheses etc.
+"Plug 'docunext/closetag.vim' " Automatically close html tags
+Plug 'ervandew/supertab' " Autocomplete with tab
+Plug 'majutsushi/tagbar' " Show tags in current file
+Plug '~/dotfiles/modules/fzf' " Fuzzy finding
+Plug 'junegunn/fzf.vim' " Fuzzy finding
+Plug 'tpope/vim-fugitive'
+Plug 'szw/vim-tags'
+Plug 'easymotion/vim-easymotion'
+Plug 'luochen1990/rainbow'
+Plug 'nbardiuk/vim-gol'
+Plug 'blueyed/vim-diminactive'
+Plug 'sainnhe/sonokai'
+Plug 'sheerun/vim-polyglot'
+Plug 'Yggdroot/indentLine'
+if has('nvim-0.5')
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'nvim-treesitter/nvim-treesitter-refactor'
+  Plug 'romgrk/nvim-treesitter-context'
+  Plug 'neovim/nvim-lspconfig'
+endif
+"Plug 'garbas/vim-snipmate' " Autogenerate code
+call plug#end()
+
+if has('nvim-0.5')
+  lua <<EOF
+  require'nvim-treesitter.configs'.setup {
+    highlight = {
+      enable = true,
+    },
+    indent = {
+      enable = true
+    },
+    refactor = {
+      highlight_definitions = { enable = true },
+      highlight_current_scope = { enable = true },
+    },
+  }
+EOF
+
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+set foldlevelstart=20
+endif
+" }}}
+
+" Key bindings {{{
+let s:activatedh = 0 
+function! ToggleH()
+  if s:activatedh == 0
+    let s:activatedh = 1 
+    match ErrorMsg '\(\%>80v.\+\|\s\+$\)'
+  else
+    let s:activatedh = 0 
+    match none
+  endif
+endfunction
+
+imap ^_ <esc>wdbi
+
+let mapleader="\<SPACE>"
+
+map :Q :q
+map :W :w
+map :WQ :wq
+
+set pastetoggle=<F12>
+map <F5> :e <CR>
+map <F4> :RainbowToggle <CR>
+map <F2> :NERDTreeToggle <CR>
+map <F3> :TagbarToggle<CR>
+map <C-L> :set relativenumber! <CR>
+map <S-H> :set cursorline! <CR>
+map <C-P> :FZF <CR>
+map & :Lines <CR>
+map ¤ $
+
+map <Leader>h :hi CursorLine cterm=bold ctermbg=black <CR>
+            \:set cursorline! <CR>
+map <Leader>rn :set relativenumber! <CR>
+map <Leader>n :set number! <CR>
+map <Leader>l :call ToggleH() <CR>
+map <Leader>s :if exists("g:syntax_on") <Bar>
+            \ syntax off <Bar>  
+            \ else <Bar>
+            \ syntax enable <Bar>
+            \ endif <CR>
+            \ :hi CursorLine cterm=bold ctermbg=black <CR>
+map <Leader>t :terminal<CR>
+map <Leader><Leader> za
+" open vimrc in new split
+nnoremap <leader>ev :vsplit $MYVIMRC<cr> 
+" source vimrc
+nnoremap <leader>sv :source $MYVIMRC<cr>
+" surround word with "
+:nnoremap <space>" ea"<esc>bi"<esc>
+
+
+" Cscope bindings
+nmap <C-c>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-c>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-c>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c>h :cs help <CR>
+
+nmap <C-c><C-v>s :vert scs find s <C-R>=expand("<cword>")<CR><CR> 
+nmap <C-c><C-v>g :vert scs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-v>c :vert scs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-v>t :vert scs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-v>e :vert scs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-v>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-c><C-v>i :vert scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-c><C-v>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
+
+nmap <C-c><C-h>s scs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-h>g scs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-h>c scs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-h>t scs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-h>e scs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-c><C-h>f scs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-c><C-h>i scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-c><C-h>d scs find d <C-R>=expand("<cword>")<CR><CR>
+
+nmap <C-c><C-s> :cs find s 
+nmap <C-c><C-g> :cs find g 
+nmap <C-c><C-c> :cs find c 
+nmap <C-c><C-t> :cs find t 
+nmap <C-c><C-e> :cs find e 
+nmap <C-c><C-f> :cs find f 
+nmap <C-c><C-i> :cs find i 
+nmap <C-c><C-d> :cs find d 
+
+nmap <M-m> :Man <C-R>=expand("<cword>")<CR><CR>
+
+if has('nvim')
+  " For moving in wrapped text
+  map <A-k> gk
+  map <A-j> gj
+  " Execute current file
+  map <A-r> :!./%<CR>
+else
+  map <Esc>k gk
+  map <Esc>j gj
+  map <Esc>r :!./%<CR>
+endif
+
+let g:EasyMotion_do_mapping = 0
+nmap <Space>f <Plug>(easymotion-overwin-f)
+nmap <Space>w <Plug>(easymotion-overwin-w)
+
+imap jj <Esc>
+" Make word uppercase
+:imap <c-u> <esc>viwUi
+
+" Save as root even when file wasn't open with sudo
+cmap w!! w !sudo tee > /dev/null %
+" }}}
+
+" Settings {{{
+set cursorline " Set line highlight.
+
+set showmatch " Show matching brackets.
+
+set incsearch " Search when typing.
+set hlsearch  " Highlight search matches.
+set nowrapscan " Don't wrap when searching.
+
+set wildmenu " Show options when completing.
+
+set scrolloff=3 " Min lines above and below cursor.
+
+set lazyredraw
+
+" Tabs
+set shiftwidth=2
+set tabstop=2
+set softtabstop=2
+set autoindent
+set expandtab
+set shiftround
+
+set linebreak " Don't break words when wrapping.
+set breakindent " Keep indentation for wrapped lines.
+
+set nojoinspaces " Only insert one space when joining lines.
+" Window splitting
+set splitright
+set splitbelow
+
+set showmode
+
+" Statusline
+"set laststatus=2
+"set statusline=%<%F\ %h%m%r%y%=%-14.(%l,%c%V%)\ %P
+
+set listchars=tab:>>,trail:.,
+set list
+
+set noerrorbells
+
+" Colorscheme
+colorscheme sonokai
+hi CursorLine cterm=bold ctermbg=black
+hi ColorColumn ctermbg=none ctermfg=darkgrey " Needed for vim-diminactive plugin
+hi Normal ctermbg=None
+
+
+" => Turn persistent undo on
+" "    means that you can undo even when you close a buffer/VIM
+try
+  set undodir=~/.vim_runtime/temp_dirs/undodir
+  set undofile
+catch
+endtry
+" }}}
+
+" Language Specific {{{
+function! StripTrailingWhitespace()
+  let save_cursor = getpos(".")
+  %s/\s\+$//e
+  call setpos('.', save_cursor)
+endfunction
+
+" c/c++
+autocmd BufWritePre *.h,*.c,*.cpp,*.hpp call StripTrailingWhitespace()
+" cscript template
+autocmd FileType cpp iabbrev cscript #!/bin/bash<cr>tail +3 $0 \| g++ -std=c++17 -Wall -Werror -O3 -x c++ - && exec ./a.out
+autocmd FileType c iabbrev cscript #!/bin/bash<cr>tail +3 $0 \| gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out
+
+" xml
+autocmd BufWritePre *.xml call StripTrailingWhitespace()
+
+" python
+autocmd FileType python setlocal shiftwidth=4
+autocmd FileType python setlocal tabstop=4
+autocmd FileType python setlocal softtabstop=4
+
+" Git commit (Might not work, put options in ~/.vim/ftplugin/gitcommit.vim
+" instead)
+autocmd FileType gitcommit setlocal spell
+
+" Vim
+autocmd FileType vim setlocal foldmethod=marker
+autocmd FileType vim setlocal foldlevel=0
+
+" }}}
+
+" Autocorrections {{{
+ab pritnf printf
+
+" }}}
