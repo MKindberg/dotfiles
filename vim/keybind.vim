@@ -11,6 +11,8 @@ endfunction
 
 imap ^_ <esc>wdbi
 
+let mapleader="\<SPACE>"
+
 map :Q :q
 map :W :w
 map :WQ :wq
@@ -26,18 +28,26 @@ map <C-P> :FZF <CR>
 map & :Lines <CR>
 map ¤ $
 
-map <Space>h :hi CursorLine cterm=bold ctermbg=black <CR>
+map <Leader>h :hi CursorLine cterm=bold ctermbg=black <CR>
             \:set cursorline! <CR>
-map <Space>rn :set relativenumber! <CR>
-map <Space>n :set number! <CR>
-map <Space>l :call ToggleH() <CR>
-map <Space>s :if exists("g:syntax_on") <Bar>
+map <Leader>rn :set relativenumber! <CR>
+map <Leader>n :set number! <CR>
+map <Leader>l :call ToggleH() <CR>
+map <Leader>s :if exists("g:syntax_on") <Bar>
             \ syntax off <Bar>  
             \ else <Bar>
             \ syntax enable <Bar>
             \ endif <CR>
             \ :hi CursorLine cterm=bold ctermbg=black <CR>
-map <Space>t :terminal<CR>
+map <Leader>t :terminal<CR>
+map <Leader><Leader> za
+" open vimrc in new split
+nnoremap <leader>ev :vsplit $MYVIMRC<cr> 
+" source vimrc
+nnoremap <leader>sv :source $MYVIMRC<cr>
+" surround word with "
+:nnoremap <space>" ea"<esc>bi"<esc>
+
 
 " Cscope bindings
 nmap <C-c>s :cs find s <C-R>=expand("<cword>")<CR><CR>
@@ -96,6 +106,8 @@ nmap <Space>f <Plug>(easymotion-overwin-f)
 nmap <Space>w <Plug>(easymotion-overwin-w)
 
 imap jj <Esc>
+" Make word uppercase
+:imap <c-u> <esc>viwUi
 
 " Save as root even when file wasn't open with sudo
 cmap w!! w !sudo tee > /dev/null %
