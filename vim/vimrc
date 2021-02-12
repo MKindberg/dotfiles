@@ -16,7 +16,6 @@ Plug 'junegunn/fzf.vim' " Fuzzy finding
 Plug 'tpope/vim-fugitive' " Git commands
 Plug 'szw/vim-tags' " Show all tags in file
 Plug 'luochen1990/rainbow' " Rainbow paranthesis
-Plug 'blueyed/vim-diminactive' " Dim inactive splits
 Plug 'sainnhe/sonokai' " Colorscheme
 Plug 'Yggdroot/indentLine' " Show indentation markers
 if has('nvim-0.5')
@@ -34,6 +33,7 @@ endif
 "Plug 'docunext/closetag.vim' " Automatically close html tags
 "Plug 'easymotion/vim-easymotion'
 "Plug 'nbardiuk/vim-gol'
+" Plug 'blueyed/vim-diminactive' " Dim inactive splits
 call plug#end()
 
 if has('nvim-0.5')
@@ -286,6 +286,9 @@ autocmd FileType gitcommit setlocal spell
 autocmd FileType vim setlocal foldmethod=marker
 autocmd FileType vim setlocal foldlevel=0
 
+syntax manual
+autocmd BufLeave * set syntax=OFF
+autocmd BufEnter * set syntax=ON
 " }}}
 
 " Autocorrections {{{
