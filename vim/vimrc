@@ -255,6 +255,13 @@ try
   set undofile
 catch
 endtry
+
+syntax manual
+augroup focus_active
+  autocmd!
+  autocmd BufLeave * set syntax=OFF
+  autocmd BufEnter * set syntax=ON
+augroup END
 " }}}
 
 " Language Specific {{{
@@ -265,30 +272,41 @@ function! StripTrailingWhitespace()
 endfunction
 
 " c/c++
-autocmd BufWritePre *.h,*.c,*.cpp,*.hpp call StripTrailingWhitespace()
-" cscript template
-autocmd FileType cpp iabbrev cscript #!/bin/bash<cr>tail +3 $0 \| g++ -std=c++17 -Wall -Werror -O3 -x c++ - && exec ./a.out
-autocmd FileType c iabbrev cscript #!/bin/bash<cr>tail +3 $0 \| gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out
+augroup c
+  autocmd!
+  autocmd BufWritePre *.h,*.c,*.cpp,*.hpp call StripTrailingWhitespace()
+  " cscript template
+  autocmd FileType cpp iabbrev cscript #!/bin/bash<cr>tail +3 $0 \| g++ -std=c++17 -Wall -Werror -O3 -x c++ - && exec ./a.out
+  autocmd FileType c iabbrev cscript #!/bin/bash<cr>tail +3 $0 \| gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out
+augroup END
 
 " xml
-autocmd BufWritePre *.xml call StripTrailingWhitespace()
+augroup xml
+  autocmd!
+  autocmd BufWritePre *.xml call StripTrailingWhitespace()
+augroup END
 
 " python
-autocmd FileType python,bzl setlocal shiftwidth=4
-autocmd FileType python,bzl setlocal tabstop=4
-autocmd FileType python,bzl setlocal softtabstop=4
+augroup python
+  autocmd!
+  autocmd FileType python,bzl setlocal shiftwidth=4
+  autocmd FileType python,bzl setlocal tabstop=4
+  autocmd FileType python,bzl setlocal softtabstop=4
+augroup END
 
 " Git commit (Might not work, put options in ~/.vim/ftplugin/gitcommit.vim
 " instead)
-autocmd FileType gitcommit setlocal spell
+augroup git
+  autocmd!
+  autocmd FileType gitcommit setlocal spell
+augroup END
 
 " Vim
-autocmd FileType vim setlocal foldmethod=marker
-autocmd FileType vim setlocal foldlevel=0
-
-syntax manual
-autocmd BufLeave * set syntax=OFF
-autocmd BufEnter * set syntax=ON
+augroup vim
+  autocmd!
+  autocmd FileType vim setlocal foldmethod=marker
+  autocmd FileType vim setlocal foldlevel=0
+augroup END
 " }}}
 
 " Autocorrections {{{
