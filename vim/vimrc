@@ -64,24 +64,42 @@ set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set foldlevelstart=20
 
+noremap <Leader>p <cmd>Telescope find_files<cr>
+nnoremap <leader>g <cmd>Telescope live_grep<cr>
+nnoremap <leader>b <cmd>Telescope buffers<cr>
+nnoremap <leader>h <cmd>Telescope help_tags<cr>
+nnoremap <leader>q <cmd>Telescope quickfix<cr>
+nnoremap <leader>t <cmd>Telescope treesitter<cr>
+
 endif
 " cscope settings {{{
 
 set cscopetag
 set csprg=gtags-cscope
-set cscopequickfix=s-,f-,g-,c-,d-,i-,t-,e-
 if !empty(expand(glob("GTAGS")))
   cs add GTAGS
 endif
 
-nnoremap <C-c>s :cs find s <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
-nnoremap <C-c>g :cs find g <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
-nnoremap <C-c>c :cs find c <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
-nnoremap <C-c>t :cs find t <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
-nnoremap <C-c>e :cs find e <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
-nnoremap <C-c>f :cs find f <C-R>=expand("<cfile>")<CR><CR><cmd>Telescope quickfix<cr>
-nnoremap <C-c>i :cs find i <C-R>=expand("%:t")<CR><CR><cmd>Telescope quickfix<cr>
-nnoremap <C-c>d :cs find d <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
+if has('nvim-0.5')
+  set cscopequickfix=s-,f-,g-,c-,d-,i-,t-,e-
+  nnoremap <C-c>s :cs find s <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
+  nnoremap <C-c>g :cs find g <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
+  nnoremap <C-c>c :cs find c <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
+  nnoremap <C-c>t :cs find t <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
+  nnoremap <C-c>e :cs find e <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
+  nnoremap <C-c>f :cs find f <C-R>=expand("<cfile>")<CR><CR><cmd>Telescope quickfix<cr>
+  nnoremap <C-c>i :cs find i <C-R>=expand("%:t")<CR><CR><cmd>Telescope quickfix<cr>
+  nnoremap <C-c>d :cs find d <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
+else
+  nnoremap <C-c>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <C-c>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <C-c>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <C-c>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <C-c>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+  nnoremap <C-c>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+  nnoremap <C-c>i :cs find i <C-R>=expand("%:t")<CR><CR>
+  nnoremap <C-c>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+endif
 nnoremap <C-c>h :cs help <CR>
 
 nnoremap <C-c><C-v>s :vert scs find s <C-R>=expand("<cword>")<CR><CR>
@@ -160,12 +178,6 @@ noremap <Leader>s :if exists("g:syntax_on") <Bar>
             \ syntax enable <Bar>
             \ endif <CR>
             \ :hi CursorLine cterm=bold ctermbg=black <CR>
-noremap <Leader>p <cmd>Telescope find_files<cr>
-nnoremap <leader>g <cmd>Telescope live_grep<cr>
-nnoremap <leader>b <cmd>Telescope buffers<cr>
-nnoremap <leader>h <cmd>Telescope help_tags<cr>
-nnoremap <leader>q <cmd>Telescope quickfix<cr>
-nnoremap <leader>t <cmd>Telescope treesitter<cr>
 
 noremap <Leader><Leader> za
 " open vimrc in new split
