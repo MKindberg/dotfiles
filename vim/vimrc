@@ -99,10 +99,9 @@ nnoremap <leader>q :call QuickfixToggle()<cr>
 
 inoremap ^_ <esc>wdbi
 
-
-noremap :Q :q
-noremap :W :w
-noremap :WQ :wq
+cnoremap Q<cr> q<cr>
+cnoremap W<cr> w<cr>
+cnoremap WQ<cr> wq<cr>
 
 set pastetoggle=<F12>
 noremap <F5> :e <CR>
@@ -125,7 +124,10 @@ noremap <Leader>s :if exists("g:syntax_on") <Bar>
             \ syntax enable <Bar>
             \ endif <CR>
             \ :hi CursorLine cterm=bold ctermbg=black <CR>
-noremap <Leader>t :terminal<CR>
+noremap <Leader>tf <cmd>Telescope find_files<cr>
+nnoremap <leader>tg <cmd>Telescope live_grep<cr>
+nnoremap <leader>tb <cmd>Telescope buffers<cr>
+nnoremap <leader>th <cmd>Telescope help_tags<cr>
 noremap <Leader><Leader> za
 " open vimrc in new split
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
