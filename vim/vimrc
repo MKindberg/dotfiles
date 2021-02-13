@@ -1,3 +1,5 @@
+let mapleader="\<SPACE>"
+
 " Plugins {{{
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -125,8 +127,6 @@ nnoremap <C-c><C-d> :cs find d
 " }}}
 
 " Key bindings {{{
-let mapleader="\<SPACE>"
-
 let s:activatedh = 0
 function! ToggleH()
   if s:activatedh
