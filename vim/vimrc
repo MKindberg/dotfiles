@@ -19,6 +19,9 @@ Plug 'luochen1990/rainbow' " Rainbow paranthesis
 Plug 'sainnhe/sonokai' " Colorscheme
 Plug 'Yggdroot/indentLine' " Show indentation markers
 if has('nvim-0.5')
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'nvim-treesitter/nvim-treesitter-refactor'
   Plug 'romgrk/nvim-treesitter-context'
@@ -49,6 +52,11 @@ if has('nvim-0.5')
       highlight_definitions = { enable = true },
       highlight_current_scope = { enable = false },
     },
+  }
+  require('telescope').setup{
+    file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
+    grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
+    qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
   }
 EOF
 
@@ -85,18 +93,6 @@ function! FoldColumnToggle()
 endfunction
 nnoremap <Leader>f :call FoldColumnToggle() <CR>
 
-let s:quickfix_is_open = 0
-function! QuickfixToggle()
-    if s:quickfix_is_open
-        cclose
-        let s:quickfix_is_open = 0
-    else
-        copen
-        let s:quickfix_is_open = 1
-    endif
-endfunction
-nnoremap <leader>q :call QuickfixToggle()<cr>
-
 inoremap ^_ <esc>wdbi
 
 cnoremap Q<cr> q<cr>
@@ -114,8 +110,8 @@ noremap <C-P> :FZF <CR>
 noremap & :Lines <CR>
 noremap ¤ $
 
-noremap <Leader>h :hi CursorLine cterm=bold ctermbg=black <CR>
-            \:set cursorline! <CR>
+"noremap <Leader>h :hi CursorLine cterm=bold ctermbg=black <CR>
+"            \:set cursorline! <CR>
 noremap <Leader>rn :set relativenumber! <CR>
 noremap <Leader>n :set number! <CR>
 noremap <Leader>s :if exists("g:syntax_on") <Bar>
@@ -124,10 +120,13 @@ noremap <Leader>s :if exists("g:syntax_on") <Bar>
             \ syntax enable <Bar>
             \ endif <CR>
             \ :hi CursorLine cterm=bold ctermbg=black <CR>
-noremap <Leader>tf <cmd>Telescope find_files<cr>
-nnoremap <leader>tg <cmd>Telescope live_grep<cr>
-nnoremap <leader>tb <cmd>Telescope buffers<cr>
-nnoremap <leader>th <cmd>Telescope help_tags<cr>
+noremap <Leader>p <cmd>Telescope find_files<cr>
+nnoremap <leader>g <cmd>Telescope live_grep<cr>
+nnoremap <leader>b <cmd>Telescope buffers<cr>
+nnoremap <leader>h <cmd>Telescope help_tags<cr>
+nnoremap <leader>q <cmd>Telescope quickfix<cr>
+nnoremap <leader>t <cmd>Telescope treesitter<cr>
+
 noremap <Leader><Leader> za
 " open vimrc in new split
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
