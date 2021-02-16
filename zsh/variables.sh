@@ -15,6 +15,7 @@ setopt HIST_REDUCE_BLANKS
 setopt HIST_VERIFY
 setopt INC_APPEND_HISTORY
 
+EDITOR=nvim
 
 export LESS=R
 

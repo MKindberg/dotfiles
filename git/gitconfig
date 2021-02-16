@@ -14,9 +14,9 @@
 [core]
 	editor = nvim
 [diff]
-    tool = nvimdiff
+  tool = nvimdiff
 [difftool "nvimdiff"]
-    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 [merge]
 	tool = vimdiff
 	conflictstyle = diff3

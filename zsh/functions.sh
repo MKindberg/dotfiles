@@ -103,7 +103,7 @@ function gd {
     while [ $file ]; do
       file=$(echo "$files" | fzf -0 --preview $cmd)
       if [ $file ]; then
-        vim ${file}
+        $EDITOR ${file}
       fi
     done
   fi
@@ -130,7 +130,7 @@ function gsh {
   while [ $file ]; do
     file=$(git show --format=oneline --name-only ${rev} | fzf --preview "git diff --color=always ${rev}~1 $rev {} | diff-so-fancy")
     if [ $file ]; then
-      vim ${file}
+      $EDITOR ${file}
     fi
   done
 }
@@ -138,7 +138,7 @@ function gsh {
 function ggg {
   local file=$(git grep -l "$@" | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
   while [ $file ]; do
-    vim -o $file
+    $EDITOR -o $file
     local file=$(git grep -l $1 | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
   done
 }
