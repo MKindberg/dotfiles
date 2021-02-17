@@ -11,12 +11,10 @@ let g:polyglot_disabled = ['markdown']
 call plug#begin('~/.vim/plugged')
 Plug 'vim-airline/vim-airline' " A nicer status line
 Plug 'Raimondi/delimitMate' " Automatically close parantheses etc.
-Plug 'ervandew/supertab' " Autocomplete with tab
 Plug 'majutsushi/tagbar' " Show tags in current file
 Plug '~/dotfiles/modules/fzf' " Fuzzy finding
 Plug 'junegunn/fzf.vim' " Fuzzy finding
 Plug 'tpope/vim-fugitive' " Git commands
-Plug 'szw/vim-tags' " Show all tags in file
 Plug 'luochen1990/rainbow' " Rainbow paranthesis
 Plug 'sainnhe/sonokai' " Colorscheme
 Plug 'Yggdroot/indentLine' " Show indentation markers
@@ -38,7 +36,9 @@ endif
 "Plug 'docunext/closetag.vim' " Automatically close html tags
 "Plug 'easymotion/vim-easymotion'
 "Plug 'nbardiuk/vim-gol'
-" Plug 'blueyed/vim-diminactive' " Dim inactive splits
+"Plug 'blueyed/vim-diminactive' " Dim inactive splits
+"Plug 'ervandew/supertab' " Autocomplete with tab
+"Plug 'szw/vim-tags' " Show all tags in file
 call plug#end()
 
 if has('nvim-0.5')
