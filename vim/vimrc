@@ -273,8 +273,14 @@ syntax match LeadingTab /^\t\+/
 
 " => Turn persistent undo on
 " "    means that you can undo even when you close a buffer/VIM
+
 try
-  set undodir=~/.vim_runtime/temp_dirs/undodir
+  " Seems like vim and nvim undo-files aren't compatible
+  if has('nvim')
+    set undodir=~/.vim_runtime/temp_dirs/nvim-undodir
+  else
+    set undodir=~/.vim_runtime/temp_dirs/undodir
+  endif
   set undofile
 catch
 endtry
