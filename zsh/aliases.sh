@@ -31,6 +31,7 @@ alias gti='git'
 alias gco='git commit'
 alias gcom='git commit -m'
 alias gap='git add -p'
+alias gdt='git difftool'
 
 alias fn='find -name'
 

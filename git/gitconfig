@@ -12,7 +12,11 @@
 	unstage = reset HEAD --
 	unadd = reset HEAD --
 [core]
-	editor = vim
+	editor = nvim
+[diff]
+    tool = nvimdiff
+[difftool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 [merge]
 	tool = vimdiff
 	conflictstyle = diff3
