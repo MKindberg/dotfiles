@@ -68,7 +68,7 @@ function gof {
   if [[ $FZF_PREVIEW == 0 ]]; then
     echo $entries | fzf | git checkout
   else
-    cmd='git diff --color=always {+1} '"$file"
+    cmd='git diff --color=always {+1} '"$file" | diff-so-fancy
     echo $entries | fzf --preview $cmd | git checkout
   fi
 }
@@ -78,7 +78,7 @@ function ga {
     if [[ $FZF_PREVIEW == 0 ]]; then
       files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 )
     else
-      files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}')
+      files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}' | diff-so-fancy)
     fi
     [[ -n "$files" ]] && echo "$files" | xargs -I{} git add {} && git status --short --untracked=no
   else
@@ -87,11 +87,13 @@ function ga {
 }
 
 function gd {
-  if [[ $FZF_PREVIEW == 0 ]]; then
+  if command -v tig &> /dev/null && [[ ! $@ ]]; then
+    tig status
+  elif [[ $FZF_PREVIEW == 0 ]]; then
     git diff --color=always $@
   else
     local files cmd
-    cmd="git diff --color=always $@ {} "
+    cmd="git diff --color=always $@ {} | diff-so-fancy"
     if [ $# -eq 0 ]; then
       files=$(git ls-files -m -o --exclude-standard -x "*")
     else
@@ -126,7 +128,7 @@ function gsh {
 
   file=" "
   while [ $file ]; do
-    file=$(git show --format=oneline --name-only ${rev} | fzf --preview "git diff --color ${rev}~1 $rev {}")
+    file=$(git show --format=oneline --name-only ${rev} | fzf --preview "git diff --color=always ${rev}~1 $rev {} | diff-so-fancy")
     if [ $file ]; then
       vim ${file}
     fi

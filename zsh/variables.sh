@@ -1,5 +1,6 @@
 # Bash variables
 
+path+=~/dotfiles/modules/diff-so-fancy
 # history
 HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
