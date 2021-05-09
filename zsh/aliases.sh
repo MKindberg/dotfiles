@@ -19,11 +19,9 @@ alias gs='git status'
 alias gst='git status --untracked-files=no'
 alias gb='git branch'
 #alias go='git checkout'
-alias gl='git log'
 #alias ga='git add'
 alias gaa='git add --all'
 #alias gd='git diff'
-alias gg='git grep -n --break --heading'
 alias gci='git commit'
 alias grm='git-rm'
 alias gmv='git-mv'
@@ -32,6 +30,14 @@ alias gco='git commit'
 alias gcom='git commit -m'
 alias gap='git add -p'
 alias gdt='git difftool'
+
+if command -v tig &> /dev/null; then
+  alias gg='tig grep'
+  alias gl='tig log'
+else
+  alias gg='git grep -n --break --heading'
+  alias gl='git log'
+fi
 
 alias fn='find -name'
 
