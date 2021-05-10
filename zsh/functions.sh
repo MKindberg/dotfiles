@@ -87,7 +87,7 @@ function ga {
 }
 
 function gd {
-  if command -v tig &> /dev/null && [[ ! $@ ]]; then
+  if command -v tig &> /dev/null && [[ -z "$@" ]]; then
     tig status
   elif [[ $FZF_PREVIEW == 0 ]]; then
     git diff --color=always $@
