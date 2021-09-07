@@ -11,6 +11,8 @@ source ~/dotfiles/zsh/functions.sh
 source ~/dotfiles/zsh/prompt.sh
 source ~/dotfiles/zsh/keybind.sh
 
+source ~/dotfiles/notes.sh
+
 setopt hist_ignore_all_dups
 
 setopt autocd
