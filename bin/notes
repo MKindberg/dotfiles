@@ -24,6 +24,8 @@ Modes:
     Open note in '$EDITOR' in tmux split if running in tmux, otherwise same as 'o'
   l -- List
     List all available notes
+  n -- Nickname
+    Create a nickname for a note
 EOF
 }
 
@@ -81,8 +83,18 @@ case ${1} in
     shift
     ;;
   l) # List
-    ls $NOTES_DIR
+    ls $NOTES_DIR --color --file-type
     exit 0
+    ;;
+  n)
+    mode="nickname"
+    shift
+    if [[ $# == 0 ]]; then
+      "n requires at least 1 argument"
+      exit 1
+    fi
+    nickname=$1
+    shift
     ;;
   h | -h | --help)
     usage
@@ -99,15 +111,15 @@ fi
 
 file=${NOTES_DIR}/$filename
 
-if [[ ! -e $file ]]; then
-  if [[ -x "$(command -v fzf)" ]]; then
-    filename=$(find_note $filename)
-    file=${NOTES_DIR}/$filename
-  else
-    echo "Note '$filename' doesn't exist"
-    exit 1
-  fi
-fi
+#if [[ ! -e $file ]]; then
+#  if [[ -x "$(command -v fzf)" ]]; then
+#    filename=$(find_note $filename)
+#    file=${NOTES_DIR}/$filename
+#  else
+#    echo "Note '$filename' doesn't exist"
+#    exit 1
+#  fi
+#fi
 
 case ${mode} in
   append | find_append)
@@ -125,4 +137,6 @@ case ${mode} in
   split)
     tmux split-window -h "$EDITOR $file"
     ;;
+  nickname)
+    ln -fs $file ${NOTES_DIR}/$nickname
   esac
