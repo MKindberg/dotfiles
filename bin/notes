@@ -1,0 +1,128 @@
+#!/bin/bash
+set -e
+
+usage()
+{
+cat << EOF
+usage: notes [mode] [note_name]
+Quickly create, view or edit notes
+
+If note_name is left out fzf will be opened to select (if available)
+
+Modes:
+  a -- Append
+    Any text written after name of note will be appended to it.
+  aa -- Find and append
+    Same as append but file will be selected via fzf
+  d -- Delete
+    Remove selected note
+  r -- Read
+    Print content of note on stdout
+  o -- Open
+    Open note in '$EDITOR'
+  s -- Open in split
+    Open note in '$EDITOR' in tmux split if running in tmux, otherwise same as 'o'
+  l -- List
+    List all available notes
+EOF
+}
+
+find_note()
+{
+  if [[ -x "$(command -v fzf)" ]]; then
+    ls $NOTES_DIR | fzf -q "$1" --preview="cat ${NOTES_DIR}/{}"
+    if [[ $? -ne 0 ]]; then
+      exit 1
+    fi
+  fi
+}
+
+if [[ -z "$EDITOR" ]]; then
+  EDITOR=vim
+fi
+
+if [[ -z "$NOTES_DIR" ]]; then
+  NOTES_DIR=~/.notes
+fi
+
+if [[ ! -d "$NOTES_DIR" ]]; then
+  mkdir $NOTES_DIR
+fi
+
+mode="open"
+case ${1} in
+  a)
+    mode="append"
+    shift
+    ;;
+  aa)
+    mode="find_append"
+    shift
+    ;;
+  d)
+    mode="delete"
+    shift
+    ;;
+  r)
+    mode="read"
+    shift
+    ;;
+  o)
+    mode="open"
+    shift
+    ;;
+  s)
+    if [[ -n $TMUX ]]; then
+      mode="split"
+    else
+      echo "Must run in tmux to split"
+      mode="open"
+    fi
+    shift
+    ;;
+  l) # List
+    ls $NOTES_DIR
+    exit 0
+    ;;
+  h | -h | --help)
+    usage
+    exit 1
+    ;;
+esac
+
+if [[ $# == 0 || $mode == "find_append" ]]; then
+  filename=$(find_note)
+else
+  filename=$1
+  shift
+fi
+
+file=${NOTES_DIR}/$filename
+
+if [[ ! -e $file ]]; then
+  if [[ -x "$(command -v fzf)" ]]; then
+    filename=$(find_note $filename)
+    file=${NOTES_DIR}/$filename
+  else
+    echo "Note '$filename' doesn't exist"
+    exit 1
+  fi
+fi
+
+case ${mode} in
+  append | find_append)
+    echo "$@" >> $file
+    ;;
+  delete)
+    rm -f $file
+    ;;
+  read)
+    cat $file
+    ;;
+  open)
+    $EDITOR $file
+    ;;
+  split)
+    tmux split-window -h "$EDITOR $file"
+    ;;
+  esac

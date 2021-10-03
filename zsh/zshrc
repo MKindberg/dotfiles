@@ -11,8 +11,6 @@ source ~/dotfiles/zsh/functions.sh
 source ~/dotfiles/zsh/prompt.sh
 source ~/dotfiles/zsh/keybind.sh
 
-source ~/dotfiles/notes.sh
-
 setopt hist_ignore_all_dups
 
 setopt autocd
@@ -43,3 +41,5 @@ zstyle ':completion:*' special-dirs true
 __git_files () {
   _wanted files expl 'local files' _files
 }
+
+PATH=$PATH:~/dotfiles/bin
