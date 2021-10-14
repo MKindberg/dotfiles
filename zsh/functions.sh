@@ -155,3 +155,10 @@ function root {
     cd /
   fi
 }
+
+# cd to a directory and run ls in the upper-left pane
+split_cd(){
+  PANE=$(tmux list-panes | grep 0: | rev | cut -d ' ' -f 1 | rev)
+  cd "$@"
+  tmux respawn-pane -k -t $PANE "ls --color $PWD && read"
+}
