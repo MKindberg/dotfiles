@@ -2,7 +2,7 @@
 [[ "$-" != *i* ]] && return
 BASH_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
-source ~/dotfiles/git-prompt.sh
+source ~/dotfiles/shrc
 
 # When changing directory small typos can be ignored by bash
 # for example, cd /vr/lgo/apaache would find /var/log/apache
@@ -16,75 +16,20 @@ shopt -s cdspell
 # HISTIGNORE is a colon-delimited list of patterns which should be excluded.
 # The '&' is a special pattern which suppresses duplicate entries.
 
-# Aliases {{{
-alias ls='echo '' && ls -hF --color=tty'                 # classify files in colour
-alias dir='ls --color=auto --format=vertical'
-alias vdir='ls --color=auto --format=long'
-alias ll='ls -l'                              # long list
-alias la='ls -A'                              # all but . and ..
-
-alias df='df -h'
-alias du='du -h'
-
-alias cd..='cd ..'
-
-alias grep='grep --color'                     # show differences in colour
-
-# git related
-alias gs='git status'
-alias gb='git branch'
-alias go='git checkout'
-alias gl='git log'
-alias ga='git add'
-alias gaa='git add --all'
-alias gd='git diff'
-alias gg='git grep -n --break --heading'
-alias gci='git commit'
-alias grm='git-rm'
-alias gmv='git-mv'
-alias gti='git'
-
-alias fn='find -name'
-
-alias cim='vim'
-# }}}
-
 # Functions {{{
-function up {
-  export back=$PWD
-  newDir=$PWD
-  for (( c=0; c<$1; c++ ))
-  do
-    newDir=$newDir/..
-  done
-  cd $newDir
-}
 
-function back {
-  cd $back
-}
-
-function cdd () {
-    cd $1
-    ls
-}
 
 function PS1_pscount {
   ps -a | wc -l
 }
 # }}}
 
-# Variables {{{
+# Prompt {{{
 GIT_PS1_SHOWDIRTYSTATE=1
 GIT_PS1_SHOWSTASHSTATE=1
 GIT_PS1_SHOWUNTRACKEDFILES=1
 GIT_PS1_SHOWUPSTREAM="auto"
 GIT_PS1_SHOWCOLORHINTS=1
-
-# history
-export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
-export HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
-export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
 
 __prompt_command() {
 
@@ -124,19 +69,8 @@ __prompt_command() {
   export PS1="\n$green$user $iceblue$path $red$gitbranch $magenta$status \n$yellow$time $white$end "
 
 }
-
-PROMPT_COMMAND=__prompt_command
-
-# ls --color
-ls_dir="di=1;95:" # Directories are bold and pink 
-ls_fi="fi=0;97:" # Normal files are white
-ls_ex="ex=1;91:" # Executables are bold and light green
-ls_ln="ln=0;91:" # Symlinks are red
-ls_mi="mi=9;37:" # Missing symlinks are strikethrough and grey
-ls_or="or=9;90:" # Orphaned symlinks are strikethrough and dark grey
-
-export LS_COLORS="$ls_dir$ls_fi$ls_ex$ls_ln$ls_mi$ls_or"
 # }}}
+
 # Completion options {{{
 bind TAB:menu-complete
 bind '"\e[Z": menu-complete-backward'

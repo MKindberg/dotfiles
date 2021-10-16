@@ -1,4 +1,7 @@
 #! /bin/zsh
+
+source ~/dotfiles/shrc
+
 autoload -U compinit
 compinit
 # Plugins {{{
@@ -51,111 +54,26 @@ zstyle ':autocomplete:tab:*' widget-style menu-complete
 
 # Variables {{{
 
-#PATH
-path+=~/dotfiles/bin
-path+=~/dotfiles/modules/diff-so-fancy
-
-# history
-HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
-HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
-HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
-HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
-SAVEHIST=500
-HISTSIZE=2000
-
-export LANG=en_US.UTF-8
-export EDITOR='vim'
-
-export LESS=R
-
-if [[ -n $TMUX ]]; then
-  export TERM=screen-256color
-else
-  export TERM=xterm-256color
-fi
-
-
-# ls --color
-ls_dir="di=1;95:" # Directories are bold and pink 
-ls_fi="fi=0;97:" # Normal files are white
-ls_ex="ex=1;91:" # Executables are bold and light green
-ls_ln="ln=0;91:" # Symlinks are red
-ls_mi="mi=9;37:" # Missing symlinks are strikethrough and grey
-ls_or="or=9;90:" # Orphaned symlinks are strikethrough and dark grey
-
-export LS_COLORS="$ls_dir$ls_fi$ls_ex$ls_ln$ls_mi$ls_or"
-
-#colors for man pages
-man() {
-    LESS_TERMCAP_md=$'\e[01;31m' \
-    LESS_TERMCAP_me=$'\e[0m' \
-    LESS_TERMCAP_se=$'\e[0m' \
-    LESS_TERMCAP_so=$'\e[01;44;33m' \
-    LESS_TERMCAP_ue=$'\e[0m' \
-    LESS_TERMCAP_us=$'\e[01;32m' \
-    command man "$@"
-}
-
-FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --no-mouse"
-
 CASE_SENSITIVE="true" # Case insensitive completion
 
 ENABLE_CORRECTION="true" # Command autocorrection
 # }}}
 
+# Functions {{{
+function PS1_pscount {
+  ps -a | wc -l
+}
+
+__git_files () {
+  _wanted files expl 'local files' _files
+}
+# }}}
+
 # Aliases {{{
-alias l='ls'
-alias ls='echo '' && \ls -hFH --color=tty'                 # classify files in colour
-alias dir='ls --color=auto --format=vertical'
-alias vdir='ls --color=auto --format=long'
-alias ll='ls -l'                              # long list
-alias la='ls -A'                              # all but . and ..
-
-alias df='df -h'
-alias du='du -h'
-
-alias cd..='cd ..'
-
-alias grep='grep --color'                     # show differences in colour
-
-# git related
-alias gs='git status'
-alias gst='git status --untracked-files=no'
-alias gb='git branch'
-#alias go='git checkout'
-#alias ga='git add'
-alias gaa='git add --all'
-#alias gd='git diff'
-alias gci='git commit'
-alias grm='git-rm'
-alias gmv='git-mv'
-alias gti='git'
-alias gco='git commit'
-alias gcom='git commit -m'
-alias gap='git add -p'
-alias gdt='git difftool'
-
-if command -v tig &> /dev/null; then
-  alias gg='tig grep'
-  alias gl='tig log'
-else
-  alias gg='git grep -n --break --heading'
-  alias gl='git log'
-fi
-
-alias fn='find -name'
-
-alias cim='vim'
-
 alias -s c=vim
 alias -s h=vim
 alias -s cpp=vim
 alias -s html=firefox
-
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g .....='../../../..'
-alias -g ......='../../../../..'
 
 setopt auto_pushd
 setopt pushd_ignore_dups
@@ -170,176 +88,6 @@ alias 6='cd -6'
 alias 7='cd -7'
 alias 8='cd -8'
 alias 9='cd -9'
-# }}}
-
-# Functions {{{
-function up {
-  export back=$PWD
-  newDir=$PWD
-  for (( c=0; c<$1; c++ ))
-  do
-    newDir=$newDir/..
-  done
-  cd $newDir
-}
-
-function back {
-  cd $back
-}
-
-function cdd () {
-  cd $1
-  ls
-}
-
-function PS1_pscount {
-  ps -a | wc -l
-}
-
-fbr() { #checkout local branch
-  local branches branch
-  branches=$(git branch -vv) &&
-  branch=$(echo "$branches" | fzf +m) &&
-  git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
-}
-
-gor() { #checkout remote brach or tag
-  local tags branches target
-  tags=$(
-    git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
-  branches=$(
-    git branch --all | grep -v HEAD             |
-    sed "s/.* //"    | sed "s#remotes/[^/]*/##" |
-    sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
-  target=$(
-    (echo "$tags"; echo "$branches") |
-    fzf-tmux -l30 -- --no-hscroll --ansi +m -d "\t" -n 2 --preview='') || return
-  git checkout $(echo "$target" | awk '{print $2}')
-}
-
-goc() { #checkout commit
-  local commits commit
-  commits=$(git log --pretty=oneline --abbrev-commit --reverse) &&
-  if [[ $FZF_PREVIEW == 0 ]]; then
-    commit=$(echo "$commits" | fzf --tac +s +m -e ) &&
-  else
-    commit=$(echo "$commits" | fzf --tac +s +m -e --preview 'git show {+1}') &&
-  fi
-  git checkout $(echo "$commit" | sed "s/ .*//")
-}
-
-function go {
-  if [ $# -eq 0 ]; then
-    fbr
-  else
-    git checkout "$@"
-  fi
-}
-function gof {
-  local files entries cmd
-  file=$1
-  entries=$(git log --pretty=oneline --abbrev-commit)
-  if [[ $FZF_PREVIEW == 0 ]]; then
-    echo $entries | fzf | git checkout
-  else
-    cmd='git diff --color=always {+1} '"$file" | diff-so-fancy
-    echo $entries | fzf --preview $cmd | git checkout
-  fi
-}
-function ga {
-  local files
-  if [ $# -eq 0 ]; then
-    if [[ $FZF_PREVIEW == 0 ]]; then
-      files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 )
-    else
-      files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}' | diff-so-fancy)
-    fi
-    [[ -n "$files" ]] && echo "$files" | xargs -I{} git add {} && git status --short --untracked=no
-  else
-    git add "$@"
-  fi
-}
-
-function gd {
-  if command -v tig &> /dev/null && [[ -z "$@" ]]; then
-    tig status
-  elif [[ $FZF_PREVIEW == 0 ]]; then
-    git diff --color=always $@
-  else
-    local files cmd
-    cmd="git diff --color=always $@ {} | diff-so-fancy"
-    if [ $# -eq 0 ]; then
-      files=$(git ls-files -m -o --exclude-standard -x "*")
-    else
-      files=$(git log --name-only --pretty=oneline --full-index $1..HEAD | grep -vE '^[0-9a-f]{40} ' | sort | uniq)
-    fi
-    file=" "
-    while [ $file ]; do
-      file=$(echo "$files" | fzf -0 --preview $cmd)
-      if [ $file ]; then
-        $EDITOR ${file}
-      fi
-    done
-  fi
-}
-
-function glo {
-  local entries
-  entries=$(git log --pretty=oneline --abbrev-commit)
-  cmd='git show --color=always {+1}'
-  if [[ $FZF_PREVIEW == 0 ]]; then
-    echo $entries | fzf --bind="enter:execute($cmd)"
-  else
-    echo $entries | fzf --preview $cmd
-  fi
-}
-
-function gsh {
-  local rev="HEAD"
-  if [[ $# > 0 ]]; then
-    rev=$1
-  fi
-
-  file=" "
-  while [ $file ]; do
-    file=$(git show --format=oneline --name-only ${rev} | fzf --preview "git diff --color=always ${rev}~1 $rev {} | diff-so-fancy")
-    if [ $file ]; then
-      $EDITOR ${file}
-    fi
-  done
-}
-
-function ggg {
-  local file=$(git grep -l "$@" | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
-  while [ $file ]; do
-    $EDITOR -o $file
-    local file=$(git grep -l $1 | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
-  done
-}
-
-function gshs {
-  git stash list | fzf --preview 'git show $(echo {} | cut -f 1 -d :) '
-}
-
-function root {
-  local gitroot=$(git rev-parse --show-toplevel 2> /dev/null)
-  if [[ -n $gitroot ]]; then
-    cd $gitroot
-  else
-    cd /
-  fi
-}
-
-# cd to a directory and run ls in the upper-left pane
-split_cd(){
-  PANE=$(tmux list-panes | grep 0: | rev | cut -d ' ' -f 1 | rev)
-  cd "$@"
-  tmux respawn-pane -k -t $PANE "ls --color $PWD && read"
-}
-
-__git_files () {
-  _wanted files expl 'local files' _files
-}
 # }}}
 
 # Prompt {{{

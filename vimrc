@@ -355,10 +355,8 @@ augroup END
 
 augroup shell_rc
   autocmd!
-  autocmd BufRead zshrc setlocal foldmethod=marker
-  autocmd BufRead zshrc setlocal foldlevel=0
-  autocmd BufRead bashrc setlocal foldmethod=marker
-  autocmd BufRead bashrc setlocal foldlevel=0
+  autocmd BufRead *shrc setlocal foldmethod=marker
+  autocmd BufRead *shrc setlocal foldlevel=0
 augroup END
 " }}}
 
