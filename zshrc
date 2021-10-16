@@ -351,7 +351,7 @@ GIT_PS1_SHOWUNTRACKEDFILES=1
 GIT_PS1_SHOWUPSTREAM="auto"
 GIT_PS1_SHOWCOLORHINTS=1
 
-source ~/dotfiles/git/git-prompt.sh
+source ~/dotfiles/git-prompt.sh
 
 function preexec() {
   timer=${timer:-$SECONDS}

@@ -25,7 +25,12 @@ if has('nvim-0.5')
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'nvim-treesitter/nvim-treesitter-refactor'
   Plug 'romgrk/nvim-treesitter-context'
+  Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+  Plug 'gennaro-tedesco/nvim-peekup' " Preview registers
+  Plug 'beauwilliams/focus.nvim' " Increase width of active window
+  "Plug 'npxbr/glow.nvim' " Markdown preview
   "Plug 'neovim/nvim-lspconfig'
+  "Plug 'f-person/git-blame.nvim' " Show git blame at end of lines
 else
   Plug 'sheerun/vim-polyglot' " Better syntax highlight
 endif
@@ -181,7 +186,7 @@ noremap <C-P> :FZF <CR>
 noremap & :Lines <CR>
 noremap ¤ $
 
-"noremap <Leader>h :hi CursorLine cterm=bold ctermbg=black <CR>
+noremap <Leader>h :hi CursorLine cterm=bold ctermbg=black <CR>
 "            \:set cursorline! <CR>
 noremap <Leader>rn :set relativenumber! <CR>
 noremap <Leader>n :set number! <CR>

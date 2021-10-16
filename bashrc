@@ -2,7 +2,7 @@
 [[ "$-" != *i* ]] && return
 BASH_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
-source ~/dotfiles/git/git-prompt.sh
+source ~/dotfiles/git-prompt.sh
 
 # When changing directory small typos can be ignored by bash
 # for example, cd /vr/lgo/apaache would find /var/log/apache
@@ -80,8 +80,6 @@ GIT_PS1_SHOWSTASHSTATE=1
 GIT_PS1_SHOWUNTRACKEDFILES=1
 GIT_PS1_SHOWUPSTREAM="auto"
 GIT_PS1_SHOWCOLORHINTS=1
-
-source ~/dotfiles/git/git-prompt.sh
 
 # history
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
