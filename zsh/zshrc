@@ -1,4 +1,6 @@
 #! /bin/zsh
+autoload -U compinit
+compinit
 # Plugins {{{
 if [[ -a ~/.zinit/bin/zinit.zsh ]]; then
   source ~/.zinit/bin/zinit.zsh
@@ -23,16 +25,15 @@ else
 fi
 # }}}
 
-# Variables {{{
-path+=~/dotfiles/bin
-path+=~/dotfiles/modules/diff-so-fancy
-# history
-HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
-HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
-HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
-HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
-SAVEHIST=500
-HISTSIZE=2000
+# Options {{{
+setopt hist_ignore_all_dups
+
+setopt autocd
+setopt correct_all
+setopt AUTO_LIST
+setopt AUTO_MENU
+setopt LIST_AMBIGUOUS
+#
 #setopt SHARE_HISTORY
 setopt APPEND_HISTORY
 setopt HIST_SAVE_NO_DUPS
@@ -40,7 +41,30 @@ setopt HIST_REDUCE_BLANKS
 setopt HIST_VERIFY
 setopt INC_APPEND_HISTORY
 
-EDITOR=nvim
+zstyle ':completion:*' menu select=2 eval "$(dircolors -b)"
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' special-dirs true
+
+zstyle ':autocomplete:tab:*' widget-style menu-complete
+# }}}
+
+# Variables {{{
+
+#PATH
+path+=~/dotfiles/bin
+path+=~/dotfiles/modules/diff-so-fancy
+
+# history
+HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
+HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
+HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
+HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+SAVEHIST=500
+HISTSIZE=2000
+
+export LANG=en_US.UTF-8
+export EDITOR='vim'
 
 export LESS=R
 
@@ -73,6 +97,10 @@ man() {
 }
 
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --no-mouse"
+
+CASE_SENSITIVE="true" # Case insensitive completion
+
+ENABLE_CORRECTION="true" # Command autocorrection
 # }}}
 
 # Aliases {{{
@@ -308,6 +336,10 @@ split_cd(){
   cd "$@"
   tmux respawn-pane -k -t $PANE "ls --color $PWD && read"
 }
+
+__git_files () {
+  _wanted files expl 'local files' _files
+}
 # }}}
 
 # Prompt {{{
@@ -362,34 +394,3 @@ launch-in-split() { Launch command in new tmux split
 zle -N launch-in-split
 bindkey "^s" launch-in-split
 # }}}
-
-setopt hist_ignore_all_dups
-
-setopt autocd
-setopt correct_all
-setopt AUTO_LIST
-setopt AUTO_MENU
-setopt LIST_AMBIGUOUS
-
-zstyle ':completion:*' menu select=2 eval "$(dircolors -b)"
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
-
-zstyle ':autocomplete:tab:*' widget-style menu-complete
-
-# ZSH_THEME="robbyrussell"
-CASE_SENSITIVE="true" # Case insensitive completion
-
-ENABLE_CORRECTION="true" # Command autocorrection
-
-autoload -U compinit
-compinit
-
-export LANG=en_US.UTF-8
-export EDITOR='vim'
-
-zstyle ':completion:*' special-dirs true
-
-__git_files () {
-  _wanted files expl 'local files' _files
-}
