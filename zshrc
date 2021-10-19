@@ -132,7 +132,7 @@ bindkey '^[' vi-cmd-mode
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^[%' vi-match-bracket
 bindkey -s "^Z" "%\n"
-bindkey '^_' backward-word
+bindkey '^_' backward-kill-word
 
 stty -ixon # Unbind current ctrl+s behavior
 launch-in-split() { Launch command in new tmux split
