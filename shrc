@@ -204,6 +204,11 @@ split_cd(){
   cd "$@"
   tmux respawn-pane -k -t $PANE "ls --color $PWD && read"
 }
+
+colorize_less() {
+  pygmentize -O style=emacs -g $1 | \less
+}
+
 # }}}
 
 # Aliases {{{
@@ -248,8 +253,10 @@ else
 fi
 
 
+# Colorize cat and less
 if [[ -x "$(command -v pygmentize)" ]]; then
   alias cat='pygmentize -O style=emacs -g'
+  alias less='colorize_less'
 fi
 
 alias fn='find -name'
