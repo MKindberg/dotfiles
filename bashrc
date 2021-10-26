@@ -18,10 +18,16 @@ shopt -s cdspell
 
 # Functions {{{
 
-
 function PS1_pscount {
   ps -a | wc -l
 }
+
+# }}}
+
+# Aliases {{{
+
+alias reload='source ~/.bashrc'
+
 # }}}
 
 # Prompt {{{

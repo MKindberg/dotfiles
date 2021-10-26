@@ -23,6 +23,7 @@ if [[ -a ~/.zinit/bin/zinit.zsh ]]; then
 
   zinit ice pick"zsh-autosuggestions.zsh" $TURBO
   zinit light zsh-users/zsh-autosuggestions
+
 else
   echo "zinit not installed"
 fi
@@ -88,6 +89,8 @@ alias 6='cd -6'
 alias 7='cd -7'
 alias 8='cd -8'
 alias 9='cd -9'
+
+alias reload='source ~/.zshrc'
 # }}}
 
 # Prompt {{{
