@@ -87,11 +87,11 @@ gor() { #checkout remote brach or tag
 
 goc() { #checkout commit
   local commits commit
-  commits=$(git log --pretty=oneline --abbrev-commit --reverse) &&
+  commits=$(git log --pretty=oneline --abbrev-commit --reverse)
   if [[ $FZF_PREVIEW == 0 ]]; then
-    commit=$(echo "$commits" | fzf --tac +s +m -e ) &&
+    commit=$(echo "$commits" | fzf --tac +s +m -e )
   else
-    commit=$(echo "$commits" | fzf --tac +s +m -e --preview 'git show {+1}') &&
+    commit=$(echo "$commits" | fzf --tac +s +m -e --preview 'git show {+1}')
   fi
   git checkout $(echo "$commit" | sed "s/ .*//")
 }
