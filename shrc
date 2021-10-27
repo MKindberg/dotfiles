@@ -209,6 +209,56 @@ colorize_less() {
   pygmentize -O style=emacs -g $1 | \less
 }
 
+cp_to() {
+  if [[ -n "$DOTFILES_CP_FROM" ]]; then
+    cp "$DOTFILES_CP_FROM" "$1"
+    unset DOTFILES_CP_FROM
+  else
+    DOTFILES_CP_TO="$PWD/$1"
+  fi
+}
+cp_from() {
+  if [[ -n "$DOTFILES_CP_TO" ]]; then
+    cp "$1" "$DOTFILES_CP_TO"
+    unset DOTFILES_CP_TO
+  else
+    DOTFILES_CP_FROM="$PWD/$1"
+  fi
+}
+mv_to() {
+  if [[ -n "$DOTFILES_MV_FROM" ]]; then
+    mv "$DOTFILES_MV_FROM" "$1"
+    unset DOTFILES_MV_FROM
+  else
+    DOTFILES_MV_TO="$PWD/$1"
+  fi
+}
+mv_from() {
+  if [[ -n "$DOTFILES_MV_TO" ]]; then
+    mv "$1" "$DOTFILES_MV_TO"
+    unset DOTFILES_MV_TO
+  else
+    DOTFILES_MV_FROM="$PWD/$1"
+  fi
+}
+
+ln_to() {
+  if [[ -n "$DOTFILES_LN_FROM" ]]; then
+    ln -s "$(realpath --relative-to=$PWD $DOTFILES_LN_FROM)" "$1"
+    unset DOTFILES_LN_FROM
+  else
+    DOTFILES_LN_TO="$PWD/$1"
+  fi
+}
+ln_from() {
+  if [[ -n "$DOTFILES_LN_TO" ]]; then
+    ln -s "$(realpath --relative-to=$DOTFILES_LN_TO $1)" "$DOTFILES_LN_TO"
+    unset DOTFILES_LN_TO
+  else
+    DOTFILES_LN_FROM="$PWD/$1"
+  fi
+}
+
 # }}}
 
 # Aliases {{{
