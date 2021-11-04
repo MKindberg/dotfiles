@@ -18,8 +18,10 @@ if [[ -a ~/.zinit/bin/zinit.zsh ]]; then
 
   fi
 
-  zinit ice pick"zsh-syntax-highlighting.zsh" $TURBO
-  zinit light zsh-users/zsh-syntax-highlighting
+ # zinit ice pick"zsh-syntax-highlighting.zsh" $TURBO
+ # zinit light zsh-users/zsh-syntax-highlighting
+
+  zinit light zdharma-continuum/fast-syntax-highlighting
 
   zinit ice pick"zsh-autosuggestions.zsh" $TURBO
   zinit light zsh-users/zsh-autosuggestions
