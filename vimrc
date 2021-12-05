@@ -28,6 +28,10 @@ if has('nvim-0.5')
   Plug 'nvim-treesitter/nvim-treesitter-textobjects'
   Plug 'gennaro-tedesco/nvim-peekup' " Preview registers
   Plug 'beauwilliams/focus.nvim' " Increase width of active window
+  Plug 'hrsh7th/nvim-cmp'
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/cmp-cmdline'
+  Plug 'hrsh7th/cmp-path'
   "Plug 'npxbr/glow.nvim' " Markdown preview
   "Plug 'neovim/nvim-lspconfig'
   "Plug 'f-person/git-blame.nvim' " Show git blame at end of lines
@@ -78,6 +82,43 @@ if has('nvim-0.5')
       qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
     }
   }
+
+  -- Setup nvim-cmp.
+  local cmp = require'cmp'
+
+  cmp.setup({
+    mapping = {
+      ['<Space>'] = cmp.mapping.close(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    },
+    sources = cmp.config.sources(
+    {
+      {
+        name = 'buffer',
+        keyword_length = 3,
+      },
+    }),
+    experimental = {
+      ghost_text = true,
+    },
+  })
+
+  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline('/', {
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+  })
+
+})
 EOF
 
 set foldmethod=expr
