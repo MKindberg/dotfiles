@@ -28,7 +28,9 @@ if has('nvim-0.5')
   Plug 'nvim-treesitter/nvim-treesitter-textobjects'
   Plug 'gennaro-tedesco/nvim-peekup' " Preview registers
   Plug 'beauwilliams/focus.nvim' " Increase width of active window
+  Plug 'L3MON4D3/LuaSnip'
   Plug 'hrsh7th/nvim-cmp'
+  Plug 'saadparwaiz1/cmp_luasnip'
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/cmp-cmdline'
   Plug 'hrsh7th/cmp-path'
@@ -91,17 +93,27 @@ if has('nvim-0.5')
       ['<Space>'] = cmp.mapping.close(),
       ['<CR>'] = cmp.mapping.confirm({ select = true }),
     },
+    snippet = {
+      expand = function(args)
+        require'luasnip'.lsp_expand(args.body)
+      end
+    },
     sources = cmp.config.sources(
     {
       {
         name = 'buffer',
         keyword_length = 3,
       },
+      {
+        name= 'luasnip',
+        keyword_length = 2,
+      },
     }),
     experimental = {
       ghost_text = true,
     },
   })
+
 
   -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline('/', {
@@ -116,9 +128,29 @@ if has('nvim-0.5')
       { name = 'path' }
     }, {
       { name = 'cmdline' }
-  })
+      })
+    })
 
-})
+  local ls = require("luasnip")
+  local snip = ls.snippet
+  local text = ls.text_node
+  ls.snippets = {
+    c = {
+      snip("cscript",
+        {
+            text({"#!/bin/bash", "tail -n +3 $0 | gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out"}),
+        }
+      )
+    },
+    cpp = {
+      snip("cscript",
+        {
+            text({"#!/bin/bash", "tail -n +3 $0 | g++ -std=c++17 -Wall -Werror -O3 -x c++ - && exec ./a.out"}),
+        }
+      )
+    },
+  }
+  ls.filetype_extend("cpp", { "c" })
 EOF
 
 set foldmethod=expr
@@ -241,6 +273,7 @@ noremap <Leader>s :if exists("g:syntax_on") <Bar>
 noremap <Leader><Leader> za
 " open vimrc in new split
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>evv :vsplit ~/dotfiles/vimrc<cr>
 " source vimrc
 nnoremap <leader>sv :source $MYVIMRC<cr>
 " surround word with "
@@ -361,9 +394,6 @@ endfunction
 augroup c
   autocmd!
   autocmd BufWritePre *.h,*.c,*.cpp,*.hpp call StripTrailingWhitespace()
-  " cscript template
-  autocmd FileType cpp iabbrev cscript #!/bin/bash<cr>tail +3 $0 \| g++ -std=c++17 -Wall -Werror -O3 -x c++ - && exec ./a.out
-  autocmd FileType c iabbrev cscript #!/bin/bash<cr>tail +3 $0 \| gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out
 augroup END
 
 " xml
