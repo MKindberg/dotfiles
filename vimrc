@@ -54,6 +54,7 @@ call plug#end()
 
 if has('nvim-0.5')
   lua <<EOF
+  -- Treesitter {{{
   require'nvim-treesitter.configs'.setup {
     highlight = {
       enable = true,
@@ -77,6 +78,8 @@ if has('nvim-0.5')
       },
     },
   }
+  -- }}}
+  -- Telescope {{{
   require('telescope').setup{
     defaults = {
       file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
@@ -84,13 +87,15 @@ if has('nvim-0.5')
       qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
     }
   }
-
-  -- Setup nvim-cmp.
+  -- }}}
+  -- nvim-cmp {{{
   local cmp = require'cmp'
 
   cmp.setup({
     mapping = {
-      ['<Space>'] = cmp.mapping.close(),
+      ['<C>n'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+      ['<C>p'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+      ['<C>q'] = cmp.mapping.close(),
       ['<CR>'] = cmp.mapping.confirm({ select = true }),
     },
     snippet = {
@@ -130,27 +135,87 @@ if has('nvim-0.5')
       { name = 'cmdline' }
       })
     })
-
+  -- }}}
+  -- LuaSnip {{{
   local ls = require("luasnip")
   local snip = ls.snippet
   local text = ls.text_node
+  local insert = ls.insert_node
+  local func = ls.function_node
   ls.snippets = {
+    all = {
+    },
     c = {
+      snip("function",
+        {
+            insert(1, "void"),
+            text(" "),
+            insert(2, "name"),
+            text("("),
+            insert(3, "params"),
+            text({ ")", "{", "  "}),
+            insert(0),
+            text({ "", "}" }),
+        }
+      ),
+      snip("for",
+        {
+            text("for("),
+            insert(1, "size_t"),
+            text(" "),
+            insert(2, "i = 0"),
+            text("; "),
+            insert(3),
+            text("; "),
+            insert(4),
+            text({") {", "  "}),
+            insert(0),
+            text({"", "}"}),
+        }
+      ),
+      snip("if",
+        {
+            text("if("),
+            insert(1),
+            text({") {", "  "}),
+            insert(0),
+            text({"", "}"}),
+        }
+      ),
+      snip("while",
+        {
+            text("while("),
+            insert(1),
+            text({") {", "  "}),
+            insert(0),
+            text({"", "}"}),
+        }
+      ),
+      snip("do",
+        {
+            text({"do {", "  "}),
+            insert(0),
+            text({"", "} while("}),
+            insert(1),
+            text(");"),
+        }
+      ),
       snip("cscript",
         {
-            text({"#!/bin/bash", "tail -n +3 $0 | gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out"}),
+          text({"#!/bin/bash", "tail -n +3 $0 | gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out"}),
         }
       )
     },
     cpp = {
       snip("cscript",
         {
-            text({"#!/bin/bash", "tail -n +3 $0 | g++ -std=c++17 -Wall -Werror -O3 -x c++ - && exec ./a.out"}),
+          text({"#!/bin/bash", "tail -n +3 $0 | g++ -std=c++17 -Wall -Werror -O3 -x c++ - && exec ./a.out"}),
         }
       )
     },
   }
   ls.filetype_extend("cpp", { "c" })
+  -- }}}
 EOF
 
 set foldmethod=expr
@@ -164,6 +229,14 @@ nnoremap <leader>h <cmd>Telescope help_tags<cr>
 nnoremap <leader>q <cmd>Telescope quickfix<cr>
 nnoremap <leader>t <cmd>Telescope treesitter<cr>
 
+imap <silent><expr> <Esc>n luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : ''
+inoremap <silent> <Esc>p <cmd>lua require'luasnip'.jump(-1)<Cr>
+snoremap <silent> <Esc>n <cmd>lua require('luasnip').jump(1)<Cr>
+snoremap <silent> <Esc>p <cmd>lua require('luasnip').jump(-1)<Cr>
+imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>'
+inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
+snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>
+snoremap <silent> <S-Tab> <cmd>lua require('luasnip').jump(-1)<Cr>
 endif
 " cscope settings {{{
 
