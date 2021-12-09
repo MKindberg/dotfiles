@@ -28,12 +28,14 @@ if has('nvim-0.5')
   Plug 'nvim-treesitter/nvim-treesitter-textobjects'
   Plug 'gennaro-tedesco/nvim-peekup' " Preview registers
   Plug 'beauwilliams/focus.nvim' " Increase width of active window
+  Plug 'neovim/nvim-lspconfig'
   Plug 'L3MON4D3/LuaSnip'
   Plug 'hrsh7th/nvim-cmp'
   Plug 'saadparwaiz1/cmp_luasnip'
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/cmp-cmdline'
   Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-nvim-lsp'
   "Plug 'npxbr/glow.nvim' " Markdown preview
   "Plug 'neovim/nvim-lspconfig'
   "Plug 'f-person/git-blame.nvim' " Show git blame at end of lines
@@ -116,12 +118,22 @@ if has('nvim-0.5')
         name= 'luasnip',
         keyword_length = 2,
       },
+      { name = 'nvim_lsp',
+        keyword_length = 3,
+      }
     }),
     experimental = {
       ghost_text = true,
     },
   })
 
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
+  -- The following example advertise capabilities to `clangd`.
+  require'lspconfig'.clangd.setup {
+    capabilities = capabilities,
+  }
 
   -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline('/', {
@@ -227,6 +239,10 @@ if has('nvim-0.5')
   }
   ls.filetype_extend("cpp", { "c" })
   -- }}}
+
+  if(os.execute("bash -c 'command -v clangd'") == 0) then
+    require'lspconfig'.clangd.setup{}
+  end
 EOF
 
 set foldmethod=expr
