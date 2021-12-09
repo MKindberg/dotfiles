@@ -161,7 +161,7 @@ if has('nvim-0.5')
       snip("for",
         {
             text("for("),
-            insert(1, "size_t"),
+            insert(1, "unsigned"),
             text(" "),
             insert(2, "i = 0"),
             text("; "),
