@@ -54,6 +54,9 @@ call plug#end()
 
 if has('nvim-0.5')
   lua <<EOF
+  local function copy(args)
+    return args[1]
+  end
   -- Treesitter {{{
   require'nvim-treesitter.configs'.setup {
     highlight = {
@@ -163,11 +166,19 @@ if has('nvim-0.5')
             text("for("),
             insert(1, "unsigned"),
             text(" "),
-            insert(2, "i = 0"),
+            insert(2, "i"),
+            text(" = "),
+            insert(3, "0"),
             text("; "),
-            insert(3),
+            func(copy, 2),
+            text(" "),
+            insert(4, "<"),
+            text(" "),
+            insert(5),
             text("; "),
-            insert(4),
+            insert(6),
+            text("++"),
+            func(copy, 2),
             text({") {", "  "}),
             insert(0),
             text({"", "}"}),
