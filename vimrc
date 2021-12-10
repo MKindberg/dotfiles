@@ -279,7 +279,9 @@ endif
 set cscopetag
 set csprg=gtags-cscope
 if !empty(expand(glob("GTAGS")))
+  set nocscopeverbose
   cs add GTAGS
+  set cscopeverbose
 endif
 
 if has('nvim-0.5')
