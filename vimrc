@@ -245,6 +245,15 @@ if has('nvim-0.5')
   end
 EOF
 
+nnoremap <Leader>lr <cmd>lua vim.lsp.buf.rename()<CR>
+nnoremap <Leader>lf <cmd>lua vim.lsp.buf.formatting()<CR>
+nnoremap <Leader>ln <cmd>lua vim.diagnostic.goto_next()<CR>
+nnoremap <Leader>lp <cmd>lua vim.diagnostic.goto_prev()<CR>
+nnoremap <Leader>la <cmd>lua vim.lsp.buf.code_action()<CR>
+nnoremap <Leader>lh <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <Leader>ld <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <Leader>lD <cmd>lua vim.lsp.buf.declaration()<CR>
+
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set foldlevelstart=20
