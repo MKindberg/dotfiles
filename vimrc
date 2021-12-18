@@ -37,19 +37,14 @@ if has('nvim-0.5')
   Plug 'hrsh7th/cmp-path'
   Plug 'hrsh7th/cmp-nvim-lsp'
   "Plug 'npxbr/glow.nvim' " Markdown preview
-  "Plug 'neovim/nvim-lspconfig'
-  "Plug 'f-person/git-blame.nvim' " Show git blame at end of lines
 else
   Plug 'sheerun/vim-polyglot' " Better syntax highlight
 endif
 "Plug 'garbas/vim-snipmate' " Autogenerate code
 "Plug 'scrooloose/nerdtree' " A better file explorer
-"Plug 'vim-syntastic/syntastic' " Syntax checker
-"Plug 'Valloric/YouCompleteMe' " Always on autocomplete
 "Plug 'docunext/closetag.vim' " Automatically close html tags
 "Plug 'easymotion/vim-easymotion'
 "Plug 'nbardiuk/vim-gol'
-"Plug 'blueyed/vim-diminactive' " Dim inactive splits
 "Plug 'ervandew/supertab' " Autocomplete with tab
 "Plug 'szw/vim-tags' " Show all tags in file
 call plug#end()
