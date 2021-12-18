@@ -55,6 +55,21 @@ if has('nvim-0.5')
   local function copy(args)
     return args[1]
   end
+  function runCmd(line, linenr)
+    local cmd
+    local start, stop = line:find("runCmd:")
+    if (stop ~= nil)
+    then
+      cmd = string.sub(line,stop+1,-1)
+    else
+      cmd = "./" .. vim.fn.expand("%")
+    end
+    print("Executing: ", cmd)
+    local f = io.popen(cmd, "r");
+    output = f:read('*all');
+    print(output)
+    f:close()
+  end
   -- Treesitter {{{
   require'nvim-treesitter.configs'.setup {
     highlight = {
@@ -116,7 +131,7 @@ if has('nvim-0.5')
       },
       { name = 'nvim_lsp',
         keyword_length = 3,
-      }
+      },
     }),
     experimental = {
       ghost_text = true,
@@ -239,6 +254,7 @@ if has('nvim-0.5')
   if(os.execute("bash -c 'command -v clangd'") == 0) then
     require'lspconfig'.clangd.setup{}
   end
+
 EOF
 
 nnoremap <Leader>lr <cmd>lua vim.lsp.buf.rename()<CR>
@@ -394,6 +410,7 @@ if has('nvim')
   noremap <A-j> gj
   " Execute current file
   noremap <A-r> :!./%<CR>
+  noremap <A-r> :0luado runCmd(line, linenr)<CR>
   " Move in quickfix list
   nnoremap <A-n> :cn<cr>
   nnoremap <A-p> :cp<cr>
