@@ -18,6 +18,7 @@ Plug 'tpope/vim-fugitive' " Git commands
 Plug 'luochen1990/rainbow' " Rainbow paranthesis
 Plug 'sainnhe/sonokai' " Colorscheme
 Plug 'Yggdroot/indentLine' " Show indentation markers
+Plug 'tpope/vim-commentary'
 if has('nvim-0.5')
   Plug 'nvim-lua/popup.nvim'
   Plug 'nvim-lua/plenary.nvim'
@@ -412,6 +413,8 @@ inoremap jj <Esc>
 
 " Save as root even when file wasn't open with sudo
 cnoremap w!! w !sudo tee > /dev/null %
+
+map <leader>c gc
 " }}}
 
 " Settings {{{
@@ -500,6 +503,7 @@ endfunction
 augroup c
   autocmd!
   autocmd BufWritePre *.h,*.c,*.cpp,*.hpp call StripTrailingWhitespace()
+  autocmd Filetype *.h,*.c,*.cpp,*.hpp setlocal commentstring=//%s
 augroup END
 
 " xml
