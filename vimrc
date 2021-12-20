@@ -1,3 +1,4 @@
+" runCmd: :source %
 let mapleader="\<SPACE>"
 
 " Plugins {{{
@@ -55,21 +56,27 @@ if has('nvim-0.5')
   local function copy(args)
     return args[1]
   end
+  -- runCmd {{{
   function runCmd(line, linenr)
     local cmd
     local start, stop = line:find("runCmd:")
-    if (stop ~= nil)
-    then
+    if (stop ~= nil) then
       cmd = string.sub(line,stop+1,-1)
     else
       cmd = "./" .. vim.fn.expand("%")
     end
-    print("Executing: ", cmd)
-    local f = io.popen(cmd, "r");
-    output = f:read('*all');
-    print(output)
-    f:close()
+    cmd = string.gsub(cmd,"^%s+","")
+    cmd = string.gsub(cmd,"%s+$","")
+
+    print("Executing", cmd)
+    if (string.sub(cmd,1,1) == ':') then
+      vim.api.nvim_command(string.sub(cmd,2,-1))
+    else
+      vim.api.nvim_command("!"..cmd)
+    end
   end
+  vim.api.nvim_set_keymap('n', '<A>r', ':0luado runCmd(line, linenr)<CR>', {expr = true, noremap = true})
+  -- }}}
   -- Treesitter {{{
   require'nvim-treesitter.configs'.setup {
     highlight = {
@@ -408,9 +415,6 @@ if has('nvim')
   " For moving in wrapped text
   noremap <A-k> gk
   noremap <A-j> gj
-  " Execute current file
-  noremap <A-r> :!./%<CR>
-  noremap <A-r> :0luado runCmd(line, linenr)<CR>
   " Move in quickfix list
   nnoremap <A-n> :cn<cr>
   nnoremap <A-p> :cp<cr>
