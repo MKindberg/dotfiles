@@ -10,7 +10,6 @@ endif
 
 let g:polyglot_disabled = ['markdown']
 call plug#begin('~/.vim/plugged')
-Plug 'vim-airline/vim-airline' " A nicer status line
 Plug 'Raimondi/delimitMate' " Automatically close parantheses etc.
 Plug 'majutsushi/tagbar' " Show tags in current file
 Plug '~/dotfiles/modules/fzf' " Fuzzy finding
@@ -38,6 +37,7 @@ if has('nvim-0.5')
   Plug 'hrsh7th/cmp-cmdline'
   Plug 'hrsh7th/cmp-path'
   Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'nvim-lua/lsp-status.nvim'
   "Plug 'npxbr/glow.nvim' " Markdown preview
 else
   Plug 'sheerun/vim-polyglot' " Better syntax highlight
@@ -471,9 +471,6 @@ set splitbelow
 
 set showmode
 
-" Statusline
-"set laststatus=2
-"set statusline=%<%F\ %h%m%r%y%=%-14.(%l,%c%V%)\ %P
 
 set listchars=tab:>>,trail:-,
 set list
@@ -566,3 +563,66 @@ augroup END
 ab pritnf printf
 
 " }}}
+
+" StatusLine {{{
+function! LspStatus() abort
+    let sl = ''
+    if luaeval('not vim.tbl_isempty(vim.lsp.buf_get_clients(0))')
+        let sl.='E:' .luaeval("vim.lsp.diagnostic.get_count(0, [[Error]])") . ', '
+        let sl.='W:' .luaeval("vim.lsp.diagnostic.get_count(0, [[Warning]])")
+    else
+        let sl.='Lsp off'
+    endif
+    return sl
+endfunction
+  hi NormalColor guifg=Black guibg=Green ctermbg=46 ctermfg=0
+  hi InsertColor guifg=Black guibg=Cyan ctermbg=51 ctermfg=0
+  hi ReplaceColor guifg=Black guibg=maroon1 ctermbg=165 ctermfg=0
+  hi VisualColor guifg=Black guibg=Orange ctermbg=202 ctermfg=0
+  hi CommandColor guifg=Black guibg=Purple ctermbg=202 ctermfg=0
+  hi SelectColor guifg=Black guibg=White ctermbg=202 ctermfg=0
+  hi DefaultColor guifg=Black guibg=Gray ctermbg=202 ctermfg=0
+  let modes =  {
+        \'n': ["%#NormalColor#", "  NORMAL "],
+        \'i': ["%#InsertColor#", "  INSERT "],
+        \'v': ["%#VisualColor#", "  VISUAL "],
+        \'V': ["%#VisualColor#", "  VISUAL LINE "],
+        \'': ["%#VisualColor#", "  VISUAL BLOCK "],
+        \'c': ["%#CommandColor#", "  COMMAND "],
+        \'R': ["%#ReplaceColor#", "  REPLACE "],
+        \'s': ["%#SelectColor#", "  SELECT "],
+        \'S': ["%#SelectColor#", "  SELECT LINE "],
+        \'': ["%#SelectColor#", "  SELECT BLOCK "],
+        \}
+  function! AllStatus()
+    let statusline=""
+    let statusline.="%#DefaultColor#"
+    let statusline.="\ %f"
+    let statusline.="%m"
+    let statusline.='%{(&readonly || !&modifiable) ? " " : ""}'
+    let statusline.="%="
+    let statusline.="\ %{LspStatus()}"
+    let statusline.="%="
+    let statusline.="%{FugitiveStatusline()}"
+    let statusline.="%="
+    let statusline.="%l/%L,%c"
+    let statusline.="%y"
+    return statusline
+  endfunction
+
+  function! ActiveStatus()
+    let statusline=""
+    let statusline.="%{%modes[mode()][0]%}%{modes[mode()][1]}"
+    let statusline.=AllStatus()
+    return statusline
+  endfunction
+
+  function! InactiveStatus()
+    let statusline=""
+    let statusline.=AllStatus()
+    return statusline
+  endfunction
+
+  autocmd BufEnter,WinEnter * setlocal statusline=%!ActiveStatus()
+  autocmd BufLeave,WinLeave * setlocal statusline=%!InactiveStatus()
+  " }}}
