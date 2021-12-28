@@ -40,6 +40,7 @@ if has('nvim-0.5')
   Plug 'hrsh7th/cmp-path'
   Plug 'hrsh7th/cmp-nvim-lsp'
   Plug 'nvim-lua/lsp-status.nvim'
+  Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
   "Plug 'npxbr/glow.nvim' " Markdown preview
 else
   Plug 'sheerun/vim-polyglot' " Better syntax highlight
@@ -116,6 +117,13 @@ if has('nvim-0.5')
   -- nvim-cmp {{{
   local cmp = require'cmp'
 
+  local source_mapping = {
+    buffer = "[Buf]",
+    nvim_lsp = "[LSP]",
+    cmp_tabnine = "[TN]",
+    path = "[Path]",
+    luasnip = "[Snip]",
+  }
   cmp.setup({
     mapping = {
       ['<C>n'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
@@ -131,19 +139,36 @@ if has('nvim-0.5')
     sources = cmp.config.sources(
     {
       {
-        name = 'buffer',
-        keyword_length = 3,
-      },
-      {
         name= 'luasnip',
         keyword_length = 2,
       },
-      { name = 'nvim_lsp',
+      {
+        name = 'nvim_lsp',
+        keyword_length = 3,
+      },
+      {
+        name = 'cmp_tabnine',
+        keyword_length = 2,
+      },
+      {
+        name = 'buffer',
         keyword_length = 3,
       },
     }),
     experimental = {
       ghost_text = true,
+    },
+    formatting = {
+      format = function(entry, vim_item)
+      local menu = source_mapping[entry.source.name]
+      if entry.source.name == 'cmp_tabnine' then
+        if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
+          menu = entry.completion_item.data.detail .. ' ' .. menu
+        end
+      end
+      vim_item.menu = menu
+      return vim_item
+    end
     },
   })
 
@@ -170,6 +195,16 @@ if has('nvim-0.5')
       { name = 'cmdline' }
       })
     })
+  -- }}}
+  -- Tabnine {{{
+  local tabnine = require('cmp_tabnine.config')
+  tabnine:setup({
+    max_lines = 1000;
+    max_num_results = 20;
+    sort = true;
+    run_on_every_keystroke = true;
+    snippet_placeholder = '..';
+  })
   -- }}}
   -- LuaSnip {{{
   local ls = require("luasnip")
