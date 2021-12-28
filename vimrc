@@ -9,9 +9,11 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 let g:polyglot_disabled = ['markdown']
+
+" Plugin list {{{
 call plug#begin('~/.vim/plugged')
 Plug 'Raimondi/delimitMate' " Automatically close parantheses etc.
-Plug 'majutsushi/tagbar' " Show tags in current file
+Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'} " Show tags in current file
 Plug '~/dotfiles/modules/fzf' " Fuzzy finding
 Plug 'junegunn/fzf.vim' " Fuzzy finding
 Plug 'tpope/vim-fugitive' " Git commands
@@ -42,7 +44,6 @@ if has('nvim-0.5')
 else
   Plug 'sheerun/vim-polyglot' " Better syntax highlight
 endif
-"Plug 'garbas/vim-snipmate' " Autogenerate code
 "Plug 'scrooloose/nerdtree' " A better file explorer
 "Plug 'docunext/closetag.vim' " Automatically close html tags
 "Plug 'easymotion/vim-easymotion'
@@ -50,6 +51,7 @@ endif
 "Plug 'ervandew/supertab' " Autocomplete with tab
 "Plug 'szw/vim-tags' " Show all tags in file
 call plug#end()
+" }}}
 
 if has('nvim-0.5')
   lua <<EOF
