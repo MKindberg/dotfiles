@@ -577,13 +577,13 @@ function! LspStatus() abort
     endif
     return sl
 endfunction
-  hi NormalColor guifg=Black guibg=Green ctermbg=46 ctermfg=0
-  hi InsertColor guifg=Black guibg=Cyan ctermbg=51 ctermfg=0
-  hi ReplaceColor guifg=Black guibg=maroon1 ctermbg=165 ctermfg=0
-  hi VisualColor guifg=Black guibg=Orange ctermbg=202 ctermfg=0
-  hi CommandColor guifg=Black guibg=Purple ctermbg=202 ctermfg=0
-  hi SelectColor guifg=Black guibg=White ctermbg=202 ctermfg=0
-  hi DefaultColor guifg=Black guibg=Gray ctermbg=202 ctermfg=0
+  hi NormalColor ctermbg=Green ctermfg=0
+  hi InsertColor ctermbg=Cyan ctermfg=0
+  hi ReplaceColor ctermbg=DarkCyan ctermfg=0
+  hi VisualColor ctermbg=Blue ctermfg=0
+  hi CommandColor ctermbg=Red ctermfg=0
+  hi SelectColor ctermbg=White ctermfg=0
+  hi DefaultColor ctermbg=Gray ctermfg=0
   let modes =  {
         \'n': ["%#NormalColor#", "  NORMAL "],
         \'i': ["%#InsertColor#", "  INSERT "],
