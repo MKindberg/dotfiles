@@ -1,4 +1,4 @@
-" runCmd: :source %
+" Run with: :source %
 let mapleader="\<SPACE>"
 
 " Plugins {{{
@@ -59,7 +59,7 @@ if has('nvim-0.5')
   -- runCmd {{{
   function runCmd(line, linenr)
     local cmd
-    local start, stop = line:find("runCmd:")
+    local start, stop = line:find("Run with:")
     if (stop ~= nil) then
       cmd = string.sub(line,stop+1,-1)
     else
@@ -75,7 +75,7 @@ if has('nvim-0.5')
       vim.api.nvim_command("!"..cmd)
     end
   end
-  vim.api.nvim_set_keymap('n', '<A>r', ':0luado runCmd(line, linenr)<CR>', {expr = true, noremap = true})
+  vim.api.nvim_set_keymap('n', '<M-r>', ':0luado runCmd(line, linenr)<CR>', {expr = false, noremap = true})
   -- }}}
   -- Treesitter {{{
   require'nvim-treesitter.configs'.setup {
