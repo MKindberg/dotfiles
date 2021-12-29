@@ -21,6 +21,7 @@ Plug 'luochen1990/rainbow' " Rainbow paranthesis
 Plug 'sainnhe/sonokai' " Colorscheme
 Plug 'Yggdroot/indentLine' " Show indentation markers
 Plug 'tpope/vim-commentary'
+Plug 'szw/vim-maximizer'
 if has('nvim-0.5')
   Plug 'nvim-lua/popup.nvim'
   Plug 'nvim-lua/plenary.nvim'
@@ -80,6 +81,7 @@ if has('nvim-0.5')
   end
   vim.api.nvim_set_keymap('n', '<M-r>', ':0luado runCmd(line, linenr)<CR>', {expr = false, noremap = true})
   -- }}}
+
   -- Treesitter {{{
   require'nvim-treesitter.configs'.setup {
     highlight = {
@@ -105,6 +107,7 @@ if has('nvim-0.5')
     },
   }
   -- }}}
+
   -- Telescope {{{
   require('telescope').setup{
     defaults = {
@@ -114,6 +117,7 @@ if has('nvim-0.5')
     }
   }
   -- }}}
+
   -- nvim-cmp {{{
   local cmp = require'cmp'
 
@@ -196,6 +200,7 @@ if has('nvim-0.5')
       })
     })
   -- }}}
+
   -- Tabnine {{{
   local tabnine = require('cmp_tabnine.config')
   tabnine:setup({
@@ -206,6 +211,7 @@ if has('nvim-0.5')
     snippet_placeholder = '..';
   })
   -- }}}
+
   -- LuaSnip {{{
   local ls = require("luasnip")
   local snip = ls.snippet
@@ -473,6 +479,7 @@ inoremap jj <Esc>
 cnoremap w!! w !sudo tee > /dev/null %
 
 map <leader>c gc
+map <leader>m :MaximizerToggle<cr>
 " }}}
 
 " Settings {{{
