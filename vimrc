@@ -42,6 +42,7 @@ if has('nvim-0.5')
   Plug 'hrsh7th/cmp-nvim-lsp'
   Plug 'nvim-lua/lsp-status.nvim'
   Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
+  Plug 'puremourning/vimspector'
   "Plug 'npxbr/glow.nvim' " Markdown preview
 else
   Plug 'sheerun/vim-polyglot' " Better syntax highlight
@@ -480,6 +481,19 @@ cnoremap w!! w !sudo tee > /dev/null %
 
 map <leader>c gc
 map <leader>m :MaximizerToggle<cr>
+
+noremap <leader>dd :call vimspector#Launch()<CR>
+noremap <leader>dn :call vimspector#StepOver()<CR>
+noremap <leader>ds :call vimspector#StepInto()<CR>
+noremap <leader>dsu :call vimspector#StepOut()<CR>
+noremap <leader>dc :call vimspector#Continue()<CR>
+noremap <leader>db :call vimspector#ToggleBreakpoint()<CR>
+noremap <leader>dfu :call vimspector#UpFrame()<CR>
+noremap <leader>dfd :call vimspector#DownFrame()<CR>
+noremap <leader>dcc :call vimspector#RunToCursor()<CR>
+noremap <leader>dr :call vimspector#Restart()<CR>
+noremap <leader>de :call vimspector#Stop()<CR>
+
 " }}}
 
 " Settings {{{
