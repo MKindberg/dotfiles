@@ -322,11 +322,21 @@ set foldexpr=nvim_treesitter#foldexpr()
 set foldlevelstart=20
 
 noremap <Leader>p <cmd>Telescope find_files<cr>
-nnoremap <leader>g <cmd>Telescope live_grep<cr>
+nnoremap <leader>7 <cmd>Telescope live_grep<cr>
+nnoremap <leader>/ <cmd>Telescope live_grep<cr>
 nnoremap <leader>b <cmd>Telescope buffers<cr>
 nnoremap <leader>h <cmd>Telescope help_tags<cr>
 nnoremap <leader>q <cmd>Telescope quickfix<cr>
 nnoremap <leader>t <cmd>Telescope treesitter<cr>
+
+nnoremap <leader>gb <cmd>Git blame<cr>
+nnoremap <leader>gg :Ggrep 
+nnoremap <leader>gs <cmd>Git<cr>
+nnoremap <leader>gl <cmd>Gclog!<cr>
+nnoremap <leader>gd <cmd>Gvdiffsplit<cr>
+nnoremap <leader>gm <cmd>Git mergetool -y<cr>
+nnoremap <leader>ga <cmd>Gwrite<cr>
+nnoremap <leader>gc <cmd>Git commit<cr>
 
 imap <silent><expr> <Esc>n luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : ''
 inoremap <silent> <Esc>p <cmd>lua require'luasnip'.jump(-1)<Cr>
