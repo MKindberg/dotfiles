@@ -258,14 +258,47 @@ ls.snippets = {
   },
 }
 ls.filetype_extend("cpp", { "c" })
-keymap('i', '<Esc>n', "luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' :''", {expr = true, noremap = true})
-keymap('i', '<Esc>p', "<cmd>lua require'luasnip'.jump(-1)<Cr>", {expr = false, noremap = true})
-keymap('s', '<Esc>n', "<cmd>lua require'luasnip'.jump(1)<Cr>", {expr = false, noremap = true})
-keymap('s', '<Esc>p', "<cmd>lua require'luasnip'.jump(-1)<Cr>", {expr = false, noremap = true})
-keymap('i', '<Tab>', "luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' :'<Tab>'", {expr = true, noremap = true})
-keymap('i', '<S-Tab>', "<cmd>lua require'luasnip'.jump(-1)<Cr>", {expr = false, noremap = true})
-keymap('s', '<Tab>', "<cmd>lua require'luasnip'.jump(1)<Cr>", {expr = false, noremap = true})
-keymap('s', '<S-Tab>', "<cmd>lua require'luasnip'.jump(-1)<Cr>", {expr = false, noremap = true})
+local t = function(str)
+    return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+local check_back_space = function()
+    local col = vim.fn.col('.') - 1
+    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+        return true
+    else
+        return false
+    end
+end
+_G.tab_complete = function()
+    if cmp and cmp.visible() then
+        cmp.select_next_item()
+    elseif luasnip and luasnip.expand_or_jumpable() then
+        return t("<Plug>luasnip-expand-or-jump")
+    elseif check_back_space() then
+        return t "<Tab>"
+    else
+        cmp.complete()
+    end
+    return ""
+end
+_G.s_tab_complete = function()
+    if cmp and cmp.visible() then
+        cmp.select_prev_item()
+    elseif luasnip and luasnip.jumpable(-1) then
+        return t("<Plug>luasnip-jump-prev")
+    else
+        return t "<S-Tab>"
+    end
+    return ""
+end
+keymap("i", "<Esc>n", "v:lua.tab_complete()", {expr = true})
+keymap("s", "<Esc>n", "v:lua.tab_complete()", {expr = true})
+keymap("i", "<Esc>p", "v:lua.s_tab_complete()", {expr = true})
+keymap("s", "<Esc>p", "v:lua.s_tab_complete()", {expr = true})
+keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
+keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
+keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 -- }}}
 
 -- Lsp {{{
