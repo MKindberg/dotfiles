@@ -1,9 +1,13 @@
 local keymap = vim.api.nvim_set_keymap
 local set = vim.opt
 -- runCmd {{{
+local runCmd_config = {
+  trigger = "Run with:",
+  keymap = "<M-r>",
+}
 function runCmd(line, linenr)
   local cmd
-  local start, stop = line:find("Run with:")
+  local start, stop = line:find(runCmd_config.trigger)
   if (stop ~= nil) then
     cmd = string.sub(line,stop+1,-1)
   else
@@ -19,7 +23,7 @@ function runCmd(line, linenr)
     vim.api.nvim_command("!"..cmd)
   end
 end
-keymap('n', '<M-r>', '<cmd>0luado runCmd(line, linenr)<CR>', {expr = false, noremap = true})
+keymap('n', runCmd_config.keymap, '<cmd>0luado runCmd(line, linenr)<CR>', {expr = false, noremap = true})
 -- }}}
 
 -- Treesitter {{{
