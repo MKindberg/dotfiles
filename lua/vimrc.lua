@@ -283,3 +283,62 @@ keymap('n', '<Leader>ld', '<cmd>lua vim.lsp.buf.definition()<CR>', {expr = false
 keymap('n', '<Leader>lD', '<cmd>lua vim.lsp.buf.declaration()<CR>', {expr = false, noremap = true})
 
 -- }}}
+
+-- Preview {{{
+preview_config = {
+  prefix = "",
+  as_comment = true,
+  max_lines = 15,
+  keybind = "gF",
+  hightlight_group = "Comment",
+}
+local preview_active = false
+function preview_file(filename)
+  local ns_id = vim.api.nvim_create_namespace('preview_file')
+  if(preview_active) then
+    vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
+    preview_active = false
+    return
+  end
+
+  local bnr = vim.fn.bufnr('%')
+  local line_num = vim.api.nvim_call_function("line", {"."}) - 1
+  local col_num = 0
+
+  local i = 1
+  local file = io.open(filename, "r")
+  local virt_text = {}
+
+  if(file ~= nil) then
+    line = file:read("*line")
+    while(line ~= nil) do
+      line = preview_config.prefix .. line
+      if(preview_config.as_comment) then
+        line = string.gsub(vim.api.nvim_buf_get_option(0, "commentstring"), "%%s", " "..line.." ")
+      end
+
+      virt_text[i] = {{line, preview_config.hightlight_group}}
+      i = i+1
+
+      if i == preview_config.max_lines then
+        break
+      end
+
+      line = file:read("*line")
+    end
+
+    local opts = {
+      id = 1,
+      virt_lines = virt_text,
+    }
+    local mark_id = vim.api.nvim_buf_set_extmark(0, ns_id, line_num, col_num, opts)
+    preview_active = true
+
+    file:close()
+  else
+    print("Cannot open file '" .. filename .."'")
+  end
+end
+
+keymap('n', preview_config.keybind, '<cmd>lua preview_file(vim.call("expand", "<cfile>"))<cr>', {expr = false, noremap = true})
+-- }}}
