@@ -67,11 +67,14 @@ nnoremap <leader>ga <cmd>Gwrite<cr>
 nnoremap <leader>gc <cmd>Git commit<cr>
 " }}}
 
+" indentLine {{{
+let g:indentLine_char = '▏'
+" }}}
+
 if has('nvim-0.5')
   set rtp+=~/dotfiles/lua
   runtime vimrc.lua
 endif
-
 " Cscope {{{
 
 set cscopetag
