@@ -43,6 +43,7 @@ if has('nvim-0.5')
   Plug 'nvim-lua/lsp-status.nvim'
   Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
   Plug 'puremourning/vimspector'
+  Plug 'simrat39/rust-tools.nvim'
   "Plug 'npxbr/glow.nvim' " Markdown preview
 else
   Plug 'sheerun/vim-polyglot' " Better syntax highlight
