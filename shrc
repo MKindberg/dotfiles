@@ -259,6 +259,14 @@ ln_from() {
   fi
 }
 
+g() {
+  if [[ $# -eq 0 ]]; then
+    git help --all | sed -rn 's/^\s+(.*)/\1/p' | cut -d ' ' -f 1 | fzf --preview "git {} --help"
+  else
+    git "$@"
+  fi
+}
+
 # }}}
 
 # Aliases {{{
