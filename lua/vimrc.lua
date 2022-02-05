@@ -1,5 +1,6 @@
 local keymap = vim.api.nvim_set_keymap
 local set = vim.opt
+
 -- runCmd {{{
 local runCmd_config = {
   trigger = "Run with:",
@@ -348,6 +349,10 @@ local opts = {
 }
 
 require('rust-tools').setup({})
+-- }}}
+
+-- Comment {{{
+require('Comment').setup()
 -- }}}
 
 -- Preview {{{

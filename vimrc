@@ -20,7 +20,6 @@ Plug 'tpope/vim-fugitive' " Git commands
 Plug 'luochen1990/rainbow' " Rainbow paranthesis
 Plug 'sainnhe/sonokai' " Colorscheme
 Plug 'Yggdroot/indentLine' " Show indentation markers
-Plug 'tpope/vim-commentary'
 Plug 'szw/vim-maximizer'
 if has('nvim-0.5')
   Plug 'nvim-lua/popup.nvim'
@@ -44,8 +43,10 @@ if has('nvim-0.5')
   Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
   Plug 'puremourning/vimspector'
   Plug 'simrat39/rust-tools.nvim'
+  Plug 'numToStr/Comment.nvim'
   "Plug 'npxbr/glow.nvim' " Markdown preview
 else
+  Plug 'tpope/vim-commentary'
   Plug 'sheerun/vim-polyglot' " Better syntax highlight
 endif
 "Plug 'scrooloose/nerdtree' " A better file explorer
