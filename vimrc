@@ -39,6 +39,7 @@ if has('nvim-0.5')
   Plug 'hrsh7th/cmp-cmdline'
   Plug 'hrsh7th/cmp-path'
   Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'p00f/clangd_extensions.nvim'
   Plug 'nvim-lua/lsp-status.nvim'
   Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
   Plug 'puremourning/vimspector'
