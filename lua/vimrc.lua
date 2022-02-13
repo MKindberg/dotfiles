@@ -117,9 +117,11 @@ cmp.setup({
       keyword_length = 3,
     },
   }),
+  view = {
+    entries = "native"
+  },
   experimental = {
     ghost_text = true,
-    native_menu = true
   },
   formatting = {
     format = function(entry, vim_item)

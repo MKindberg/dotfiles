@@ -1,4 +1,4 @@
-" Run with: :source %
+" Run with: :source % | e
 let mapleader="\<SPACE>"
 
 " Plugins {{{
