@@ -50,6 +50,11 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --no-mouse"
 # }}}
 
 # Functions {{{
+
+learnx() {
+  exec elinks -dump https://learnxinyminutes.com/docs/$1/ | less
+}
+
 function up {
   newDir=$PWD
   for (( c=0; c<$1; c++ ))
