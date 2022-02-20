@@ -45,6 +45,8 @@ if has('nvim-0.5')
   Plug 'puremourning/vimspector'
   Plug 'simrat39/rust-tools.nvim'
   Plug 'numToStr/Comment.nvim'
+  Plug 'nvim-lualine/lualine.nvim'
+  Plug 'kyazdani42/nvim-web-devicons'
   "Plug 'npxbr/glow.nvim' " Markdown preview
 else
   Plug 'tpope/vim-commentary'
@@ -371,64 +373,64 @@ ab pritnf printf
 " }}}
 
 " StatusLine {{{
-function! LspStatus() abort
-    let sl = ''
-    if luaeval('not vim.tbl_isempty(vim.lsp.buf_get_clients(0))')
-        let sl.='E:' .luaeval("vim.lsp.diagnostic.get_count(0, [[Error]])") . ', '
-        let sl.='W:' .luaeval("vim.lsp.diagnostic.get_count(0, [[Warning]])")
-    else
-        let sl.='Lsp off'
-    endif
-    return sl
-endfunction
-  hi NormalColor ctermbg=Green ctermfg=0
-  hi InsertColor ctermbg=Cyan ctermfg=0
-  hi ReplaceColor ctermbg=DarkCyan ctermfg=0
-  hi VisualColor ctermbg=Blue ctermfg=0
-  hi CommandColor ctermbg=Red ctermfg=0
-  hi SelectColor ctermbg=White ctermfg=0
-  hi DefaultColor ctermbg=Gray ctermfg=0
-  let modes =  {
-        \'n': ["%#NormalColor#", "  NORMAL "],
-        \'i': ["%#InsertColor#", "  INSERT "],
-        \'v': ["%#VisualColor#", "  VISUAL "],
-        \'V': ["%#VisualColor#", "  VISUAL LINE "],
-        \'': ["%#VisualColor#", "  VISUAL BLOCK "],
-        \'c': ["%#CommandColor#", "  COMMAND "],
-        \'R': ["%#ReplaceColor#", "  REPLACE "],
-        \'s': ["%#SelectColor#", "  SELECT "],
-        \'S': ["%#SelectColor#", "  SELECT LINE "],
-        \'': ["%#SelectColor#", "  SELECT BLOCK "],
-        \}
-  function! AllStatus()
-    let statusline=""
-    let statusline.="%#DefaultColor#"
-    let statusline.="\ %f"
-    let statusline.="%m"
-    let statusline.='%{(&readonly || !&modifiable) ? " " : ""}'
-    let statusline.="%="
-    let statusline.="\ %{LspStatus()}"
-    let statusline.="%="
-    let statusline.="%{FugitiveStatusline()}"
-    let statusline.="%="
-    let statusline.="%l/%L,%c"
-    let statusline.="%y"
-    return statusline
-  endfunction
-
-  function! ActiveStatus()
-    let statusline=""
-    let statusline.="%{%modes[mode()][0]%}%{modes[mode()][1]}"
-    let statusline.=AllStatus()
-    return statusline
-  endfunction
-
-  function! InactiveStatus()
-    let statusline=""
-    let statusline.=AllStatus()
-    return statusline
-  endfunction
-
-  autocmd BufEnter,WinEnter * setlocal statusline=%!ActiveStatus()
-  autocmd BufLeave,WinLeave * setlocal statusline=%!InactiveStatus()
-  " }}}
+" function! LspStatus() abort
+"     let sl = ''
+"     if luaeval('not vim.tbl_isempty(vim.lsp.buf_get_clients(0))')
+"         let sl.='E:' .luaeval("vim.lsp.diagnostic.get_count(0, [[Error]])") . ', '
+"         let sl.='W:' .luaeval("vim.lsp.diagnostic.get_count(0, [[Warning]])")
+"     else
+"         let sl.='Lsp off'
+"     endif
+"     return sl
+" endfunction
+"   hi NormalColor ctermbg=Green ctermfg=0
+"   hi InsertColor ctermbg=Cyan ctermfg=0
+"   hi ReplaceColor ctermbg=DarkCyan ctermfg=0
+"   hi VisualColor ctermbg=Blue ctermfg=0
+"   hi CommandColor ctermbg=Red ctermfg=0
+"   hi SelectColor ctermbg=White ctermfg=0
+"   hi DefaultColor ctermbg=Gray ctermfg=0
+"   let modes =  {
+"         \'n': ["%#NormalColor#", "  NORMAL "],
+"         \'i': ["%#InsertColor#", "  INSERT "],
+"         \'v': ["%#VisualColor#", "  VISUAL "],
+"         \'V': ["%#VisualColor#", "  VISUAL LINE "],
+"         \'': ["%#VisualColor#", "  VISUAL BLOCK "],
+"         \'c': ["%#CommandColor#", "  COMMAND "],
+"         \'R': ["%#ReplaceColor#", "  REPLACE "],
+"         \'s': ["%#SelectColor#", "  SELECT "],
+"         \'S': ["%#SelectColor#", "  SELECT LINE "],
+"         \'': ["%#SelectColor#", "  SELECT BLOCK "],
+"         \}
+"   function! AllStatus()
+"     let statusline=""
+"     let statusline.="%#DefaultColor#"
+"     let statusline.="\ %f"
+"     let statusline.="%m"
+"     let statusline.='%{(&readonly || !&modifiable) ? " " : ""}'
+"     let statusline.="%="
+"     let statusline.="\ %{LspStatus()}"
+"     let statusline.="%="
+"     let statusline.="%{FugitiveStatusline()}"
+"     let statusline.="%="
+"     let statusline.="%l/%L,%c"
+"     let statusline.="%y"
+"     return statusline
+"   endfunction
+"
+"   function! ActiveStatus()
+"     let statusline=""
+"     let statusline.="%{%modes[mode()][0]%}%{modes[mode()][1]}"
+"     let statusline.=AllStatus()
+"     return statusline
+"   endfunction
+"
+"   function! InactiveStatus()
+"     let statusline=""
+"     let statusline.=AllStatus()
+"     return statusline
+"   endfunction
+"
+"   autocmd BufEnter,WinEnter * setlocal statusline=%!ActiveStatus()
+"   autocmd BufLeave,WinLeave * setlocal statusline=%!InactiveStatus()
+"   " }}}
