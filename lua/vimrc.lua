@@ -300,8 +300,14 @@ keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 -- }}}
 
 -- Lsp {{{
-if(os.execute("bash -c 'command -v clangd'") == 0) then
-  require'lspconfig'.clangd.setup{}
+if(os.execute("bash -c 'command -v pyright'") == 0) then
+  require'lspconfig'.pyright.setup{}
+end
+if(os.execute("bash -c 'command -v bash-language-server'") == 0) then
+  require'lspconfig'.bashls.setup{}
+end
+if(os.execute("bash -c 'command -v lua-language-server'") == 0) then
+  require'lspconfig'.sumneko_lua.setup{}
 end
 
 keymap('n', '<Leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', {expr = false, noremap = true})
