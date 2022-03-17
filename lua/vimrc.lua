@@ -502,3 +502,5 @@ require('lualine').setup {
   extensions = {}
 }
 -- }}}
+
+require("neogit")

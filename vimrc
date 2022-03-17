@@ -47,6 +47,7 @@ if has('nvim-0.5')
   Plug 'numToStr/Comment.nvim'
   Plug 'nvim-lualine/lualine.nvim'
   Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'TimUntersberger/neogit'
   "Plug 'npxbr/glow.nvim' " Markdown preview
 else
   Plug 'tpope/vim-commentary'
@@ -70,6 +71,7 @@ nnoremap <leader>gd <cmd>Gvdiffsplit<cr>
 nnoremap <leader>gm <cmd>Git mergetool -y<cr>
 nnoremap <leader>ga <cmd>Gwrite<cr>
 nnoremap <leader>gc <cmd>Git commit<cr>
+nnoremap <leader>g <cmd>Neogit<cr>
 " }}}
 
 " indentLine {{{
