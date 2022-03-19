@@ -527,4 +527,6 @@ require("sidebar-nvim").setup({
     todos = { ignored_paths = { "~" } },
 })
 
--- require("neogit")
+require("neogit").setup{
+  disable_commit_confirmation = true
+}

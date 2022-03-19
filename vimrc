@@ -71,8 +71,14 @@ nnoremap <leader>gl <cmd>Gclog!<cr>
 nnoremap <leader>gd <cmd>Gvdiffsplit<cr>
 nnoremap <leader>gm <cmd>Git mergetool -y<cr>
 nnoremap <leader>ga <cmd>Gwrite<cr>
-nnoremap <leader>gc <cmd>Git commit<cr>
-nnoremap <leader>g <cmd>Neogit<cr>
+
+if has('nvim-0.5')
+  nnoremap <leader>g <cmd>Neogit<cr>
+nnoremap <leader>gc <cmd>Neo commit<cr>
+else
+  nnoremap <leader>g <cmd>Git<cr>
+  nnoremap <leader>gc <cmd>Git commit<cr>
+endif
 " }}}
 
 " indentLine {{{
