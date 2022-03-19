@@ -1,5 +1,6 @@
 " Run with: :source % | e
 let mapleader="\<SPACE>"
+let maplocalleader=","
 
 " Plugins {{{
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -239,6 +240,21 @@ noremap <leader>dcc :call vimspector#RunToCursor()<CR>
 noremap <leader>dr :call vimspector#Restart()<CR>
 noremap <leader>de :call vimspector#Stop()<CR>
 
+noremap <leader>1 <cmd>buffer 1<cr>
+noremap <leader>2 <cmd>buffer 2<cr>
+noremap <leader>3 <cmd>buffer 3<cr>
+noremap <leader>4 <cmd>buffer 4<cr>
+noremap <leader>5 <cmd>buffer 5<cr>
+noremap <leader>6 <cmd>buffer 6<cr>
+noremap <leader>7 <cmd>buffer 7<cr>
+
+noremap <localleader><localleader> gt
+noremap <localleader>1 1gt
+noremap <localleader>2 2gt
+noremap <localleader>3 3gt
+noremap <localleader>4 4gt
+noremap <localleader>5 5gt
+noremap <localleader>6 6gt
 " }}}
 
 " Settings {{{
