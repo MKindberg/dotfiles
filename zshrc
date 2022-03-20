@@ -124,9 +124,17 @@ function precmd() {
 local ret_status="%(?:%{%F{green}:%F{red}%})\$"
 local ret_num="%(?: :%F{red} [%?] )"
 
+r_prompt() {
+  setopt localoptions extendedglob
+  if [[ "$(jobs)" ]]; then
+    jobs_str=$(jobs | sed -nr 's/(\S+)\s+\S+\s+\S+\s+(.*)/ \1 "\2" /p' | tr '\n' '|')
+    printf "%${COLUMNS}s\r" ${jobs_str:0:-1}
+  fi
+}
+
 PROMPT='
 %B%F{blue}${dirs}
-%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}`__git_ps1` %b%F{yellow}${timer_show}%B
+%F{white}$(r_prompt)%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}`__git_ps1` %b%F{yellow}${timer_show}%B
 %F{yellow}%D{%H:%M}%}%b${ret_num}${ret_status}%b%k%f '
 
 # }}}
