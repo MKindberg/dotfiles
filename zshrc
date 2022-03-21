@@ -126,9 +126,10 @@ local ret_num="%(?: :%F{red} [%?] )"
 
 r_prompt() {
   setopt localoptions extendedglob
-  if [[ "$(jobs)" ]]; then
+  if [[ "$(jobs)" != "" ]]; then
     jobs_str=$(jobs | sed -nr 's/(\S+)\s+\S+\s+\S+\s+(.*)/ \1 "\2" /p' | tr '\n' '|')
-    printf "%${COLUMNS}s\r" ${jobs_str:0:-1}
+    ((len=${#${jobs_str}}-1))
+    printf "%${COLUMNS}s\r" ${jobs_str:0:$len}
   fi
 }
 
