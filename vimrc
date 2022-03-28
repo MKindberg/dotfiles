@@ -18,6 +18,8 @@ Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'} " Show tags in current file
 Plug '~/dotfiles/modules/fzf' " Fuzzy finding
 Plug 'junegunn/fzf.vim' " Fuzzy finding
 Plug 'tpope/vim-fugitive' " Git commands
+Plug 'tpope/vim-sleuth' " Automatic detection of tabwidth
+Plug 'tpope/vim-surround'
 Plug 'luochen1990/rainbow' " Rainbow paranthesis
 Plug 'sainnhe/sonokai' " Colorscheme
 Plug 'Yggdroot/indentLine' " Show indentation markers
