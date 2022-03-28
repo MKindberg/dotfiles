@@ -280,6 +280,8 @@ set scrolloff=3 " Min lines above and below cursor.
 
 set lazyredraw
 
+set conceallevel=0 " Don't hide characters in eg. json and md files
+
 " Tabs
 set shiftwidth=2
 set tabstop=2
