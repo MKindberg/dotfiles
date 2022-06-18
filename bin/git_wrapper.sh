@@ -1,0 +1,144 @@
+#!/bin/bash
+
+git_checkout_remote() {
+  local tags branches target
+  tags=$(
+    git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
+  branches=$(
+    git branch --all | grep -v HEAD             |
+    sed "s/.* //"    | sed "s#remotes/[^/]*/##" |
+    sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
+  target=$(
+    (echo "$tags"; echo "$branches") |
+    fzf-tmux -l30 -- --no-hscroll --ansi +m -d "\t" -n 2 --preview='') || return
+  git checkout $(echo "$target" | awk '{print $2}')
+}
+
+git_checkout_commit() {
+  local commits commit
+  commits=$(git log --pretty=oneline --abbrev-commit --reverse)
+  if [[ $FZF_PREVIEW == 0 ]]; then
+    commit=$(echo "$commits" | fzf --tac +s +m -e )
+  else
+    commit=$(echo "$commits" | fzf --tac +s +m -e --preview 'git show {+1}')
+  fi
+  git checkout $(echo "$commit" | sed "s/ .*//")
+}
+
+git_checkout_branch() {
+  if [ $# -eq 0 ]; then
+		local branches branch
+		branches=$(git branch -vv) &&
+		branch=$(echo "$branches" | fzf +m) &&
+		git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
+  else
+    git checkout "$@"
+  fi
+}
+
+git_add() {
+  echo $#
+  local files
+  if [ $# -eq 0 ]; then
+    if [[ $FZF_PREVIEW == 0 ]]; then
+      files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 )
+    else
+      files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}' | diff-so-fancy)
+    fi
+    [[ -n "$files" ]] && echo "$files" | xargs -I{} git add {} && git status --short --untracked=no
+  else
+    git add "$@"
+  fi
+}
+
+git_diff() {
+echo "diff"
+if command -v tig &> /dev/null && [[ -z "$@" ]]; then
+  tig status
+elif [[ $FZF_PREVIEW == 0 ]]; then
+  git diff --color=always $@
+else
+  local files cmd
+  cmd="git diff --color=always $@ {} | diff-so-fancy"
+  if [ $# -eq 0 ]; then
+    files=$(git ls-files -m -o --exclude-standard -x "*")
+  else
+    files=$(git log --name-only --pretty=oneline --full-index $1..HEAD | grep -vE '^[0-9a-f]{40} ' | sort | uniq)
+  fi
+  file=" "
+  while [ $file ]; do
+    file=$(echo "$files" | fzf -0 --preview $cmd)
+    if [ $file ]; then
+      $EDITOR ${file}
+    fi
+  done
+fi
+}
+
+git_log() {
+local entries
+entries=$(git log --pretty=oneline --abbrev-commit)
+cmd='git show --color=always {+1}'
+if [[ $FZF_PREVIEW == 0 ]]; then
+  echo $entries | fzf --bind="enter:execute($cmd)"
+else
+  echo $entries | fzf --preview $cmd
+fi
+}
+
+git_show() {
+local rev="HEAD"
+if [[ $# > 0 ]]; then
+  rev=$1
+fi
+
+file=" "
+while [ $file ]; do
+  file=$(git show --format=oneline --name-only ${rev} | fzf --preview "git diff --color=always ${rev}~1 $rev {} | diff-so-fancy")
+  if [ $file ]; then
+    $EDITOR ${file}
+  fi
+done
+}
+
+git_grep() {
+local file=$(git grep -l "$@" | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
+while [ $file ]; do
+  $EDITOR -o $file
+  local file=$(git grep -l $1 | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
+done
+}
+
+git_show_stash() {
+git stash list | fzf --preview 'git show $(echo {} | cut -f 1 -d :) '
+}
+
+case $(basename $0) in
+ga)
+  git_add "$@"
+    ;;
+  gd)
+    git_diff "$@"
+    ;;
+  gg)
+    git_grep "$@"
+    ;;
+  gl)
+    git_log "$@"
+    ;;
+  go)
+    git_checkout_branch "$@"
+    ;;
+  goc)
+    git_checkout_commit "$@"
+    ;;
+  gor)
+    git_checkout_remote "$@"
+    ;;
+  gsh)
+    git_show "$@"
+    ;;
+  gshs)
+    git_show_stash "$@"
+    ;;
+esac

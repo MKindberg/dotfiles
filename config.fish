@@ -50,10 +50,7 @@ abbr cim vim
 abbr gs 'git status'
 abbr gst 'git status --untracked-files=no'
 abbr gb 'git branch'
-# abbr go 'git checkout'
-abbr ga 'git add'
 abbr gaa 'git add --all'
-abbr gd 'git diff'
 abbr gci 'git commit'
 abbr grm 'git-rm'
 abbr gmv 'git-mv'
@@ -63,45 +60,19 @@ abbr gcom 'git commit -m'
 abbr gap 'git add -p'
 abbr gdt 'git difftool'
 abbr gg 'git grep -n --break --heading'
-abbr gl 'git log'
 # }}}
 
 # Functions {{{
 
-function fbr
-  set branches $(git branch -vv)
-  echo $branches
-  set branch $(echo "$branches" | fzf +m)
-  echo $branch
-  git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
-end
-
-abbr --erase go
+# Not sure how to handle the name clash of go and the git checkout alias but 
+# this is good enough for now.
 function go
-  if count $argv > /dev/null
-    git checkout "$argv"
+  if test -f go.mod || test -f main.go; then
+    env go
   else
-    fbr
+    ~/dotfiles/bin/go
   end
 end
-
-abbr --erase ga
-function ga
-  if count $argv > /dev/null
-    echo 1
-    git add "$argv"
-  else
-    echo 2
-    local files
-    if test $FZF_PREVIEW == 0
-      set files $(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 )
-    else
-      set files $(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}' | diff-so-fancy)
-    end
-    test -n "$files" && echo "$files" | xargs -I{} git add {} && git status --short --untracked=no
-  end
-end
-
 # }}}
 
 # Keybinds {{{
