@@ -1,0 +1,8 @@
+#!/bin/bash
+if command -v shellcheck &> /dev/null; then
+  files="bashrc shrc install.sh bin/git_wrapper.sh pre-push"
+  echo "Running shellcheck on $files"
+  cd ~/dotfiles || exit 1
+  #shellcheck disable=SC2086
+  shellcheck -s bash -f gcc -e SC1090 $files
+fi
