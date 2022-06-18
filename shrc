@@ -13,12 +13,12 @@ export EDITOR='nvim'
 export LESS=R
 
 # history
-HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
-HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
-HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
-HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
-SAVEHIST=500
-HISTSIZE=2000
+export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
+export HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
+export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
+export HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+export SAVEHIST=500
+export HISTSIZE=2000
 
 if [[ -n $TMUX ]]; then
   export TERM=screen-256color
@@ -62,7 +62,7 @@ function go {
 }
 
 learnx() {
-  exec elinks -dump https://learnxinyminutes.com/docs/$1/ | less
+  exec elinks -dump "https://learnxinyminutes.com/docs/$1/" | less
 }
 
 function up {
@@ -71,18 +71,19 @@ function up {
   do
     newDir=$newDir/..
   done
-  cd $newDir
+  cd "$newDir" || return
 }
 
 function cdd () {
-    cd $1
+    cd "$1" || return
     ls
 }
 
 function root {
-  local gitroot=$(git rev-parse --show-toplevel 2> /dev/null)
+  local gitroot
+  gitroot=$(git rev-parse --show-toplevel 2> /dev/null)
   if [[ -n $gitroot ]]; then
-    cd $gitroot
+    cd "$gitroot" || return
   else
     cd /
   fi
@@ -91,12 +92,12 @@ function root {
 # cd to a directory and run ls in the upper-left pane
 split_cd(){
   PANE=$(tmux list-panes | grep 0: | rev | cut -d ' ' -f 1 | rev)
-  cd "$@"
-  tmux respawn-pane -k -t $PANE "ls --color $PWD && read"
+  cd "$@" || return
+  tmux respawn-pane -k -t "$PANE" "ls --color $PWD && read"
 }
 
 colorize_less() {
-  pygmentize -O style=emacs -g $1 | \less
+  pygmentize -O style=emacs -g "$1" | \less
 }
 
 cp_to() {
@@ -134,7 +135,9 @@ mv_from() {
 
 ln_to() {
   if [[ -n "$DOTFILES_LN_FROM" ]]; then
-    ln -s "$(realpath --relative-to=$PWD $DOTFILES_LN_FROM)" "$1"
+    local DEST
+    DEST=$(realpath --relative-to="$PWD" "$DOTFILES_LN_FROM")
+    ln -s "$DEST" "$1"
     unset DOTFILES_LN_FROM
   else
     DOTFILES_LN_TO="$PWD/$1"
@@ -142,7 +145,9 @@ ln_to() {
 }
 ln_from() {
   if [[ -n "$DOTFILES_LN_TO" ]]; then
-    ln -s "$(realpath --relative-to=$DOTFILES_LN_TO $1)" "$DOTFILES_LN_TO"
+    local DEST
+    DEST=$(realpath --relative-to="$DOTFILES_LN_TO" "$1")
+    ln -s "$DEST" "$DOTFILES_LN_TO"
     unset DOTFILES_LN_TO
   else
     DOTFILES_LN_FROM="$PWD/$1"
