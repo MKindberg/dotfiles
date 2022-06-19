@@ -5,7 +5,62 @@ dot_dir=$(git rev-parse --show-toplevel)
 git submodule init
 git submodule update
 
-# fzf
+declare -A INCLUDE_STRINGS
+INCLUDE_STRINGS=(
+  [zsh]="source $dot_dir/zshrc"
+  [bash]="source $dot_dir/bashrc"
+  [git]="[include]\n\tpath=$dot_dir/gitconfig"
+  [tmux]="source-file $dot_dir/tmux.conf"
+  [vim]="source $dot_dir/vimrc"
+  [nvim]="source $dot_dir/vimrc"
+)
+
+declare -A DOTFILES
+DOTFILES=(
+  [zsh]="$HOME/.zshrc"
+  [bash]="$HOME/.bashrc"
+  [git]="$HOME/.gitconfig"
+  [tmux]="$HOME/.tmux.conf"
+  [vim]="$HOME/.vimrc"
+  [nvim]="$HOME/.config/nvim/init.vim"
+)
+
+declare -A GREP_PATTERNS
+for key in "${!INCLUDE_STRINGS[@]}"; do
+  GREP_PATTERNS[$key]=${INCLUDE_STRINGS[$key]}
+done
+GREP_PATTERNS+=([git]="\spath=$dot_dir/gitconfig")
+
+install() {
+  local file name str
+  name="$1"
+  file="${DOTFILES[$name]}"
+  str="${INCLUDE_STRINGS[$name]}"
+  pat="${GREP_PATTERNS[$name]}"
+  read -rp "Do you want to install $name to $file? (y/n/e/a) " -n 1
+  echo # newline
+  # Abort
+  if [[ $REPLY =~ ^[Aa]$ ]]; then
+    exit
+  fi
+  # No
+  if [[ $REPLY =~ ^[Nn]$ ]]; then
+    return
+  fi
+  # Edit
+  if [[ $REPLY =~ ^[Ee]$ ]]; then
+    read -rp "Enter new file name: "
+    echo # newline
+    file="$REPLY"
+  fi
+  # Yes
+  if eval "grep -x \"$pat\" $file" &> /dev/null; then
+    echo "Skipping $name, already installed"
+    return
+  fi
+  eval "sed -i \"1i $str\" $file"
+}
+fzf
 installed=$(fzf --version 2> /dev/null)
 if [[ $installed == "" ]]; then
   read -pr "Do you want to install fzf? " -n 1
@@ -17,81 +72,6 @@ else
   echo "fzf already installed"
 fi
 
-# zsh
-installed=$(grep "source $dot_dir/zsh/zshrc" ~/.zshrc.user ~/.zshrc 2> /dev/null)
-if [[ -f ~/.zshrc.user && $installed == "" ]]; then
-  read -pr "Do you want to install zsh dotfile to ~/.zshrc.user? " -n 1
-  echo #newline
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo > ~/.zshrc.user
-    sed -i "1i source $dot_dir/zsh/zshrc" ~/.zshrc.user
-  fi
-elif [[ $installed == "" ]]; then
-  read -pr "Do you want to install zsh dotfile to ~/.zshrc? " -n 1
-  echo #newline
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo > ~/.zshrc
-    sed -i "1i source $dot_dir/zsh/zshrc" ~/.zshrc
-  fi
-else
-  echo "zsh dotfile already installed"
-fi
-
-# bash
-installed=$(grep "source $dot_dir/bash/bashrc" ~/.bashrc.user ~/.bashrc 2> /dev/null)
-if [[ -f ~/.bashrc.user && $installed == "" ]]; then
-  read -pr "Do you want to install bash dotfile to ~/.bashrc.user? " -n 1
-  echo #newline
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo > ~/.bashrc.user
-    sed -i "1i source $dot_dir/bash/bashrc" ~/.bashrc.user
-  fi
-elif [[ $installed == "" ]]; then
-  read -pr "Do you want to install bash dotfile to ~/.bashrc? " -n 1
-  echo #newline
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo > ~/.bahrc.user
-    sed -i "1i source $dot_dir/bash/bashrc" ~/.bashrc
-  fi
-else
-  echo "bash dotfile already installed"
-fi
-
-# vim
-installed=$(grep "source $dot_dir/vim/vimrc" ~/.vimrc 2> /dev/null)
-if [[ $installed == "" ]]; then
-  read -pr "Do you want to install vim dotfile to ~/.vimrc? " -n 1
-  echo #newline
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo > ~/.vimrc
-    sed -i "1i source $dot_dir/vim/vimrc" ~/.vimrc
-  fi
-else
-  echo "vim dotfile already installed"
-fi
-
-# tmux
-installed=$(grep "source-file $dot_dir/tmux/tmux.conf" ~/.tmux.conf 2> /dev/null)
-if [[ $installed == "" ]]; then
-  read -pr "Do you want to install tmux dotfile to ~/.tmux.conf? " -n 1
-  echo #newline
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo > ~/.tmux.conf
-    sed -i "1i source $dot_dir/tmux/tmux.conf" ~/.tmux.conf
-  fi
-else
-  echo "tmux dotfile already installed"
-fi
-
-# git
-installed=$(grep "path=$dot_dir/git/gitconfig" ~/.gitconfig 2> /dev/null)
-if [[ $installed == "" ]]; then
-  read -pr "Do you want to install gitconfig dotfile to ~/.gitconfig? " -n 1
-  echo #newline
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo > ~/.gitconfig
-    sed -i "1i [include]\n\tpath=$dot_dir/git/gitconfig" ~/.gitconfig
-  fi
-else
-  echo "git dotfile already installed"
-fi
+for pgm in "${!DOTFILES[@]}"; do
+  install "$pgm"
+done
