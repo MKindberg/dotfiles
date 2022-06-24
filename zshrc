@@ -5,29 +5,19 @@ source ~/dotfiles/shrc
 autoload -U compinit
 compinit
 # Plugins {{{
-if [[ -a ~/.zinit/bin/zinit.zsh ]]; then
-  source ~/.zinit/bin/zinit.zsh
-  if [[ $ZSH_VERSION == 5.<3->* ]]; then
-    #  zinit ice pick"zsh-autocomplete.plugin.zsh"
-    #  zinit light marlonrichert/zsh-autocomplete
+if [[ -a ~/.zi/bin/zi.zsh ]]; then
+  source ~/.zi/bin/zi.zsh
 
-    #  zinit ice pick"fzf-tab.plugin.zsh"
-    #  zinit light Aloxaf/fzf-tab
+  zi ice lucid as"program" pick"bin/git-dsf"
+  zi light z-shell/zsh-diff-so-fancy
 
-    TURBO=wait'!0'
+  zi light z-shell/F-Sy-H
 
-  fi
-
- # zinit ice pick"zsh-syntax-highlighting.zsh" $TURBO
- # zinit light zsh-users/zsh-syntax-highlighting
-
-  zinit light zdharma-continuum/fast-syntax-highlighting
-
-  zinit ice pick"zsh-autosuggestions.zsh" $TURBO
-  zinit light zsh-users/zsh-autosuggestions
+  zi ice pick"zsh-autosuggestions.zsh" $TURBO
+  zi light zsh-users/zsh-autosuggestions
 
 else
-  echo "zinit not installed"
+  echo "zi not installed"
 fi
 # }}}
 
