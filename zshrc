@@ -16,6 +16,9 @@ if [[ -a ~/.zi/bin/zi.zsh ]]; then
   zi ice pick"zsh-autosuggestions.zsh" $TURBO
   zi light zsh-users/zsh-autosuggestions
 
+  zi snippet https://github.com/junegunn/fzf/blob/master/shell/key-bindings.zsh
+  zi snippet https://github.com/junegunn/fzf/blob/master/shell/completion.zsh
+
 else
   echo "zi not installed"
 fi
