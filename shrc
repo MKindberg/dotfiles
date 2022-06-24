@@ -1,7 +1,5 @@
 # Setup things that are common in bash and zsh
 
-source ~/dotfiles/git-prompt.sh
-
 # Variables {{{
 
 # path

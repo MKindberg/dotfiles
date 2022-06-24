@@ -19,6 +19,8 @@ if [[ -a ~/.zi/bin/zi.zsh ]]; then
   zi snippet https://github.com/junegunn/fzf/blob/master/shell/key-bindings.zsh
   zi snippet https://github.com/junegunn/fzf/blob/master/shell/completion.zsh
 
+  zi snippet https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
+
 else
   echo "zi not installed"
 fi
@@ -96,8 +98,6 @@ GIT_PS1_SHOWSTASHSTATE=1
 GIT_PS1_SHOWUNTRACKEDFILES=1
 GIT_PS1_SHOWUPSTREAM="auto"
 GIT_PS1_SHOWCOLORHINTS=1
-
-source ~/dotfiles/git-prompt.sh
 
 function preexec() {
   timer=${timer:-$SECONDS}
