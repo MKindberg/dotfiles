@@ -60,17 +60,6 @@ install() {
   fi
   eval "sed -i \"1i $str\" $file"
 }
-fzf
-installed=$(fzf --version 2> /dev/null)
-if [[ $installed == "" ]]; then
-  read -pr "Do you want to install fzf? " -n 1
-  echo #newline
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    (cd "$dot_dir/modules/fzf" && ./install)
-  fi
-else
-  echo "fzf already installed"
-fi
 
 for pgm in "${!DOTFILES[@]}"; do
   install "$pgm"

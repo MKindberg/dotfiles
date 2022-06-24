@@ -330,6 +330,9 @@ if(os.execute("bash -c 'command -v lua-language-server'") == 0) then
     },
   }
 end
+if(os.execute("bash -c 'command -v texlab'") == 0) then
+  require'lspconfig'.texlab.setup{}
+end
 
 keymap('n', '<Leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', {expr = false, noremap = true})
 keymap('n', '<Leader>lf', '<cmd>lua vim.lsp.buf.formatting()<CR>', {expr = false, noremap = true})

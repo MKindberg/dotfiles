@@ -8,6 +8,3 @@ do
   git pull origin master
   cd ..
 done
-
-cd fzf
-./install --bin
