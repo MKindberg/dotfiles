@@ -6,7 +6,6 @@ source ~/dotfiles/git-prompt.sh
 
 # path
 PATH=$PATH:~/dotfiles/bin
-PATH=$PATH:~/dotfiles/modules/diff-so-fancy
 
 export LANG=en_US.UTF-8
 export EDITOR='nvim'
