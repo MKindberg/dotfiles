@@ -300,6 +300,9 @@ keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 -- }}}
 
 -- Lsp {{{
+if(os.execute("bash -c 'command -v gopls'") == 0) then
+  require'lspconfig'.gopls.setup{}
+end
 if(os.execute("bash -c 'command -v pyright'") == 0) then
   require'lspconfig'.pyright.setup{}
 end
