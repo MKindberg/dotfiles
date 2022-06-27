@@ -52,9 +52,9 @@ FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --no-mouse"
 # this is good enough for now.
 function go {
   if test -f go.mod || test -f main.go; then
-    env go
+    env go -- "$@"
   else
-    ~/dotfiles/bin/go
+    ~/dotfiles/bin/go "$@"
   fi
 }
 
