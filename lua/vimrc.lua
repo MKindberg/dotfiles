@@ -1,4 +1,4 @@
-local keymap = vim.api.nvim_set_keymap
+local keymap = vim.keymap.set
 local set = vim.opt
 
 -- runCmd {{{
@@ -337,14 +337,17 @@ if(os.execute("bash -c 'command -v texlab'") == 0) then
   require'lspconfig'.texlab.setup{}
 end
 
-keymap('n', '<Leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', {expr = false, noremap = true})
-keymap('n', '<Leader>lf', '<cmd>lua vim.lsp.buf.formatting()<CR>', {expr = false, noremap = true})
-keymap('n', '<Leader>ln', '<cmd>lua vim.diagnostic.goto_next()<CR>', {expr = false, noremap = true})
-keymap('n', '<Leader>lp', '<cmd>lua vim.diagnostic.goto_prev()<CR>', {expr = false, noremap = true})
-keymap('n', '<Leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', {expr = false, noremap = true})
-keymap('n', '<Leader>lh', '<cmd>lua vim.lsp.buf.hover()<CR>', {expr = false, noremap = true})
-keymap('n', '<Leader>ld', '<cmd>lua vim.lsp.buf.definition()<CR>', {expr = false, noremap = true})
-keymap('n', '<Leader>lD', '<cmd>lua vim.lsp.buf.declaration()<CR>', {expr = false, noremap = true})
+keymap('n', '<Leader>lr', vim.lsp.buf.rename, {expr = false, noremap = true})
+keymap('n', '<Leader>lf', vim.lsp.buf.formatting, {expr = false, noremap = true})
+keymap('n', '<Leader>ln', vim.diagnostic.goto_next, {expr = false, noremap = true})
+keymap('n', '<Leader>lp', vim.diagnostic.goto_prev, {expr = false, noremap = true})
+keymap('n', '<Leader>le', vim.diagnostic.open_float, {expr = false, noremap = true})
+keymap('n', '<Leader>la', vim.lsp.buf.code_action, {expr = false, noremap = true})
+keymap('n', '<Leader>lh', vim.lsp.buf.hover, {expr = false, noremap = true})
+keymap('n', '<Leader>ld', vim.lsp.buf.definition, {expr = false, noremap = true})
+keymap('n', '<Leader>lD', vim.lsp.buf.declaration, {expr = false, noremap = true})
+keymap('n', '<Leader>li', vim.lsp.buf.implementation, {expr = false, noremap = true})
+keymap('n', '<Leader>lt', vim.lsp.buf.references, {expr = false, noremap = true})
 
 local opts = {
   tools = { -- rust-tools options
