@@ -11,6 +11,8 @@
   unstash = stash pop
 	unstage = reset HEAD --
 	unadd = reset HEAD --
+  su = submodule update
+  si = submodule init
 [core]
 	editor = nvim
 [diff]
