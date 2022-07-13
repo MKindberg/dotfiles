@@ -13,6 +13,7 @@
 	unadd = reset HEAD --
   su = submodule update
   si = submodule init
+  xclean = clean -xdf -e GTAGS -e GRTAGS -e GPATH -e tags -e compile_commands.json
 [core]
 	editor = nvim
 [diff]

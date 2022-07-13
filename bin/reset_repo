@@ -1,0 +1,8 @@
+#!/bin/bash
+
+git xclean
+git reset --hard origin/master
+git submodule foreach git xclean
+git submodule foreach git reset --hard
+git submodule update
+
