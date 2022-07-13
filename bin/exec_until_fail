@@ -1,0 +1,14 @@
+#!/bin/bash
+
+numIter=0
+while [ 1 ]; do
+  ((numIter++))
+  echo "Iteration: $numIter"
+  $*
+  res=$?
+  if [ $res != 0 ]; then
+    echo "fail: $res"
+    echo "After $numIter iterations"
+    exit 1
+  fi
+done
