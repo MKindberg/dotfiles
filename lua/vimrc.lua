@@ -79,11 +79,11 @@ keymap('n', '<Leader>/t', '<cmd>Telescope treesitter<cr>', {expr = false, norema
 local cmp = require'cmp'
 
 local source_mapping = {
-  buffer = "[Buf]",
+  luasnip = "[Snip]",
   nvim_lsp = "[LSP]",
+  buffer = "[Buf]",
   cmp_tabnine = "[TN]",
   path = "[Path]",
-  luasnip = "[Snip]",
 }
 
 cmp.setup({
@@ -106,11 +106,11 @@ cmp.setup({
     },
     {
       name = 'nvim_lsp',
-      keyword_length = 3,
+      keyword_length = 2,
     },
     {
       name = 'cmp_tabnine',
-      keyword_length = 2,
+      keyword_length = 3,
     },
     {
       name = 'buffer',
@@ -179,68 +179,6 @@ ls.snippets = {
   all = {
   },
   c = {
-    snip("function",
-    {
-      insert(1, "void"),
-      text(" "),
-      insert(2, "name"),
-      text("("),
-      insert(3, "params"),
-      text({ ")", "{", "  "}),
-      insert(0),
-      text({ "", "}" }),
-    }
-    ),
-    snip("for",
-    {
-      text("for("),
-      insert(1, "unsigned"),
-      text(" "),
-      insert(2, "i"),
-      text(" = "),
-      insert(3, "0"),
-      text("; "),
-      func(copy, 2),
-      text(" "),
-      insert(4, "<"),
-      text(" "),
-      insert(5),
-      text("; "),
-      insert(6),
-      text("++"),
-      func(copy, 2),
-      text({") {", "  "}),
-      insert(0),
-      text({"", "}"}),
-    }
-    ),
-    snip("if",
-    {
-      text("if("),
-      insert(1),
-      text({") {", "  "}),
-      insert(0),
-      text({"", "}"}),
-    }
-    ),
-    snip("while",
-    {
-      text("while("),
-      insert(1),
-      text({") {", "  "}),
-      insert(0),
-      text({"", "}"}),
-    }
-    ),
-    snip("do",
-    {
-      text({"do {", "  "}),
-      insert(0),
-      text({"", "} while("}),
-      insert(1),
-      text(");"),
-    }
-    ),
     snip("cscript",
     {
       text({"#!/bin/bash", "tail -n +3 $0 | gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out"}),
