@@ -187,6 +187,8 @@ noremap <S-H> :set cursorline! <CR>
 noremap <C-P> :FZF <CR>
 noremap & :Lines <CR>
 noremap ¤ $
+noremap ä $
+noremap ö ^
 
 noremap <Leader>h :hi CursorLine cterm=bold ctermbg=black <CR>
 "            \:set cursorline! <CR>
