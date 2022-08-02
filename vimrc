@@ -54,7 +54,9 @@ if has('nvim-0.5')
   Plug 'nvim-lualine/lualine.nvim'
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'TimUntersberger/neogit'
-  "Plug 'npxbr/glow.nvim' " Markdown preview
+  " Plug 'npxbr/glow.nvim' " Markdown preview
+  Plug 'ray-x/lsp_signature.nvim'
+  Plug 'weilbith/nvim-code-action-menu'
 else
   Plug 'tpope/vim-commentary'
   Plug 'sheerun/vim-polyglot' " Better syntax highlight

@@ -282,21 +282,24 @@ keymap('n', '<Leader>lf', vim.lsp.buf.formatting, {expr = false, noremap = true}
 keymap('n', '<Leader>ln', vim.diagnostic.goto_next, {expr = false, noremap = true})
 keymap('n', '<Leader>lp', vim.diagnostic.goto_prev, {expr = false, noremap = true})
 keymap('n', '<Leader>le', vim.diagnostic.open_float, {expr = false, noremap = true})
-keymap('n', '<Leader>la', vim.lsp.buf.code_action, {expr = false, noremap = true})
+keymap('n', '<Leader>la', ":CodeActionMenu<CR>:syntax on<CR>", {expr = false, noremap = true})
 keymap('n', '<Leader>lh', vim.lsp.buf.hover, {expr = false, noremap = true})
 keymap('n', '<Leader>ld', vim.lsp.buf.definition, {expr = false, noremap = true})
 keymap('n', '<Leader>lD', vim.lsp.buf.declaration, {expr = false, noremap = true})
 keymap('n', '<Leader>li', vim.lsp.buf.implementation, {expr = false, noremap = true})
 keymap('n', '<Leader>lt', vim.lsp.buf.references, {expr = false, noremap = true})
+keymap('n', '<Leader>lc', vim.lsp.codelens.run, {expr = false, noremap = true})
 
 local opts = {
   tools = { -- rust-tools options
     autoSetHints = true,
     hover_with_actions = true,
+    hover_actions = {
+      auto_focus = true,
+    },
     inlay_hints = {
-      show_parameter_hints = false,
-      parameter_hints_prefix = "",
-      other_hints_prefix = "",
+      only_current_line = true,
+      show_parameter_hints = true,
     },
   },
 
@@ -319,13 +322,17 @@ local opts = {
   },
 }
 
-require('rust-tools').setup({})
+
+require('rust-tools').setup(opts)
 -- }}}
 
 -- Clangd {{{
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
+-- Used with the CursorHold event below to display inlay hints after a delay
+vim.api.nvim_set_option("updatetime", 600)
 
 require("clangd_extensions").setup {
     server = {
@@ -343,7 +350,7 @@ require("clangd_extensions").setup {
         -- These apply to the default ClangdSetInlayHints command
         inlay_hints = {
             -- Only show inlay hints for the current line
-            only_current_line = false,
+            only_current_line = true,
             -- Event which triggers a refersh of the inlay hints.
             -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
             -- not that this may cause  higher CPU usage.
@@ -353,7 +360,7 @@ require("clangd_extensions").setup {
             -- whether to show parameter hints with the inlay hints or not
             show_parameter_hints = true,
             -- whether to show variable name before type hints with the inlay hints or not
-            show_variable_name = false,
+            show_variable_name = true,
             -- prefix for parameter hints
             parameter_hints_prefix = "<- ",
             -- prefix for all the other hints (type, chaining)
