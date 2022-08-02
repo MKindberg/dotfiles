@@ -58,7 +58,12 @@ install() {
     echo "Skipping $name, already installed"
     return
   fi
-  eval "sed -i \"1i $str\" $file"
+
+  if test -f "$file"; then
+    eval "sed -i \"1i $str\" $file"
+  else
+    echo -e "$str" > "$file"
+  fi
 }
 
 for pgm in "${!DOTFILES[@]}"; do
