@@ -156,14 +156,16 @@ cmp.setup({
 -- }}}
 
 -- Tabnine {{{
-local tabnine = require('cmp_tabnine.config')
-tabnine:setup({
-  max_lines = 1000;
-  max_num_results = 20;
-  sort = true;
-  run_on_every_keystroke = true;
-  snippet_placeholder = '..';
-})
+if vim.api.nvim_eval('exists("use_tabnine")') == true and vim.api.nvim_get_var("use_tabnine") == 1 then
+  local tabnine = require('cmp_tabnine.config')
+  tabnine:setup({
+    max_lines = 1000;
+    max_num_results = 20;
+    sort = true;
+    run_on_every_keystroke = true;
+    snippet_placeholder = '..';
+  })
+end
 -- }}}
 
 -- LuaSnip {{{

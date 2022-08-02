@@ -45,7 +45,9 @@ if has('nvim-0.5')
   Plug 'hrsh7th/cmp-nvim-lsp'
   Plug 'p00f/clangd_extensions.nvim'
   Plug 'nvim-lua/lsp-status.nvim'
-  Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
+  if exists("use_tabnine") && use_tabnine == 1
+    Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
+  endif
   Plug 'puremourning/vimspector'
   Plug 'simrat39/rust-tools.nvim'
   Plug 'numToStr/Comment.nvim'
