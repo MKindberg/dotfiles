@@ -19,6 +19,8 @@ if [[ -a ~/.zi/bin/zi.zsh ]]; then
   zi snippet https://github.com/junegunn/fzf/blob/master/shell/key-bindings.zsh
   zi snippet https://github.com/junegunn/fzf/blob/master/shell/completion.zsh
 
+  zi snippet https://github.com/rupa/z/blob/master/z.sh
+
   zi snippet https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
 
 else
