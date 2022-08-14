@@ -90,6 +90,7 @@ endif
 
 " indentLine {{{
 let g:indentLine_char = '▏'
+let g:indentLine_setConceal = 0
 " }}}
 
 if has('nvim-0.5')
