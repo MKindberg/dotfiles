@@ -278,7 +278,7 @@ if(os.execute("bash -c 'command -v texlab'") == 0) then
 end
 
 keymap('n', '<Leader>lr', vim.lsp.buf.rename, {expr = false, noremap = true})
-keymap('n', '<Leader>lf', vim.lsp.buf.formatting, {expr = false, noremap = true})
+keymap('n', '<Leader>lf', vim.lsp.buf.format, {expr = false, noremap = true})
 keymap('n', '<Leader>ln', vim.diagnostic.goto_next, {expr = false, noremap = true})
 keymap('n', '<Leader>lp', vim.diagnostic.goto_prev, {expr = false, noremap = true})
 keymap('n', '<Leader>le', vim.diagnostic.open_float, {expr = false, noremap = true})
@@ -293,7 +293,6 @@ keymap('n', '<Leader>lc', vim.lsp.codelens.run, {expr = false, noremap = true})
 local opts = {
   tools = { -- rust-tools options
     autoSetHints = true,
-    hover_with_actions = true,
     hover_actions = {
       auto_focus = true,
     },
