@@ -34,7 +34,7 @@ if has('nvim-0.5')
   Plug 'nvim-treesitter/nvim-treesitter-textobjects'
   Plug 'gennaro-tedesco/nvim-peekup' " Preview registers
   Plug 'beauwilliams/focus.nvim' " Increase width of active window
-  Plug 'williamboman/nvim-lsp-installer', {'on': 'LspInstall'}
+  Plug 'williamboman/mason.nvim'
   Plug 'neovim/nvim-lspconfig'
   Plug 'L3MON4D3/LuaSnip'
   Plug 'hrsh7th/nvim-cmp'

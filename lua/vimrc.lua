@@ -486,6 +486,8 @@ require('lualine').setup {
 }
 -- }}}
 
+require("mason").setup()
+
 require("neogit").setup{
   disable_commit_confirmation = true
 }
