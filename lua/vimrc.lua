@@ -486,6 +486,7 @@ require('lualine').setup {
 }
 -- }}}
 
+require("nvim-surround").setup({})
 require("mason").setup()
 
 require("neogit").setup{

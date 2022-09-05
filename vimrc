@@ -19,7 +19,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim' " Fuzzy finding
 Plug 'tpope/vim-fugitive' " Git commands
 Plug 'tpope/vim-sleuth' " Automatic detection of tabwidth
-Plug 'tpope/vim-surround'
+Plug 'kylechui/nvim-surround'
 Plug 'luochen1990/rainbow' " Rainbow paranthesis
 Plug 'sainnhe/sonokai' " Colorscheme
 Plug 'Yggdroot/indentLine' " Show indentation markers
