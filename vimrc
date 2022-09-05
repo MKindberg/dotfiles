@@ -345,6 +345,14 @@ augroup focus_active
   autocmd BufLeave * set syntax=OFF
   autocmd BufEnter * set syntax=ON
 augroup END
+
+augroup line_number_active
+  autocmd!
+  autocmd BufLeave * set norelativenumber
+  autocmd BufLeave * set nonumber
+  autocmd BufEnter * set relativenumber
+  autocmd BufEnter * set number
+augroup END
 " }}}
 
 " Language Specific {{{
