@@ -90,7 +90,6 @@ endif
 
 " indentLine {{{
 let g:indentLine_char = '▏'
-let g:indentLine_setConceal = 0
 " }}}
 
 if has('nvim-0.5')
@@ -288,8 +287,6 @@ set scrolloff=3 " Min lines above and below cursor.
 
 set lazyredraw
 
-set conceallevel=0 " Don't hide characters in eg. json and md files
-
 " Tabs
 set shiftwidth=2
 set tabstop=2
@@ -408,6 +405,15 @@ augroup shell_rc
   autocmd!
   autocmd BufRead *shrc setlocal foldmethod=marker
   autocmd BufRead *shrc setlocal foldlevel=0
+augroup END
+
+augroup json
+  autocmd!
+  autocmd BufRead *.json setlocal conceallevel=0
+augroup END
+augroup markdown
+  autocmd!
+  autocmd BufRead *.md setlocal conceallevel=0
 augroup END
 " }}}
 
