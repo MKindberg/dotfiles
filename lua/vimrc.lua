@@ -497,3 +497,13 @@ require("mason").setup()
 require("neogit").setup{
   disable_commit_confirmation = true
 }
+
+function Hover()
+  local width = vim.api.nvim_list_uis()[1]["width"]/2
+  local height = vim.api.nvim_list_uis()[1]["height"]/2
+
+  local row = vim.api.nvim_list_uis()[1]["height"]/2 - height/2
+  local col = vim.api.nvim_list_uis()[1]["width"]/2 - width/2
+  vim.api.nvim_open_win(0, true, {relative='editor', row=row, col=col, width=width, height=height, border='single'})
+end
+vim.api.nvim_create_user_command('Hover', 'lua Hover()', {})
