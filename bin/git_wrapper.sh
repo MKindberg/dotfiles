@@ -30,7 +30,7 @@ git_checkout_branch() {
   if [ $# -eq 0 ]; then
     local branches branch
     branches=$(git branch -vv) &&
-      branch=$(echo "$branches" | fzf +m | cut -d ' ' -f 2) &&
+      branch=$(echo "$branches" | fzf +m | cut -d ' ' -f 3) &&
       git checkout "$branch"
   else
     git checkout "$@"
