@@ -348,7 +348,9 @@ local opts = {
 }
 
 
-require('rust-tools').setup(opts)
+if(os.execute("bash -c 'command -v rust-analyzer'") == 0) then
+  require('rust-tools').setup(opts)
+end
 -- }}}
 
 -- Clangd {{{
