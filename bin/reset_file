@@ -1,0 +1,4 @@
+#!/bin/bash
+files=$(git diff --name-only)
+selected=$(echo $files | fzf --preview='git diff  --color {}' --color=16)
+git checkout HEAD $selected
