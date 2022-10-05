@@ -313,6 +313,7 @@ set noerrorbells
 
 " Colorscheme
 colorscheme sonokai
+highlight EndOfBuffer ctermbg=none
 highlight CursorLine cterm=bold ctermbg=black
 highlight ColorColumn ctermbg=none ctermfg=darkgrey " Needed for vim-diminactive plugin
 highlight Normal ctermbg=None
