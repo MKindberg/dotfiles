@@ -96,7 +96,7 @@ git_show() {
   while test -n "$file"; do
     file=$(git show --format=oneline --name-only "$rev" | fzf --preview "git diff --color=always ${rev}~1 $rev {} | diff-so-fancy")
     if test -n "$file"; then
-      $EDITOR "file"
+      $EDITOR "$file"
     fi
   done
 }
