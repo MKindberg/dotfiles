@@ -4,6 +4,7 @@ source ~/dotfiles/shrc
 
 autoload -U compinit
 compinit
+autoload -Uz zmv
 # Plugins {{{
 if [[ -a ~/.zi/bin/zi.zsh ]]; then
   source ~/.zi/bin/zi.zsh
