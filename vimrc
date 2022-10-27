@@ -273,6 +273,9 @@ noremap <localleader>6 6gt
 " }}}
 
 " Settings {{{
+set mouse=
+set spell
+
 set cursorline " Set line highlight.
 
 set showmatch " Show matching brackets.
