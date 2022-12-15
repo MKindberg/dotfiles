@@ -45,6 +45,7 @@ if has('nvim-0.5')
   Plug 'hrsh7th/cmp-nvim-lsp'
   Plug 'p00f/clangd_extensions.nvim'
   Plug 'nvim-lua/lsp-status.nvim'
+  Plug 'levouh/tint.nvim'
   if exists("use_tabnine") && use_tabnine == 1
     Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
   endif
@@ -340,12 +341,12 @@ try
 catch
 endtry
 
-syntax manual
-augroup focus_active
-  autocmd!
-  autocmd BufLeave * set syntax=OFF
-  autocmd BufEnter * set syntax=ON
-augroup END
+" syntax manual
+" augroup focus_active
+"   autocmd!
+"   autocmd BufLeave * set syntax=OFF
+"   autocmd BufEnter * set syntax=ON
+" augroup END
 
 augroup line_number_active
   autocmd!
