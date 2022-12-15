@@ -258,10 +258,10 @@ keymap("i", "<Esc>n", "<Plug>luasnip-expand-or-jump", {expr = false})
 keymap("s", "<Esc>n", "<Plug>luasnip-expand-or-jump", {expr = false})
 keymap("i", "<Esc>p", "<Plug>luasnip-jump-prev", {expr = false})
 keymap("s", "<Esc>p", "<Plug>luasnip-jump-prev", {expr = false})
-keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+-- keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
+-- keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
+-- keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+-- keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 -- }}}
 
 -- Lsp {{{
