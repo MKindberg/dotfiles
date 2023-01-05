@@ -319,8 +319,9 @@ set noerrorbells
 colorscheme sonokai
 highlight EndOfBuffer ctermbg=none
 highlight CursorLine cterm=bold ctermbg=black
-highlight ColorColumn ctermbg=none ctermfg=darkgrey " Needed for vim-diminactive plugin
+" highlight ColorColumn ctermbg=none ctermfg=darkgrey " Needed for vim-diminactive plugin
 highlight Normal ctermbg=None
+highlight NormalNC ctermbg=None
 
 highlight ExtraWhitespace ctermbg=red
 syntax match ExtraWhitespace /\s\+$/
