@@ -14,8 +14,8 @@ export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 export HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
 export HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
 export HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
-export SAVEHIST=500
-export HISTSIZE=2000
+export SAVEHIST=10000
+export HISTSIZE=10000
 
 if [[ -n $TMUX ]]; then
   export TERM=screen-256color
