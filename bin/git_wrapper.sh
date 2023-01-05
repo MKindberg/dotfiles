@@ -52,7 +52,6 @@ git_add() {
 }
 
 git_diff() {
-  echo "diff"
   if command -v tig &> /dev/null && [[ -z "$*" ]]; then
     tig status
   elif [[ $FZF_PREVIEW == 0 ]]; then
@@ -70,6 +69,7 @@ git_diff() {
       file=$(echo "$files" | fzf -0 --preview "$cmd")
       if test -n "$file"; then
 	$EDITOR "$file"
+	break
       fi
     done
   fi
