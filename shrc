@@ -44,6 +44,12 @@ man() {
 }
 
 FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --no-mouse"
+FZF_ALT_C_OPTS="--preview 'tree -C -L 1 {}'"
+if [[ -x "$(command -v bat)" ]]; then
+  FZF_CTRL_T_OPTS="--preview 'bat -p --color=always {} 2> /dev/null || tree -C -L 1 {}'"
+else
+  FZF_CTRL_T_OPTS="--preview 'cat {} 2> /dev/null || tree -C -L 1 {}'"
+fi
 # }}}
 
 # Functions {{{
