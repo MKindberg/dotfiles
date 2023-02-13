@@ -265,64 +265,10 @@ keymap("s", "<Esc>p", "<Plug>luasnip-jump-prev", {expr = false})
 -- }}}
 
 -- Lsp {{{
-if(os.execute("bash -c 'command -v gopls'") == 0) then
-  require'lspconfig'.gopls.setup{}
-end
-if(os.execute("bash -c 'command -v pyright'") == 0) then
-  require'lspconfig'.pyright.setup{}
-end
-if(os.execute("bash -c 'command -v bash-language-server'") == 0) then
-  require'lspconfig'.bashls.setup{}
-end
-if(os.execute("bash -c 'command -v lua-language-server'") == 0) then
-  require'lspconfig'.sumneko_lua.setup{
-    settings = {
-      Lua = {
-        runtime = {
-          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-          version = 'LuaJIT',
-        },
-        diagnostics = {
-          -- Get the language server to recognize the `vim` global
-          globals = {'vim'},
-        },
-        workspace = {
-          -- Make the server aware of Neovim runtime files
-          library = vim.api.nvim_get_runtime_file("", true),
-          checkThirdParty = false,
-        },
-        -- Do not send telemetry data containing a randomized but unique identifier
-        telemetry = {
-          enable = false,
-        },
-      },
-    },
-  }
-end
-if(os.execute("bash -c 'command -v texlab'") == 0) then
-  require'lspconfig'.texlab.setup{}
-end
 
-keymap('n', '<Leader>lr', vim.lsp.buf.rename, {expr = false, noremap = true})
-keymap('n', '<Leader>ls', vim.lsp.buf.references, {expr = false, noremap = true})
-keymap('n', 'gr', vim.lsp.buf.references, {expr = false, noremap = true})
-keymap('n', '<Leader>lf', vim.lsp.buf.formatting, {expr = false, noremap = true})
-keymap('n', '<Leader>ln', vim.diagnostic.goto_next, {expr = false, noremap = true})
-keymap('n', ']d', vim.diagnostic.goto_next, {expr = false, noremap = true})
-keymap('n', '<Leader>lp', vim.diagnostic.goto_prev, {expr = false, noremap = true})
-keymap('n', '[d', vim.diagnostic.goto_prev, {expr = false, noremap = true})
-keymap('n', '<Leader>le', vim.diagnostic.open_float, {expr = false, noremap = true})
-keymap('n', '<Leader>la', ":CodeActionMenu<CR>:syntax on<CR>", {expr = false, noremap = true})
-keymap('n', '<Leader>lh', vim.lsp.buf.hover, {expr = false, noremap = true})
-keymap('n', '<Leader>ld', vim.lsp.buf.definition, {expr = false, noremap = true})
-keymap('n', 'gd', vim.lsp.buf.definition, {expr = false, noremap = true})
-keymap('n', '<Leader>lD', vim.lsp.buf.declaration, {expr = false, noremap = true})
-keymap('n', 'gD', vim.lsp.buf.declaration, {expr = false, noremap = true})
-keymap('n', '<Leader>li', vim.lsp.buf.implementation, {expr = false, noremap = true})
-keymap('n', '<Leader>lt', vim.lsp.buf.references, {expr = false, noremap = true})
-keymap('n', '<Leader>lc', vim.lsp.codelens.run, {expr = false, noremap = true})
+-- Rust {{{
 
-local opts = {
+local rust_opts = {
   tools = { -- rust-tools options
     autoSetHints = true,
     hover_actions = {
@@ -343,7 +289,7 @@ local opts = {
     settings = {
       -- to enable rust-analyzer settings visit:
       -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-      ["rust-analyzer"] = {
+      ["rust_analyzer"] = {
         -- enable clippy on save
         checkOnSave = {
           command = "clippy"
@@ -352,65 +298,128 @@ local opts = {
     }
   },
 }
-
-
-if(os.execute("bash -c 'command -v rust-analyzer'") == 0) then
-  require('rust-tools').setup(opts)
-end
 -- }}}
 
--- Clangd {{{
+-- Lua {{{
+local lua_opts = {
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = { 'vim' },
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+        checkThirdParty = false,
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+}
+-- }}}
 
+-- C/C++ {{{
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Used with the CursorHold event below to display inlay hints after a delay
 vim.api.nvim_set_option("updatetime", 600)
 
-require("clangd_extensions").setup {
-    server = {
-        -- options to pass to nvim-lspconfig
-        -- i.e. the arguments to require("lspconfig").clangd.setup({})
-        capabilities = capabilities,
+local clangd_opts = {
+  server = {
+    -- options to pass to nvim-lspconfig
+    -- i.e. the arguments to require("lspconfig").clangd.setup({})
+    capabilities = capabilities,
+  },
+  extensions = {
+    -- defaults:
+    -- Automatically set inlay hints (type hints)
+    autoSetHints = true,
+    -- Whether to show hover actions inside the hover window
+    -- This overrides the default hover handler
+    hover_with_actions = true,
+    -- These apply to the default ClangdSetInlayHints command
+    inlay_hints = {
+      -- Only show inlay hints for the current line
+      only_current_line = true,
+      -- Event which triggers a refersh of the inlay hints.
+      -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
+      -- not that this may cause  higher CPU usage.
+      -- This option is only respected when only_current_line and
+      -- autoSetHints both are true.
+      only_current_line_autocmd = "CursorHold",
+      -- whether to show parameter hints with the inlay hints or not
+      show_parameter_hints = true,
+      -- whether to show variable name before type hints with the inlay hints or not
+      show_variable_name = true,
+      -- prefix for parameter hints
+      parameter_hints_prefix = "<- ",
+      -- prefix for all the other hints (type, chaining)
+      other_hints_prefix = "=> ",
+      -- whether to align to the length of the longest line in the file
+      max_len_align = false,
+      -- padding from the left if max_len_align is true
+      max_len_align_padding = 1,
+      -- whether to align to the extreme right or not
+      right_align = false,
+      -- padding from the right if right_align is true
+      right_align_padding = 7,
+      -- The color of the hints
+      highlight = "Comment",
     },
-    extensions = {
-        -- defaults:
-        -- Automatically set inlay hints (type hints)
-        autoSetHints = true,
-        -- Whether to show hover actions inside the hover window
-        -- This overrides the default hover handler
-        hover_with_actions = true,
-        -- These apply to the default ClangdSetInlayHints command
-        inlay_hints = {
-            -- Only show inlay hints for the current line
-            only_current_line = true,
-            -- Event which triggers a refersh of the inlay hints.
-            -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
-            -- not that this may cause  higher CPU usage.
-            -- This option is only respected when only_current_line and
-            -- autoSetHints both are true.
-            only_current_line_autocmd = "CursorHold",
-            -- whether to show parameter hints with the inlay hints or not
-            show_parameter_hints = true,
-            -- whether to show variable name before type hints with the inlay hints or not
-            show_variable_name = true,
-            -- prefix for parameter hints
-            parameter_hints_prefix = "<- ",
-            -- prefix for all the other hints (type, chaining)
-            other_hints_prefix = "=> ",
-            -- whether to align to the length of the longest line in the file
-            max_len_align = false,
-            -- padding from the left if max_len_align is true
-            max_len_align_padding = 1,
-            -- whether to align to the extreme right or not
-            right_align = false,
-            -- padding from the right if right_align is true
-            right_align_padding = 7,
-            -- The color of the hints
-            highlight = "Comment",
-        },
-    }
+  }
 }
+-- }}}
+
+require("mason").setup()
+require("mason-lspconfig").setup()
+require("mason-lspconfig").setup_handlers {
+  function(server_name) -- default handler (optional)
+    require("lspconfig")[server_name].setup {}
+  end,
+  ["lua_ls"] = function()
+    require 'lspconfig'.sumneko_lua.setup(lua_opts)
+  end,
+  ["rust_analyzer"] = function()
+    require("rust-tools").setup(rust_opts)
+  end,
+  ["clangd"] = function()
+    require("clangd_extensions").setup(clangd_opts)
+  end
+}
+
+keymap('n', '<Leader>lr', vim.lsp.buf.rename, { expr = false, noremap = true })
+keymap('n', '<Leader>ls', vim.lsp.buf.references, { expr = false, noremap = true })
+keymap('n', 'gr', vim.lsp.buf.references, { expr = false, noremap = true })
+keymap('n', '<Leader>lf', vim.lsp.buf.format, { expr = false, noremap = true })
+keymap('n', '<Leader>ln', vim.diagnostic.goto_next, { expr = false, noremap = true })
+keymap('n', ']d', vim.diagnostic.goto_next, { expr = false, noremap = true })
+keymap('n', '<Leader>lp', vim.diagnostic.goto_prev, { expr = false, noremap = true })
+keymap('n', '[d', vim.diagnostic.goto_prev, { expr = false, noremap = true })
+keymap('n', '<Leader>le', vim.diagnostic.open_float, { expr = false, noremap = true })
+keymap('n', '<Leader>la', ":CodeActionMenu<CR>:syntax on<CR>", { expr = false, noremap = true })
+keymap('n', '<Leader>lh', vim.lsp.buf.hover, { expr = false, noremap = true })
+keymap('n', '<Leader>ld', vim.lsp.buf.definition, { expr = false, noremap = true })
+keymap('n', 'gd', vim.lsp.buf.definition, { expr = false, noremap = true })
+keymap('n', '<Leader>lD', vim.lsp.buf.declaration, { expr = false, noremap = true })
+keymap('n', 'gD', vim.lsp.buf.declaration, { expr = false, noremap = true })
+keymap('n', '<Leader>li', vim.lsp.buf.implementation, { expr = false, noremap = true })
+keymap('n', '<Leader>lt', vim.lsp.buf.references, { expr = false, noremap = true })
+keymap('n', '<Leader>lc', vim.lsp.codelens.run, { expr = false, noremap = true })
+
+--
+--
+-- if(os.execute("bash -c 'command -v rust-analyzer'") == 0) then
+--   require('rust-tools').setup(opts)
+-- end
 -- }}}
 
 -- Comment {{{
