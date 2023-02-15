@@ -100,6 +100,7 @@ if has('nvim-0.5')
 endif
 " Cscope {{{
 
+if !has('nvim-0.5')
 set cscopetag
 set csprg=gtags-cscope
 if !empty(expand(glob("GTAGS")))
@@ -108,26 +109,6 @@ if !empty(expand(glob("GTAGS")))
   set cscopeverbose
 endif
 
-if has('nvim-0.5')
-  set cscopequickfix=s-,f-,g-,c-,d-,i-,t-,e-
-  nnoremap <C-c>s :cs find s <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
-  nnoremap <C-c>g :cs find g <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
-  nnoremap <C-c>c :cs find c <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
-  nnoremap <C-c>t :cs find t <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
-  nnoremap <C-c>e :cs find e <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
-  nnoremap <C-c>f :cs find f <C-R>=expand("<cfile>")<CR><CR><cmd>Telescope quickfix<cr>
-  nnoremap <C-c>i :cs find i <C-R>=expand("%:t")<CR><CR><cmd>Telescope quickfix<cr>
-  nnoremap <C-c>d :cs find d <C-R>=expand("<cword>")<CR><CR><cmd>Telescope quickfix<cr>
-else
-  nnoremap <C-c>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-c>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-c>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-c>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-c>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-  nnoremap <C-c>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-  nnoremap <C-c>i :cs find i <C-R>=expand("%:t")<CR><CR>
-  nnoremap <C-c>d :cs find d <C-R>=expand("<cword>")<CR><CR>
-endif
 nnoremap <C-c>h :cs help <CR>
 
 nnoremap <C-c><C-v>s :vert scs find s <C-R>=expand("<cword>")<CR><CR>
@@ -147,6 +128,7 @@ nnoremap <C-c><C-e> :cs find e
 nnoremap <C-c><C-f> :cs find f 
 nnoremap <C-c><C-i> :cs find i 
 nnoremap <C-c><C-d> :cs find d 
+endif
 
 " }}}
 
