@@ -1,0 +1,29 @@
+#!/bin/bash
+
+elements=$(</dev/stdin)
+
+if [[ -z "$PAGER" ]] && [[ -x "$(command -v bat)" ]]; then
+  PAGER=bat
+elif [[ -z "$PAGER" ]]; then
+  PAGER=less
+fi
+
+if [[ "$PAGER" == "bat"* ]]; then
+  PAGER_OPTS='--highlight-line {2}'
+fi
+
+selected=$(
+  echo "${elements}" | fzf                                   \
+    --delimiter :                                            \
+    --preview-window '~3,+{2}+3/3'                           \
+    --preview "$PAGER --color=always $PAGER_OPTS {1}"        \
+  )
+
+if [[ -z "${selected}" ]]; then
+  exit 1
+fi
+
+file=$(echo $selected | cut -d : -f 1)
+line_nbr=$(echo $selected | cut -d : -f 2)
+
+$EDITOR $file +$line_nbr
