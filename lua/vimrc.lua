@@ -10,25 +10,26 @@ function runCmd(line, linenr)
   local cmd
   local start, stop = line:find(runCmd_config.trigger)
   if (stop ~= nil) then
-    cmd = string.sub(line,stop+1,-1)
+    cmd = string.sub(line, stop + 1, -1)
   else
     cmd = "./" .. vim.fn.expand("%")
   end
-  cmd = string.gsub(cmd,"^%s+","")
-  cmd = string.gsub(cmd,"%s+$","")
+  cmd = string.gsub(cmd, "^%s+", "")
+  cmd = string.gsub(cmd, "%s+$", "")
 
   print("Executing", cmd)
-  if (string.sub(cmd,1,1) == ':') then
-    vim.api.nvim_command(string.sub(cmd,2,-1))
+  if (string.sub(cmd, 1, 1) == ':') then
+    vim.api.nvim_command(string.sub(cmd, 2, -1))
   else
-    vim.api.nvim_command("!"..cmd)
+    vim.api.nvim_command("!" .. cmd)
   end
 end
-keymap('n', runCmd_config.keymap, '<cmd>0luado runCmd(line, linenr)<CR>', {expr = false, noremap = true})
+
+keymap('n', runCmd_config.keymap, '<cmd>0luado runCmd(line, linenr)<CR>', { expr = false, noremap = true })
 -- }}}
 
 -- Treesitter {{{
-require'nvim-treesitter.configs'.setup {
+require 'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true,
   },
@@ -83,25 +84,25 @@ set.foldlevelstart = 20
 -- }}}
 
 -- Telescope {{{
-require('telescope').setup{
+require('telescope').setup {
   defaults = {
-    file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
-    grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
-    qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
-  }
+    file_previewer = require 'telescope.previewers'.vim_buffer_cat.new,
+    grep_previewer = require 'telescope.previewers'.vim_buffer_vimgrep.new,
+    qflist_previewer = require 'telescope.previewers'.vim_buffer_qflist.new,
+  },
 }
 
-keymap('n', '<Leader>p', '<cmd>Telescope find_files<cr>', {expr = false, noremap = true})
-keymap('n', '<Leader>q', '<cmd>Telescope quickfix<cr>', {expr = false, noremap = true})
-keymap('n', '<Leader>b', '<cmd>Telescope buffers<cr>', {expr = false, noremap = true})
-keymap('n', '<Leader>/', '<cmd>Telescope live_grep<cr>', {expr = false, noremap = true})
-keymap('n', '<Leader>/h', '<cmd>Telescope help_tags<cr>', {expr = false, noremap = true})
-keymap('n', '<Leader>/t', '<cmd>Telescope treesitter<cr>', {expr = false, noremap = true})
+keymap('n', '<Leader>p', '<cmd>Telescope find_files<cr>', { expr = false, noremap = true })
+keymap('n', '<Leader>q', '<cmd>Telescope quickfix<cr>', { expr = false, noremap = true })
+keymap('n', '<Leader>b', '<cmd>Telescope buffers<cr>', { expr = false, noremap = true })
+keymap('n', '<Leader>/', '<cmd>Telescope live_grep<cr>', { expr = false, noremap = true })
+keymap('n', '<Leader>/h', '<cmd>Telescope help_tags<cr>', { expr = false, noremap = true })
+keymap('n', '<Leader>/t', '<cmd>Telescope treesitter<cr>', { expr = false, noremap = true })
 
 -- }}}
 
 -- nvim-cmp {{{
-local cmp = require'cmp'
+local cmp = require 'cmp'
 
 local source_mapping = {
   luasnip = "[Snip]",
@@ -120,28 +121,28 @@ cmp.setup({
   },
   snippet = {
     expand = function(args)
-      require'luasnip'.lsp_expand(args.body)
+      require 'luasnip'.lsp_expand(args.body)
     end
   },
   sources = cmp.config.sources(
-  {
     {
-      name= 'luasnip',
-      keyword_length = 1,
-    },
-    {
-      name = 'nvim_lsp',
-      keyword_length = 1,
-    },
-    {
-      name = 'cmp_tabnine',
-      keyword_length = 1,
-    },
-    {
-      name = 'buffer',
-      keyword_length = 1,
-    },
-  }),
+      {
+        name = 'luasnip',
+        keyword_length = 1,
+      },
+      {
+        name = 'nvim_lsp',
+        keyword_length = 1,
+      },
+      {
+        name = 'cmp_tabnine',
+        keyword_length = 1,
+      },
+      {
+        name = 'buffer',
+        keyword_length = 1,
+      },
+    }),
   view = {
     entries = "native"
   },
@@ -184,11 +185,11 @@ cmp.setup({
 if vim.api.nvim_eval('exists("use_tabnine")') == true and vim.api.nvim_get_var("use_tabnine") == 1 then
   local tabnine = require('cmp_tabnine.config')
   tabnine:setup({
-    max_lines = 1000;
-    max_num_results = 20;
-    sort = true;
-    run_on_every_keystroke = true;
-    snippet_placeholder = '..';
+    max_lines = 1000,
+    max_num_results = 20,
+    sort = true,
+    run_on_every_keystroke = true,
+    snippet_placeholder = '..',
   })
 end
 -- }}}
@@ -207,16 +208,16 @@ ls.snippets = {
   },
   c = {
     snip("cscript",
-    {
-      text({"#!/bin/bash", "tail -n +3 $0 | gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out"}),
-    }
+      {
+        text({ "#!/bin/bash", "tail -n +3 $0 | gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out" }),
+      }
     )
   },
   cpp = {
     snip("cscript",
-    {
-      text({"#!/bin/bash", "tail -n +3 $0 | g++ -std=c++17 -Wall -Werror -O3 -x c++ - && exec ./a.out"}),
-    }
+      {
+        text({ "#!/bin/bash", "tail -n +3 $0 | g++ -std=c++17 -Wall -Werror -O3 -x c++ - && exec ./a.out" }),
+      }
     )
   },
 }
@@ -246,7 +247,7 @@ end
 _G.s_tab_complete = function()
   if cmp and cmp.visible() then
     cmp.select_prev_item()
-  elseif ls and ls.jumpable(-1) then
+  elseif ls and ls.jumpable( -1) then
     return t("<Plug>luasnip-jump-prev")
   else
     return t "<S-Tab>"
@@ -254,10 +255,10 @@ _G.s_tab_complete = function()
   return ""
 end
 
-keymap("i", "<Esc>n", "<Plug>luasnip-expand-or-jump", {expr = false})
-keymap("s", "<Esc>n", "<Plug>luasnip-expand-or-jump", {expr = false})
-keymap("i", "<Esc>p", "<Plug>luasnip-jump-prev", {expr = false})
-keymap("s", "<Esc>p", "<Plug>luasnip-jump-prev", {expr = false})
+keymap("i", "<Esc>n", "<Plug>luasnip-expand-or-jump", { expr = false })
+keymap("s", "<Esc>n", "<Plug>luasnip-expand-or-jump", { expr = false })
+keymap("i", "<Esc>p", "<Plug>luasnip-jump-prev", { expr = false })
+keymap("s", "<Esc>p", "<Plug>luasnip-jump-prev", { expr = false })
 -- keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
 -- keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
 -- keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
@@ -279,7 +280,6 @@ local rust_opts = {
       show_parameter_hints = true,
     },
   },
-
   -- all the opts to send to nvim-lspconfig
   -- these override the defaults set by rust-tools.nvim
   -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
@@ -437,30 +437,30 @@ preview_config = {
 local preview_active = false
 function preview_file(filename)
   local ns_id = vim.api.nvim_create_namespace('preview_file')
-  if(preview_active) then
+  if (preview_active) then
     vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
     preview_active = false
     return
   end
 
   local bnr = vim.fn.bufnr('%')
-  local line_num = vim.api.nvim_call_function("line", {"."}) - 1
+  local line_num = vim.api.nvim_call_function("line", { "." }) - 1
   local col_num = 0
 
   local i = 1
   local file = io.open(filename, "r")
   local virt_text = {}
 
-  if(file ~= nil) then
+  if (file ~= nil) then
     line = file:read("*line")
-    while(line ~= nil) do
+    while (line ~= nil) do
       line = preview_config.prefix .. line
-      if(preview_config.as_comment) then
-        line = string.gsub(vim.api.nvim_buf_get_option(0, "commentstring"), "%%s", " "..line.." ")
+      if (preview_config.as_comment) then
+        line = string.gsub(vim.api.nvim_buf_get_option(0, "commentstring"), "%%s", " " .. line .. " ")
       end
 
-      virt_text[i] = {{line, preview_config.hightlight_group}}
-      i = i+1
+      virt_text[i] = { { line, preview_config.hightlight_group } }
+      i = i + 1
 
       if i == preview_config.max_lines then
         break
@@ -478,15 +478,16 @@ function preview_file(filename)
 
     file:close()
   else
-    print("Cannot open file '" .. filename .."'")
+    print("Cannot open file '" .. filename .. "'")
   end
 end
 
-keymap('n', preview_config.keybind, '<cmd>lua preview_file(vim.call("expand", "<cfile>"))<cr>', {expr = false, noremap = true})
+keymap('n', preview_config.keybind, '<cmd>lua preview_file(vim.call("expand", "<cfile>"))<cr>',
+  { expr = false, noremap = true })
 -- }}}
 
 -- Web-devicons {{{
-require'nvim-web-devicons'.setup {
+require 'nvim-web-devicons'.setup {
   -- default = true;
 }
 -- }}}
@@ -496,52 +497,59 @@ require('lualine').setup {
   options = {
     icons_enabled = true,
     theme = 'auto',
-    component_separators = { left = '', right = ''},
-    section_separators = { left = '', right = ''},
+    component_separators = { left = '', right = '' },
+    section_separators = { left = '', right = '' },
     disabled_filetypes = {},
     always_divide_middle = true,
   },
   sections = {
-    lualine_a = {'mode'},
-    lualine_b = {'diff', 'diagnostics'},
-    lualine_c = {{'filename', file_status = true, path = 1}},
-    lualine_x = {'encoding', 'filetype'},
-    lualine_y = {'progress'},
-    lualine_z = {'location'}
+    lualine_a = { 'mode' },
+    lualine_b = { 'diff', 'diagnostics' },
+    lualine_c = { { 'filename', file_status = true, path = 1 } },
+    lualine_x = { 'encoding', 'filetype' },
+    lualine_y = { 'progress' },
+    lualine_z = { 'location' }
   },
   inactive_sections = {
     lualine_a = {},
     lualine_b = {},
-    lualine_c = {'filename'},
-    lualine_x = {'location'},
+    lualine_c = { 'filename' },
+    lualine_x = { 'location' },
     lualine_y = {},
     lualine_z = {}
   },
   tabline = {
-    lualine_a = {{'buffers', mode=2}},
-    lualine_b = {'branch'},
+    lualine_a = { { 'buffers', mode = 2 } },
+    lualine_b = { 'branch' },
     lualine_c = {},
     lualine_x = {},
     lualine_y = {},
-    lualine_z = {{'tabs', mode=2}}
+    lualine_z = { { 'tabs', mode = 2 } }
   },
   extensions = {}
 }
 -- }}}
 
 require("nvim-surround").setup({})
-require("mason").setup()
 
-require("neogit").setup{
+require("neogit").setup {
   disable_commit_confirmation = true
 }
 
 function Hover()
-  local width = vim.api.nvim_list_uis()[1]["width"]/2
-  local height = vim.api.nvim_list_uis()[1]["height"]/2
+  local width = vim.api.nvim_list_uis()[1]["width"] / 2
+  local height = vim.api.nvim_list_uis()[1]["height"] / 2
 
-  local row = vim.api.nvim_list_uis()[1]["height"]/2 - height/2
-  local col = vim.api.nvim_list_uis()[1]["width"]/2 - width/2
-  vim.api.nvim_open_win(0, true, {relative='editor', row=row, col=col, width=width, height=height, border='single'})
+  local row = vim.api.nvim_list_uis()[1]["height"] / 2 - height / 2
+  local col = vim.api.nvim_list_uis()[1]["width"] / 2 - width / 2
+  vim.api.nvim_open_win(0, true, {
+    relative = 'editor',
+    row = row,
+    col = col,
+    width = width,
+    height = height,
+    border = 'single'
+  })
 end
+
 vim.api.nvim_create_user_command('Hover', 'lua Hover()', {})
