@@ -201,10 +201,10 @@ alias gcom='git commit -m'
 alias gap='git add -p'
 alias gdt='git difftool'
 if command -v tig &> /dev/null; then
-  alias gg='tig grep'
+  # alias gg='tig grep'
   alias gl='tig log'
 else
-  alias gg='git grep -n --break --heading'
+  # alias gg='git grep -n --break --heading'
   alias gl='git log'
 fi
 

@@ -102,12 +102,19 @@ git_show() {
 }
 
 git_grep() {
-  local file
-  file=$(git grep -l "$@" | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
-  while test -n "$file"; do
-    $EDITOR -o "$file"
-    file=$(git grep -l "$1" | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
-  done
+  if [[ -x "$(git rev-parse &> /dev/null)" ]]; then
+    tig grep "$@"
+  elif [[ -d .repo ]]; then
+    repo grep "$@" | grep_tui
+  else
+    rg --no-heading -n "$@" | grep_tui
+  fi
+  # local file
+  # file=$(git grep -l "$@" | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
+  # while test -n "$file"; do
+  #   $EDITOR -o "$file"
+  #   file=$(git grep -l "$1" | fzf --preview "git grep --color -A 5 -B 5 $1 -- {}")
+  # done
 }
 
 git_show_stash() {
