@@ -172,7 +172,7 @@ noremap <F2> :NERDTreeToggle <CR>
 noremap <F3> :TagbarToggle<CR>
 noremap <C-L> :set relativenumber! <CR>
 noremap <S-H> :set cursorline! <CR>
-noremap <C-P> :FZF <CR>
+noremap <C-P> :Files <CR>
 noremap & :Lines <CR>
 noremap ¤ $
 noremap ä $
