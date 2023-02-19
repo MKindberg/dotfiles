@@ -532,6 +532,8 @@ require('lualine').setup {
 
 require("nvim-surround").setup({})
 
+require("smartcolumn").setup({ colorcolumn = 120 })
+
 require("neogit").setup {
   disable_commit_confirmation = true
 }

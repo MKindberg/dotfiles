@@ -59,6 +59,7 @@ if has('nvim-0.5')
   " Plug 'npxbr/glow.nvim' " Markdown preview
   Plug 'ray-x/lsp_signature.nvim'
   Plug 'weilbith/nvim-code-action-menu'
+  Plug 'm4xshen/smartcolumn.nvim'
 else
   Plug 'tpope/vim-commentary'
   Plug 'sheerun/vim-polyglot' " Better syntax highlight
