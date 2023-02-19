@@ -60,6 +60,8 @@ if has('nvim-0.5')
   Plug 'ray-x/lsp_signature.nvim'
   Plug 'weilbith/nvim-code-action-menu'
   Plug 'm4xshen/smartcolumn.nvim'
+  Plug 'folke/noice.nvim'
+  Plug 'MunifTanjim/nui.nvim'
 else
   Plug 'tpope/vim-commentary'
   Plug 'sheerun/vim-polyglot' " Better syntax highlight
