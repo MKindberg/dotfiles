@@ -102,7 +102,7 @@ git_show() {
 }
 
 git_grep() {
-  if [[ -x "$(git rev-parse &> /dev/null)" ]]; then
+  if [[ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" == "true" ]]; then
     tig grep "$@"
   elif [[ -d .repo ]]; then
     repo grep "$@" | grep_tui
