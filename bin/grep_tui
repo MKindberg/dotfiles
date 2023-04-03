@@ -15,7 +15,8 @@ if [[ "$PAGER" == "bat"* ]]; then
   PAGER_OPTS='--highlight-line {2}'
 fi
 
-echo "${elements}" | fzf                                   \
+echo -n "${elements}" | fzf                                \
+  --exit-0                                                 \
   --delimiter :                                            \
   --preview-window '~3,+{2}+3/3'                           \
   --preview "$PAGER --color=always $PAGER_OPTS {1}"        \

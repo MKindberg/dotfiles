@@ -36,10 +36,10 @@ require 'nvim-treesitter.configs'.setup {
   indent = {
     enable = true
   },
-  refactor = {
-    highlight_definitions = { enable = true },
-    highlight_current_scope = { enable = false },
-  },
+  -- refactor = {
+  --   highlight_definitions = { enable = true },
+  --   highlight_current_scope = { enable = false },
+  -- },
   textobjects = {
     select = {
       enable = true,
@@ -90,7 +90,17 @@ require('telescope').setup {
     grep_previewer = require 'telescope.previewers'.vim_buffer_vimgrep.new,
     qflist_previewer = require 'telescope.previewers'.vim_buffer_qflist.new,
   },
+  extensions = {
+    fzf = {
+      fuzzy = true, -- false will only do exact matching
+      override_generic_sorter = true, -- override the generic sorter
+      override_file_sorter = true, -- override the file sorter
+      case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+      -- the default case_mode is "smart_case"
+    }
+  }
 }
+require('telescope').load_extension('fzf')
 
 keymap('n', '<Leader>p', '<cmd>Telescope find_files<cr>', { expr = false, noremap = true })
 keymap('n', '<Leader>q', '<cmd>Telescope quickfix<cr>', { expr = false, noremap = true })
@@ -379,6 +389,7 @@ local clangd_opts = {
 }
 -- }}}
 
+
 require("mason").setup()
 require("mason-lspconfig").setup()
 require("mason-lspconfig").setup_handlers {
@@ -386,14 +397,19 @@ require("mason-lspconfig").setup_handlers {
     require("lspconfig")[server_name].setup {}
   end,
   ["lua_ls"] = function()
-    require 'lspconfig'.sumneko_lua.setup(lua_opts)
+    require 'lspconfig'.lua_ls.setup(lua_opts)
   end,
   ["rust_analyzer"] = function()
     require("rust-tools").setup(rust_opts)
   end,
   ["clangd"] = function()
     require("clangd_extensions").setup(clangd_opts)
-  end
+  end,
+  -- ["robotframework_ls"] = function()
+  --   require'lspconfig'.robotframework_ls.setup({
+  --     root_dir = function() return "/home/mkindber/csp" end
+  --   })
+  -- end
 }
 
 keymap('n', '<Leader>lr', vim.lsp.buf.rename, { expr = false, noremap = true })
@@ -532,24 +548,24 @@ require('lualine').setup {
 
 require("nvim-surround").setup({})
 
-require("smartcolumn").setup({ colorcolumn = 120 })
+-- require("smartcolumn").setup({ colorcolumn = 120 })
 
-require("noice").setup({
-  -- you can enable a preset for easier configuration
-  popupmenu = {
-    enabled = false,
-  },
-
-  presets = {
-    bottom_search = true, -- use a classic bottom cmdline for search
-    command_palette = true, -- position the cmdline and popupmenu together
-    long_message_to_split = true, -- long messages will be sent to a split
-    inc_rename = false, -- enables an input dialog for inc-rename.nvim
-    lsp_doc_border = false, -- add a border to hover docs and signature help
-  },
-})
-vim.keymap.set("n", "<leader>:", "<cmd>Noice last<cr>", { desc = "Show latest command output" })
-
+-- require("noice").setup({
+--   -- you can enable a preset for easier configuration
+--   popupmenu = {
+--     enabled = false,
+--   },
+--
+--   presets = {
+--     bottom_search = true, -- use a classic bottom cmdline for search
+--     command_palette = true, -- position the cmdline and popupmenu together
+--     long_message_to_split = true, -- long messages will be sent to a split
+--     inc_rename = false, -- enables an input dialog for inc-rename.nvim
+--     lsp_doc_border = false, -- add a border to hover docs and signature help
+--   },
+-- })
+-- vim.keymap.set("n", "<leader>:", "<cmd>Noice last<cr>", { desc = "Show latest command output" })
+--
 require("neogit").setup {
   disable_commit_confirmation = true
 }
@@ -571,3 +587,4 @@ function Hover()
 end
 
 vim.api.nvim_create_user_command('Hover', 'lua Hover()', {})
+
