@@ -144,13 +144,28 @@ bindkey '^[%' vi-match-bracket
 bindkey -s "^Z" "fg\n"
 bindkey '^_' backward-kill-word
 
+split-window() {
+  tmux split-window -h "tmux select-pane -l; echo -e $1\\\n-----\\\n; $1; read"
+}
 stty -ixon # Unbind current ctrl+s behavior
-launch-in-split() { Launch command in new tmux split
+launch-in-split() { # Launch command in new tmux split
   if [[ -n "$TMUX" ]]; then
-    BUFFER="tmux split-window -h \"tmux select-pane -l; echo -e \\\"$BUFFER\n-----\n\\\"; $BUFFER; read\""
+    BUFFER="split-window \"$BUFFER\""
     zle accept-line
   fi
 }
 zle -N launch-in-split
 bindkey "^s" launch-in-split
+
+split-window2() {
+  tmux split-window -h "tmux select-pane -l; echo -e $1\\\n-----\\\n; $1"
+}
+launch-in-split2() { # Launch command in new tmux split
+  if [[ -n "$TMUX" ]]; then
+    BUFFER="split-window2 \"$BUFFER\""
+    zle accept-line
+  fi
+}
+zle -N launch-in-split2
+bindkey "^[^S" launch-in-split2
 # }}}
