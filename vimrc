@@ -25,6 +25,7 @@ Plug 'sainnhe/sonokai' " Colorscheme
 Plug 'Yggdroot/indentLine' " Show indentation markers
 Plug 'szw/vim-maximizer'
 if has('nvim-0.5')
+  Plug 'ray-x/lsp_signature.nvim'
   Plug 'nvim-lua/popup.nvim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'

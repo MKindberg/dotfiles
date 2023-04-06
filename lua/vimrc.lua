@@ -546,6 +546,13 @@ require('lualine').setup {
 }
 -- }}}
 
+local signature_config = {
+  hint_enable = false,
+  max_width = 80,
+}
+require("lsp_signature").setup(signature_config)
+
+
 require("nvim-surround").setup({})
 
 -- require("smartcolumn").setup({ colorcolumn = 120 })
