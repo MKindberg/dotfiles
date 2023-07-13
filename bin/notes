@@ -1,8 +1,7 @@
 #!/bin/bash
 set -e
 
-usage()
-{
+usage() {
 cat << EOF
 usage: notes [mode] [note_name]
 Quickly create, view or edit notes
@@ -29,13 +28,13 @@ Modes:
 EOF
 }
 
-find_note()
-{
+find_note() {
   if [[ -x "$(command -v fzf)" ]]; then
-    ls $NOTES_DIR | fzf -q "$1" --preview="cat ${NOTES_DIR}/{}"
+    file=$(ls "${NOTES_DIR}" | sed 's/\.md$//' | fzf --preview="cat ${NOTES_DIR}/{}.md")
     if [[ $? -ne 0 ]]; then
       exit 1
     fi
+    echo "${file}.md"
   fi
 }
 
@@ -105,38 +104,28 @@ esac
 if [[ $# == 0 || $mode == "find_append" ]]; then
   filename=$(find_note)
 else
-  filename=$1
+  filename=${1%.md}.md
   shift
 fi
 
 file=${NOTES_DIR}/$filename
 
-#if [[ ! -e $file ]]; then
-#  if [[ -x "$(command -v fzf)" ]]; then
-#    filename=$(find_note $filename)
-#    file=${NOTES_DIR}/$filename
-#  else
-#    echo "Note '$filename' doesn't exist"
-#    exit 1
-#  fi
-#fi
-
 case ${mode} in
   append | find_append)
-    echo "$@" >> $file
+    echo "$@" >> "$file"
     ;;
   delete)
-    rm -f $file
+    rm -f "$file"
     ;;
   read)
-    cat $file
+    cat "$file"
     ;;
   open)
-    $EDITOR $file
+    $EDITOR "$file"
     ;;
   split)
     tmux split-window -h "$EDITOR $file"
     ;;
   nickname)
-    ln -fs $file ${NOTES_DIR}/$nickname
+    ln -fs "$file" "${NOTES_DIR}/$nickname"
   esac
