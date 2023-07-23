@@ -115,7 +115,11 @@ case ${mode} in
     echo "$@" >> "$file"
     ;;
   delete)
-    rm -f "$file"
+    read -rp "Do you want to delete $file? " -n 1
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      rm -f "$file"
+    fi
     ;;
   read)
     cat "$file"
