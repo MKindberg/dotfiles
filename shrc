@@ -211,7 +211,6 @@ fi
 
 # Colorize cat and less
 if [[ -x "$(command -v pygmentize)" ]]; then
-  alias cat='pygmentize -O style=emacs -g'
   alias less='colorize_less'
 fi
 
