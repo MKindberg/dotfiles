@@ -45,12 +45,6 @@ setopt HIST_REDUCE_BLANKS
 setopt HIST_VERIFY
 setopt INC_APPEND_HISTORY
 
-zstyle ':completion:*' menu select=2 eval "$(dircolors -b)"
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
-zstyle ':completion:*' special-dirs true
-
-zstyle ':autocomplete:tab:*' widget-style menu-complete
 # }}}
 
 # Variables {{{
@@ -168,4 +162,23 @@ launch-in-split2() { # Launch command in new tmux split
 }
 zle -N launch-in-split2
 bindkey "^[^S" launch-in-split2
+# }}}
+
+# Completion {{{
+zstyle ':completion:*' completer _extensions _complete _approximate
+zstyle ':completion:*' use-cache on
+
+zstyle ':completion:*' menu select=2 eval "$(dircolors -b)" search=yes
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' special-dirs true
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' complete-options true
+
+zstyle ':completion:*:*:*:*:descriptions' format '%F{green}-- %d --%f'
+zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
+zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+
+zstyle ':autocomplete:tab:*' widget-style menu-complete
 # }}}
