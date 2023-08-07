@@ -115,6 +115,7 @@ keymap('n', '<Leader>/t', '<cmd>Telescope treesitter<cr>', { expr = false, norem
 local cmp = require 'cmp'
 
 local source_mapping = {
+  codeium = "[AI]",
   luasnip = "[Snip]",
   nvim_lsp = "[LSP]",
   buffer = "[Buf]",
@@ -136,6 +137,10 @@ cmp.setup({
   },
   sources = cmp.config.sources(
     {
+      {
+        name = 'codeium',
+        keyword_length = 0,
+      },
       {
         name = 'luasnip',
         keyword_length = 1,
@@ -595,3 +600,4 @@ end
 
 vim.api.nvim_create_user_command('Hover', 'lua Hover()', {})
 
+require("codeium").setup({})

@@ -48,8 +48,9 @@ if has('nvim-0.5')
   Plug 'p00f/clangd_extensions.nvim'
   Plug 'nvim-lua/lsp-status.nvim'
   Plug 'levouh/tint.nvim'
-  if exists("use_tabnine") && use_tabnine == 1
+  if exists("use_ai_comp") && use_ai_comp == 1
     Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
+    Plug 'jcdickinson/codeium.nvim'
   endif
   Plug 'puremourning/vimspector'
   Plug 'simrat39/rust-tools.nvim'
