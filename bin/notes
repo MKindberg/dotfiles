@@ -29,8 +29,15 @@ EOF
 }
 
 find_note() {
+  if [[ -x "$(command -v unbuffer)" && -x "$(command -v glow)" ]]; then
+    PREVIEW="unbuffer glow"
+  elif [[ -x "$(command -v bat)" ]]; then
+    PREVIEW="bat --style=plain --color=always"
+  else
+    PREVIEW=cat
+  fi
   if [[ -x "$(command -v fzf)" ]]; then
-    file=$(ls "${NOTES_DIR}" | sed 's/\.md$//' | fzf --preview="cat ${NOTES_DIR}/{}.md")
+    file=$(ls "${NOTES_DIR}" | sed 's/\.md$//' | fzf --preview="${PREVIEW} ${NOTES_DIR}/{}.md")
     if [[ $? -ne 0 ]]; then
       exit 1
     fi
