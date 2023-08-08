@@ -197,7 +197,7 @@ cmp.setup({
 -- }}}
 
 -- Tabnine {{{
-if vim.api.nvim_eval('exists("use_tabnine")') == true and vim.api.nvim_get_var("use_tabnine") == 1 then
+if vim.api.nvim_eval('exists("use_ai_comp")') == true and vim.api.nvim_get_var("use_ai_comp") == 1 then
   local tabnine = require('cmp_tabnine.config')
   tabnine:setup({
     max_lines = 1000,
@@ -600,4 +600,6 @@ end
 
 vim.api.nvim_create_user_command('Hover', 'lua Hover()', {})
 
-require("codeium").setup({})
+if vim.api.nvim_eval('exists("use_ai_comp")') == true and vim.api.nvim_get_var("use_ai_comp") == 1 then
+  require("codeium").setup({})
+end
