@@ -1,5 +1,6 @@
 [alias]
 	cp = cherry-pick
+	cpc = cherry-pick --continue
   ci = commit
   cia = commit --amend
   co = checkout
@@ -21,7 +22,7 @@
 [difftool "nvimdiff"]
   cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 [merge]
-	tool = vimdiff
+	tool = nvimdiff
 	conflictstyle = diff3
 [color]
 	ui = true
