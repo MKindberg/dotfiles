@@ -81,10 +81,11 @@ git_log() {
 
 git_show() {
     local rev="HEAD"
+    local root=$(git rev-parse --show-toplevel)
     if [[ $# -gt 0 ]]; then
         rev=$1
     fi
-    file=$(git show --format=oneline --name-only "$rev" | fzf --preview "git diff --color=always ${rev}~1 $rev {} | diff-so-fancy" --bind "enter:execute($EDITOR {})")
+    file=$(git show --format=oneline --name-only "$rev" | fzf --preview "git diff --color=always ${rev}~1 $rev ${root}/{} | diff-so-fancy" --bind "enter:execute($EDITOR ${root}{})")
 }
 
 git_grep() {
