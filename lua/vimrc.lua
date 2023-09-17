@@ -262,7 +262,7 @@ end
 _G.s_tab_complete = function()
   if cmp and cmp.visible() then
     cmp.select_prev_item()
-  elseif ls and ls.jumpable( -1) then
+  elseif ls and ls.jumpable(-1) then
     return t("<Plug>luasnip-jump-prev")
   else
     return t "<S-Tab>"
@@ -578,9 +578,6 @@ require("nvim-surround").setup({})
 -- })
 -- vim.keymap.set("n", "<leader>:", "<cmd>Noice last<cr>", { desc = "Show latest command output" })
 --
-require("neogit").setup {
-  disable_commit_confirmation = true
-}
 
 function Hover()
   local width = vim.api.nvim_list_uis()[1]["width"] / 2
@@ -603,3 +600,6 @@ vim.api.nvim_create_user_command('Hover', 'lua Hover()', {})
 if vim.api.nvim_eval('exists("use_ai_comp")') == true and vim.api.nvim_get_var("use_ai_comp") == 1 then
   require("codeium").setup({})
 end
+
+vim.keymap.set('n', '<leader>dd', function() require("duck").hatch() end, {})
+vim.keymap.set('n', '<leader>dk', function() require("duck").cook() end, {})

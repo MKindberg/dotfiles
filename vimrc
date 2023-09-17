@@ -13,19 +13,17 @@ let g:polyglot_disabled = ['markdown']
 
 " Plugin list {{{
 call plug#begin('~/.vim/plugged')
+Plug 'tamton-aquib/duck.nvim'
 Plug 'Raimondi/delimitMate' " Automatically close parantheses etc.
-Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'} " Show tags in current file
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim' " Fuzzy finding
 Plug 'tpope/vim-fugitive' " Git commands
 Plug 'tpope/vim-sleuth' " Automatic detection of tabwidth
-Plug 'kylechui/nvim-surround'
-Plug 'luochen1990/rainbow' " Rainbow paranthesis
 Plug 'sainnhe/sonokai' " Colorscheme
 Plug 'Yggdroot/indentLine' " Show indentation markers
 Plug 'szw/vim-maximizer'
 if has('nvim-0.5')
-  Plug 'ray-x/lsp_signature.nvim'
+  Plug 'kylechui/nvim-surround'
   Plug 'nvim-lua/popup.nvim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
@@ -34,46 +32,32 @@ if has('nvim-0.5')
   Plug 'romgrk/nvim-treesitter-context'
   Plug 'nvim-treesitter/nvim-treesitter-textobjects'
   Plug 'gennaro-tedesco/nvim-peekup' " Preview registers
-  Plug 'beauwilliams/focus.nvim' " Increase width of active window
   Plug 'williamboman/mason.nvim'
   Plug 'williamboman/mason-lspconfig.nvim'
   Plug 'neovim/nvim-lspconfig'
   Plug 'L3MON4D3/LuaSnip'
-  Plug 'hrsh7th/nvim-cmp'
   Plug 'saadparwaiz1/cmp_luasnip'
+  Plug 'hrsh7th/nvim-cmp'
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/cmp-cmdline'
   Plug 'hrsh7th/cmp-path'
   Plug 'hrsh7th/cmp-nvim-lsp'
   Plug 'p00f/clangd_extensions.nvim'
   Plug 'nvim-lua/lsp-status.nvim'
-  Plug 'levouh/tint.nvim'
   if exists("use_ai_comp") && use_ai_comp == 1
     Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
     Plug 'jcdickinson/codeium.nvim'
   endif
-  Plug 'puremourning/vimspector'
   Plug 'simrat39/rust-tools.nvim'
   Plug 'numToStr/Comment.nvim'
   Plug 'nvim-lualine/lualine.nvim'
   Plug 'kyazdani42/nvim-web-devicons'
-  Plug 'TimUntersberger/neogit'
-  " Plug 'npxbr/glow.nvim' " Markdown preview
   Plug 'ray-x/lsp_signature.nvim'
   Plug 'weilbith/nvim-code-action-menu'
-  Plug 'm4xshen/smartcolumn.nvim'
-  Plug 'folke/noice.nvim'
-  Plug 'MunifTanjim/nui.nvim'
 else
   Plug 'tpope/vim-commentary'
   Plug 'sheerun/vim-polyglot' " Better syntax highlight
 endif
-"Plug 'scrooloose/nerdtree' " A better file explorer
-"Plug 'docunext/closetag.vim' " Automatically close html tags
-"Plug 'easymotion/vim-easymotion'
-"Plug 'nbardiuk/vim-gol'
-"Plug 'ervandew/supertab' " Autocomplete with tab
-"Plug 'szw/vim-tags' " Show all tags in file
 call plug#end()
 " }}}
 
@@ -85,14 +69,8 @@ nnoremap <leader>gl <cmd>Gclog!<cr>
 nnoremap <leader>gd <cmd>Gvdiffsplit<cr>
 nnoremap <leader>gm <cmd>Git mergetool -y<cr>
 nnoremap <leader>ga <cmd>Gwrite<cr>
-
-if has('nvim-0.5')
-  nnoremap <leader>g <cmd>Neogit<cr>
-nnoremap <leader>gc <cmd>Neo commit<cr>
-else
-  nnoremap <leader>g <cmd>Git<cr>
-  nnoremap <leader>gc <cmd>Git commit<cr>
-endif
+nnoremap <leader>g <cmd>Git<cr>
+nnoremap <leader>gc <cmd>Git commit<cr>
 " }}}
 
 " indentLine {{{
@@ -173,8 +151,6 @@ cnoremap WQ<cr> wq<cr>
 set pastetoggle=<F12>
 noremap <F5> :e <CR>
 noremap <F4> :RainbowToggle <CR>
-noremap <F2> :NERDTreeToggle <CR>
-noremap <F3> :TagbarToggle<CR>
 noremap <C-L> :set relativenumber! <CR>
 noremap <S-H> :set cursorline! <CR>
 noremap <C-P> :Files <CR>
@@ -231,18 +207,6 @@ cnoremap w!! w !sudo tee > /dev/null %
 
 map <leader>c gc
 map <leader>m :MaximizerToggle<cr>
-
-noremap <leader>dd :call vimspector#Launch()<CR>
-noremap <leader>dn :call vimspector#StepOver()<CR>
-noremap <leader>ds :call vimspector#StepInto()<CR>
-noremap <leader>dsu :call vimspector#StepOut()<CR>
-noremap <leader>dc :call vimspector#Continue()<CR>
-noremap <leader>db :call vimspector#ToggleBreakpoint()<CR>
-noremap <leader>dfu :call vimspector#UpFrame()<CR>
-noremap <leader>dfd :call vimspector#DownFrame()<CR>
-noremap <leader>dcc :call vimspector#RunToCursor()<CR>
-noremap <leader>dr :call vimspector#Restart()<CR>
-noremap <leader>de :call vimspector#Stop()<CR>
 
 noremap <leader>1 <cmd>buffer 1<cr>
 noremap <leader>2 <cmd>buffer 2<cr>
