@@ -54,6 +54,7 @@ if has('nvim-0.5')
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'ray-x/lsp_signature.nvim'
   Plug 'weilbith/nvim-code-action-menu'
+  Plug 'unblevable/quick-scope'
 else
   Plug 'tpope/vim-commentary'
   Plug 'sheerun/vim-polyglot' " Better syntax highlight
