@@ -1,6 +1,81 @@
 local keymap = vim.keymap.set
 local set = vim.opt
 
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+local function use_ai_completion()
+  return vim.g.use_ai_comp == 1
+end
+
+local plugins = {
+  "tamton-aquib/duck.nvim",
+  "Raimondi/delimitMate", -- Automatically close parantheses etc.
+  "junegunn/fzf",         -- { 'do': { -> fzf#install() } },
+  "junegunn/fzf.vim",     -- " Fuzzy finding,
+  {
+    "tpope/vim-fugitive",
+    init = function()
+      keymap('n', '<leader>g', '<cmd>Git<cr>', { expr = false, noremap = true })
+      keymap('n', '<leader>gg', ':Git grep ', { expr = false, noremap = true })
+      keymap('n', '<leader>gb', '<cmd>Git blame<cr>', { expr = false, noremap = true })
+      keymap('n', '<leader>gs', '<cmd>Git<cr>', { expr = false, noremap = true })
+      keymap('n', '<leader>gl', '<cmd>Gclog!<cr>', { expr = false, noremap = true })
+      keymap('n', '<leader>gd', '<cmd>Gvdiffsplit<cr>', { expr = false, noremap = true })
+      keymap('n', '<leader>gm', '<cmd>Git mergetool -y<cr>', { expr = false, noremap = true })
+      keymap('n', '<leader>ga', '<cmd>Gwrite<cr>', { expr = false, noremap = true })
+      keymap('n', '<leader>gc', '<cmd>Git commit<cr>', { expr = false, noremap = true })
+    end
+  },
+  "tpope/vim-sleuth",    -- " Automatic detection of tabwidth,
+  "sainnhe/sonokai",     -- " Colorscheme,
+  "Yggdroot/indentLine", -- " Show indentation markers,
+  "szw/vim-maximizer",
+  "kylechui/nvim-surround",
+  { "nvim-lua/popup.nvim",             lazy = true },
+  { "nvim-lua/plenary.nvim",           lazy = true },
+  { "nvim-telescope/telescope.nvim",   dependencies = { 'nvim-lua/plenary.nvim' } },
+  { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+  "nvim-treesitter/nvim-treesitter-refactor",
+  "romgrk/nvim-treesitter-context",
+  "nvim-treesitter/nvim-treesitter-textobjects",
+  "gennaro-tedesco/nvim-peekup", -- " Preview registers,
+  "williamboman/mason.nvim",
+  "williamboman/mason-lspconfig.nvim",
+  "neovim/nvim-lspconfig",
+  "L3MON4D3/LuaSnip",
+  "saadparwaiz1/cmp_luasnip",
+  "hrsh7th/nvim-cmp",
+  "hrsh7th/cmp-buffer",
+  "hrsh7th/cmp-cmdline",
+  "hrsh7th/cmp-path",
+  "hrsh7th/cmp-nvim-lsp",
+  "p00f/clangd_extensions.nvim",
+  "nvim-lua/lsp-status.nvim",
+  "simrat39/rust-tools.nvim",
+  "numToStr/Comment.nvim",
+  "nvim-lualine/lualine.nvim",
+  "kyazdani42/nvim-web-devicons",
+  "ray-x/lsp_signature.nvim",
+  "weilbith/nvim-code-action-menu",
+  "unblevable/quick-scope",
+  { "tzachar/cmp-tabnine",      enabled = use_ai_completion(), build = "./install.sh" },
+  { "jcdickinson/codeium.nvim", enabled = use_ai_completion() },
+}
+local lazy_opts = {}
+
+require("lazy").setup(plugins, lazy_opts)
+
 -- runCmd {{{
 local runCmd_config = {
   trigger = "Run with:",
@@ -33,6 +108,7 @@ require 'nvim-treesitter.configs'.setup {
   highlight = {
     enable = true,
   },
+  auto_install = true,
   indent = {
     enable = true
   },
