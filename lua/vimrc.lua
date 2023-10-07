@@ -1,5 +1,9 @@
 local keymap = vim.keymap.set
 local set = vim.opt
+vim.g.mapleader = " "
+vim.g.maplocalleader = ","
+
+vim.cmd("source ~/dotfiles/common.vim")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -37,9 +41,9 @@ local plugins = {
       keymap('n', '<leader>gc', '<cmd>Git commit<cr>', { expr = false, noremap = true })
     end
   },
-  "tpope/vim-sleuth",    -- " Automatic detection of tabwidth,
-  "sainnhe/sonokai",     -- " Colorscheme,
-  "Yggdroot/indentLine", -- " Show indentation markers,
+  "tpope/vim-sleuth",                                                         -- " Automatic detection of tabwidth,
+  "sainnhe/sonokai",                                                          -- " Colorscheme,
+  { "Yggdroot/indentLine",             init = function() vim.g.indentLine_char = '|' end }, -- " Show indentation markers,
   "szw/vim-maximizer",
   "kylechui/nvim-surround",
   { "nvim-lua/popup.nvim",             lazy = true },
@@ -625,6 +629,10 @@ require('lualine').setup {
   },
   extensions = {}
 }
+-- }}}
+
+-- Autocorrect {{{
+  vim.cmd.abbrev("pritnf", "printf")
 -- }}}
 
 local signature_config = {
