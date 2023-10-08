@@ -12,7 +12,7 @@ INCLUDE_STRINGS=(
   [git]="[include]\n\tpath=$dot_dir/gitconfig"
   [tmux]="source-file $dot_dir/tmux.conf"
   [vim]="source $dot_dir/vimrc"
-  [nvim]="luafile $dot_dir/lua/vimrc.lua"
+  [nvim]="luafile $dot_dir/vimrc.lua"
 )
 
 declare -A DOTFILES

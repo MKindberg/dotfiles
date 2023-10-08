@@ -30,7 +30,7 @@ local plugins = {
       keymap('n', '<leader>dk', function() require("duck").cook() end, {})
     end
   },
-  "junegunn/fzf",         -- { 'do': { -> fzf#install() } },
+  "junegunn/fzf", -- { 'do': { -> fzf#install() } },
   {
     "junegunn/fzf.vim",
     init = function()
@@ -98,7 +98,7 @@ local plugins = {
   {
     "numToStr/Comment.nvim",
     init = function()
-      keymap({''}, '<leader>c', "gc", { remap = true })
+      keymap({ '' }, '<leader>c', "gc", { remap = true })
     end,
     config = true,
     lazy = true,
@@ -116,7 +116,7 @@ local plugins = {
     "./install.sh"
   },
   { "jcdickinson/codeium.nvim",     enabled = use_ai_completion(), config = {} },
-  { "m4xshen/autoclose.nvim", config = true},
+  { "m4xshen/autoclose.nvim",       config = true },
 }
 local lazy_opts = {}
 
@@ -212,17 +212,7 @@ require('telescope').setup {
     grep_previewer = require 'telescope.previewers'.vim_buffer_vimgrep.new,
     qflist_previewer = require 'telescope.previewers'.vim_buffer_qflist.new,
   },
-  extensions = {
-    fzf = {
-      fuzzy = true, -- false will only do exact matching
-      override_generic_sorter = true, -- override the generic sorter
-      override_file_sorter = true, -- override the file sorter
-      case_mode = "smart_case", -- or "ignore_case" or "respect_case"
-      -- the default case_mode is "smart_case"
-    }
-  }
 }
-require('telescope').load_extension('fzf')
 
 keymap('n', '<Leader>p', '<cmd>Telescope find_files<cr>', { expr = false, noremap = true })
 keymap('n', '<Leader>q', '<cmd>Telescope quickfix<cr>', { expr = false, noremap = true })
@@ -684,7 +674,7 @@ keymap('n', '<A-p>', "<cmd>cn<cr>", { noremap = true })
 
 -- Open vimrc
 keymap('n', "<leader>ev", "<cmd>vsplit $MYVIMRC<cr>", { noremap = true })
-keymap('n', "<leader>evv", "<cmd>tabnew ~/dotfiles/lua/vimrc.lua<cr>",
+keymap('n', "<leader>evv", "<cmd>tabnew ~/dotfiles/vimrc.lua<cr>",
   { noremap = true })
 
 -- Save as root even when file wasn't open with sudo
@@ -745,10 +735,10 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   end
 })
 
-local au_group_dotfiles = vim.api.nvim_create_augroup("dotfiles", {clear = true})
-vim.api.nvim_create_autocmd({"BufEnter"}, {
+local au_group_dotfiles = vim.api.nvim_create_augroup("dotfiles", { clear = true })
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
   group = au_group_dotfiles,
-  pattern = {"*vimrc*", "*shrc", "init.lua"},
+  pattern = { "*vimrc*", "*shrc", "init.lua" },
   callback = function()
     vim.opt_local.foldmethod = "marker"
     vim.opt_local.foldlevel = 0
