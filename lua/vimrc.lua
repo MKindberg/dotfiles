@@ -6,7 +6,7 @@ vim.g.maplocalleader = ","
 vim.cmd("source ~/dotfiles/common.vim")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
     "git",
     "clone",
@@ -53,8 +53,17 @@ local plugins = {
       keymap('n', '<leader>gc', '<cmd>Git commit<cr>', { expr = false, noremap = true })
     end
   },
-  "tpope/vim-sleuth",                                                                       -- " Automatic detection of tabwidth,
-  "sainnhe/sonokai",                                                                        -- " Colorscheme,
+  "tpope/vim-sleuth", -- " Automatic detection of tabwidth,
+  {
+    "sainnhe/sonokai",
+    config = function()
+      vim.cmd([[colorscheme sonokai]])
+      vim.cmd("highlight EndOfBuffer ctermbg=none")
+      vim.cmd("highlight CursorLine cterm=bold ctermbg=black")
+      vim.cmd("highlight Normal ctermbg=None")
+      vim.cmd("highlight NormalNC ctermbg=None")
+    end,
+  },
   { "Yggdroot/indentLine",             init = function() vim.g.indentLine_char = '|' end }, -- " Show indentation markers,
   {
     "szw/vim-maximizer",
@@ -90,7 +99,7 @@ local plugins = {
   {
     "numToStr/Comment.nvim",
     init = function()
-      keymap('n', '<leader>c', "gc", { remap = true })
+      keymap({''}, '<leader>c', "gc", { remap = true })
     end,
     config = true,
     lazy = true,
@@ -675,7 +684,7 @@ keymap('n', '<A-p>', "<cmd>cn<cr>", { noremap = true })
 
 -- Open vimrc
 keymap('n', "<leader>ev", "<cmd>vsplit $MYVIMRC<cr>", { noremap = true })
-keymap('n', "<leader>evv", "<cmd>tabnew ~/dotfiles/nvimrc<cr><cmd>vsplit ~/dotfiles/lua/vimrc.lua<cr>",
+keymap('n', "<leader>evv", "<cmd>tabnew ~/dotfiles/lua/vimrc.lua<cr>",
   { noremap = true })
 
 -- Save as root even when file wasn't open with sudo
@@ -697,6 +706,56 @@ keymap('n', "<localleader>4", "4gt", { noremap = true })
 keymap('n', "<localleader>5", "5gt", { noremap = true })
 keymap('n', "<localleader>6", "6gt", { noremap = true })
 --- }}}
+
+-- Settings {{{
+set.mouse = ""
+set.spell = true
+set.undofile = true
+vim.cmd("highlight ExtraWhitespace ctermbg=red")
+vim.cmd('syntax match ExtraWhitespace /\\s\\+$/')
+vim.cmd("highlight LeadingTab ctermbg=blue")
+vim.cmd("syntax match LeadingTab /^\\t\\+/")
+
+-- }}}
+
+-- Auto commands {{{
+
+local au_group_all = vim.api.nvim_create_augroup("all_files", { clear = true })
+vim.api.nvim_create_autocmd({ 'BufLeave' }, {
+  group = au_group_all,
+  pattern = "*",
+  callback = function()
+    set.relativenumber = false
+    set.number = false
+  end
+})
+vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+  group = au_group_all,
+  pattern = "*",
+  callback = function()
+    set.relativenumber = true
+    set.number = true
+  end
+})
+vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+  group = au_group_all,
+  pattern = "*",
+  callback = function()
+    vim.cmd("%s/\\s\\+$//e")
+  end
+})
+
+local au_group_dotfiles = vim.api.nvim_create_augroup("dotfiles", {clear = true})
+vim.api.nvim_create_autocmd({"BufEnter"}, {
+  group = au_group_dotfiles,
+  pattern = {"*vimrc*", "*shrc", "init.lua"},
+  callback = function()
+    vim.opt_local.foldmethod = "marker"
+    vim.opt_local.foldlevel = 0
+  end
+})
+
+-- }}}
 
 local signature_config = {
   hint_enable = false,
