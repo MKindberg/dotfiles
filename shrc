@@ -1,3 +1,4 @@
+#!/bin/sh
 # Setup things that are common in bash and zsh
 
 # Variables {{{
@@ -54,7 +55,7 @@ fi
 
 # Functions {{{
 
-# Not sure how to handle the name clash of go and the git checkout alias but 
+# Not sure how to handle the name clash of go and the git checkout alias but
 # this is good enough for now.
 function go {
   if test -f go.mod || test -f main.go; then

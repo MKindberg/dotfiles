@@ -1,3 +1,4 @@
+# vim: set filetype=yaml
 ---
 Language:        Cpp
 AccessModifierOffset: -2
