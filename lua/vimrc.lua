@@ -30,7 +30,6 @@ local plugins = {
       keymap('n', '<leader>dk', function() require("duck").cook() end, {})
     end
   },
-  "Raimondi/delimitMate", -- Automatically close parantheses etc.
   "junegunn/fzf",         -- { 'do': { -> fzf#install() } },
   {
     "junegunn/fzf.vim",
@@ -117,6 +116,7 @@ local plugins = {
     "./install.sh"
   },
   { "jcdickinson/codeium.nvim",     enabled = use_ai_completion(), config = {} },
+  { "m4xshen/autoclose.nvim", config = true},
 }
 local lazy_opts = {}
 
