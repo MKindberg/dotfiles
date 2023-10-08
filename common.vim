@@ -34,4 +34,8 @@ set listchars=tab:>>,trail:-,
 set list
 
 set noerrorbells
+
+set pastetoggle=<F12>
+
+set wildmenu
 " }}}

@@ -23,10 +23,22 @@ local function use_ai_completion()
 end
 
 local plugins = {
-  "tamton-aquib/duck.nvim",
+  {
+    "tamton-aquib/duck.nvim",
+    init = function()
+      keymap('n', '<leader>dd', function() require("duck").hatch() end, {})
+      keymap('n', '<leader>dk', function() require("duck").cook() end, {})
+    end
+  },
   "Raimondi/delimitMate", -- Automatically close parantheses etc.
   "junegunn/fzf",         -- { 'do': { -> fzf#install() } },
-  "junegunn/fzf.vim",     -- " Fuzzy finding,
+  {
+    "junegunn/fzf.vim",
+    init = function()
+      keymap('n', '<C-P>', "<cmd>Files<cr>", { noremap = true })
+      keymap('n', '<&>', "<cmd>Lines<cr>", { noremap = true })
+    end
+  },
   {
     "tpope/vim-fugitive",
     init = function()
@@ -41,10 +53,16 @@ local plugins = {
       keymap('n', '<leader>gc', '<cmd>Git commit<cr>', { expr = false, noremap = true })
     end
   },
-  "tpope/vim-sleuth",                                                         -- " Automatic detection of tabwidth,
-  "sainnhe/sonokai",                                                          -- " Colorscheme,
+  "tpope/vim-sleuth",                                                                       -- " Automatic detection of tabwidth,
+  "sainnhe/sonokai",                                                                        -- " Colorscheme,
   { "Yggdroot/indentLine",             init = function() vim.g.indentLine_char = '|' end }, -- " Show indentation markers,
-  "szw/vim-maximizer",
+  {
+    "szw/vim-maximizer",
+    init = function()
+      keymap('n', '<leader>m', "<cmd>MaximizerToggle<cr>",
+        { noremap = true })
+    end
+  },
   "kylechui/nvim-surround",
   { "nvim-lua/popup.nvim",             lazy = true },
   { "nvim-lua/plenary.nvim",           lazy = true },
@@ -67,14 +85,24 @@ local plugins = {
   "p00f/clangd_extensions.nvim",
   "nvim-lua/lsp-status.nvim",
   "simrat39/rust-tools.nvim",
-  "numToStr/Comment.nvim",
+  {
+    "numToStr/Comment.nvim",
+    init = function()
+      keymap('n', '<leader>c', "gc", { remap = true })
+    end
+  },
   "nvim-lualine/lualine.nvim",
   "kyazdani42/nvim-web-devicons",
   "ray-x/lsp_signature.nvim",
   "weilbith/nvim-code-action-menu",
   "unblevable/quick-scope",
-  { "tzachar/cmp-tabnine",      enabled = use_ai_completion(), build = "./install.sh" },
-  { "jcdickinson/codeium.nvim", enabled = use_ai_completion() },
+  {
+    "tzachar/cmp-tabnine",
+    enabled = use_ai_completion(),
+    build =
+    "./install.sh"
+  },
+  { "jcdickinson/codeium.nvim", enabled = use_ai_completion(), config = {} },
 }
 local lazy_opts = {}
 
@@ -620,7 +648,7 @@ require('lualine').setup {
     lualine_z = {}
   },
   tabline = {
-    lualine_a = { { 'buffers', mode = 2 } },
+    lualine_a = { { 'buffers', mode = 4 } },
     lualine_b = { 'branch' },
     lualine_c = {},
     lualine_x = {},
@@ -632,8 +660,50 @@ require('lualine').setup {
 -- }}}
 
 -- Autocorrect {{{
-  vim.cmd.abbrev("pritnf", "printf")
+vim.cmd.abbrev("pritnf", "printf")
 -- }}}
+
+--- Key binding {{{
+
+keymap('n', '<leader><leader>', "za", { noremap = true })
+keymap('n', '<F5>', "<cmd>e<cr>", { noremap = true })
+keymap('n', '<S-H>', "<cmd>set cursorline!<cr>", { noremap = true })
+keymap('i', 'jj', "<Esc>", { noremap = true })
+keymap('n', '<leader>rn', "<cmd>set relativenumber!<cr>", { noremap = true })
+keymap('n', '<leader>n', "<cmd>set number!<cr>", { noremap = true })
+
+-- Movements
+keymap('n', '¤', "$", { noremap = true })
+keymap('n', 'ä', "$", { noremap = true })
+keymap('n', 'ö', "^", { noremap = true })
+
+keymap('n', '<A-n>', "<cmd>cn<cr>", { noremap = true })
+keymap('n', '<A-p>', "<cmd>cn<cr>", { noremap = true })
+
+-- Open vimrc
+keymap('n', "<leader>ev", "<cmd>vsplit $MYVIMRC<cr>", { noremap = true })
+keymap('n', "<leader>evv", "<cmd>tabnew ~/dotfiles/nvimrc<cr><cmd>vsplit ~/dotfiles/lua/vimrc.lua<cr>",
+  { noremap = true })
+
+-- Save as root even when file wasn't open with sudo
+keymap('c', "w!!", "w !sudo tee > /dev/null %", { noremap = true })
+
+-- Move between buffers
+keymap('n', "<leader>1", "<cmd>buffer 1<cr>", { noremap = true })
+keymap('n', "<leader>2", "<cmd>buffer 2<cr>", { noremap = true })
+keymap('n', "<leader>3", "<cmd>buffer 3<cr>", { noremap = true })
+keymap('n', "<leader>4", "<cmd>buffer 4<cr>", { noremap = true })
+keymap('n', "<leader>5", "<cmd>buffer 5<cr>", { noremap = true })
+keymap('n', "<leader>6", "<cmd>buffer 6<cr>", { noremap = true })
+
+-- Move between tabs
+keymap('n', "<localleader>1", "1gt", { noremap = true })
+keymap('n', "<localleader>2", "2gt", { noremap = true })
+keymap('n', "<localleader>3", "3gt", { noremap = true })
+keymap('n', "<localleader>4", "4gt", { noremap = true })
+keymap('n', "<localleader>5", "5gt", { noremap = true })
+keymap('n', "<localleader>6", "6gt", { noremap = true })
+--- }}}
 
 local signature_config = {
   hint_enable = false,
@@ -660,7 +730,7 @@ require("nvim-surround").setup({})
 --     lsp_doc_border = false, -- add a border to hover docs and signature help
 --   },
 -- })
--- vim.keymap.set("n", "<leader>:", "<cmd>Noice last<cr>", { desc = "Show latest command output" })
+-- keymap("n", "<leader>:", "<cmd>Noice last<cr>", { desc = "Show latest command output" })
 --
 
 function Hover()
@@ -680,10 +750,3 @@ function Hover()
 end
 
 vim.api.nvim_create_user_command('Hover', 'lua Hover()', {})
-
-if vim.api.nvim_eval('exists("use_ai_comp")') == true and vim.api.nvim_get_var("use_ai_comp") == 1 then
-  require("codeium").setup({})
-end
-
-vim.keymap.set('n', '<leader>dd', function() require("duck").hatch() end, {})
-vim.keymap.set('n', '<leader>dk', function() require("duck").cook() end, {})
