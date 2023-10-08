@@ -61,9 +61,11 @@ local plugins = {
     init = function()
       keymap('n', '<leader>m', "<cmd>MaximizerToggle<cr>",
         { noremap = true })
-    end
+    end,
+    lazy = true,
+    cmd = "MaximizerToggle",
   },
-  "kylechui/nvim-surround",
+  { "kylechui/nvim-surround",          config = true },
   { "nvim-lua/popup.nvim",             lazy = true },
   { "nvim-lua/plenary.nvim",           lazy = true },
   { "nvim-telescope/telescope.nvim",   dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -72,8 +74,8 @@ local plugins = {
   "romgrk/nvim-treesitter-context",
   "nvim-treesitter/nvim-treesitter-textobjects",
   "gennaro-tedesco/nvim-peekup", -- " Preview registers,
-  "williamboman/mason.nvim",
-  "williamboman/mason-lspconfig.nvim",
+  { "williamboman/mason.nvim",           config = true, lazy = true, cmd = { "Mason" } },
+  { "williamboman/mason-lspconfig.nvim", config = true, },
   "neovim/nvim-lspconfig",
   "L3MON4D3/LuaSnip",
   "saadparwaiz1/cmp_luasnip",
@@ -89,10 +91,13 @@ local plugins = {
     "numToStr/Comment.nvim",
     init = function()
       keymap('n', '<leader>c', "gc", { remap = true })
-    end
+    end,
+    config = true,
+    lazy = true,
+    keys = "gc"
   },
   "nvim-lualine/lualine.nvim",
-  "kyazdani42/nvim-web-devicons",
+  { "kyazdani42/nvim-web-devicons", config = true },
   "ray-x/lsp_signature.nvim",
   "weilbith/nvim-code-action-menu",
   "unblevable/quick-scope",
@@ -102,7 +107,7 @@ local plugins = {
     build =
     "./install.sh"
   },
-  { "jcdickinson/codeium.nvim", enabled = use_ai_completion(), config = {} },
+  { "jcdickinson/codeium.nvim",     enabled = use_ai_completion(), config = {} },
 }
 local lazy_opts = {}
 
@@ -503,8 +508,6 @@ local clangd_opts = {
 -- }}}
 
 
-require("mason").setup()
-require("mason-lspconfig").setup()
 require("mason-lspconfig").setup_handlers {
   function(server_name) -- default handler (optional)
     require("lspconfig")[server_name].setup {}
@@ -549,10 +552,6 @@ keymap('n', '<Leader>lc', vim.lsp.codelens.run, { expr = false, noremap = true }
 -- if(os.execute("bash -c 'command -v rust-analyzer'") == 0) then
 --   require('rust-tools').setup(opts)
 -- end
--- }}}
-
--- Comment {{{
-require('Comment').setup()
 -- }}}
 
 -- Preview {{{
@@ -613,12 +612,6 @@ end
 
 keymap('n', preview_config.keybind, '<cmd>lua preview_file(vim.call("expand", "<cfile>"))<cr>',
   { expr = false, noremap = true })
--- }}}
-
--- Web-devicons {{{
-require 'nvim-web-devicons'.setup {
-  -- default = true;
-}
 -- }}}
 
 -- Lualine {{{
@@ -711,27 +704,6 @@ local signature_config = {
 }
 require("lsp_signature").setup(signature_config)
 
-
-require("nvim-surround").setup({})
-
--- require("smartcolumn").setup({ colorcolumn = 120 })
-
--- require("noice").setup({
---   -- you can enable a preset for easier configuration
---   popupmenu = {
---     enabled = false,
---   },
---
---   presets = {
---     bottom_search = true, -- use a classic bottom cmdline for search
---     command_palette = true, -- position the cmdline and popupmenu together
---     long_message_to_split = true, -- long messages will be sent to a split
---     inc_rename = false, -- enables an input dialog for inc-rename.nvim
---     lsp_doc_border = false, -- add a border to hover docs and signature help
---   },
--- })
--- keymap("n", "<leader>:", "<cmd>Noice last<cr>", { desc = "Show latest command output" })
---
 
 function Hover()
   local width = vim.api.nvim_list_uis()[1]["width"] / 2
