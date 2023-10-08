@@ -28,7 +28,8 @@ local plugins = {
         init = function()
             keymap('n', '<leader>dd', function() require("duck").hatch() end, {})
             keymap('n', '<leader>dk', function() require("duck").cook() end, {})
-        end
+        end,
+        lazy = true,
     },
     "junegunn/fzf", -- { 'do': { -> fzf#install() } },
     {
@@ -50,7 +51,8 @@ local plugins = {
             keymap('n', '<leader>gm', '<cmd>Git mergetool -y<cr>', { expr = false, noremap = true })
             keymap('n', '<leader>ga', '<cmd>Gwrite<cr>', { expr = false, noremap = true })
             keymap('n', '<leader>gc', '<cmd>Git commit<cr>', { expr = false, noremap = true })
-        end
+        end,
+        cmd = { "Git", "Gwrite", "Gvdiffsplit", "Gclog" },
     },
     "tpope/vim-sleuth", -- " Automatic detection of tabwidth,
     {
@@ -70,7 +72,6 @@ local plugins = {
             keymap('n', '<leader>m', "<cmd>MaximizerToggle<cr>",
                 { noremap = true })
         end,
-        lazy = true,
         cmd = "MaximizerToggle",
     },
     { "kylechui/nvim-surround",          config = true },
@@ -81,42 +82,47 @@ local plugins = {
     "nvim-treesitter/nvim-treesitter-refactor",
     "romgrk/nvim-treesitter-context",
     "nvim-treesitter/nvim-treesitter-textobjects",
-    "gennaro-tedesco/nvim-peekup", -- " Preview registers,
-    { "williamboman/mason.nvim",           config = true, lazy = true, cmd = { "Mason" } },
+    {
+        "gennaro-tedesco/nvim-peekup", -- " Preview registers,
+        keys = '""'
+    },
+    { "williamboman/mason.nvim",           config = true, cmd = { "Mason" } },
     { "williamboman/mason-lspconfig.nvim", config = true, },
     "neovim/nvim-lspconfig",
-    "L3MON4D3/LuaSnip",
+    {"L3MON4D3/LuaSnip", event = "InsertEnter"},
     "saadparwaiz1/cmp_luasnip",
     "hrsh7th/nvim-cmp",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-cmdline",
     "hrsh7th/cmp-path",
     "hrsh7th/cmp-nvim-lsp",
-    "p00f/clangd_extensions.nvim",
+    {"p00f/clangd_extensions.nvim", lazy = true},
     "nvim-lua/lsp-status.nvim",
-    "simrat39/rust-tools.nvim",
+    { "simrat39/rust-tools.nvim",     lazy = true },
     {
         "numToStr/Comment.nvim",
         init = function()
             keymap({ '' }, '<leader>c', "gc", { remap = true })
         end,
         config = true,
-        lazy = true,
         keys = "gc"
     },
     "nvim-lualine/lualine.nvim",
     { "kyazdani42/nvim-web-devicons", config = true },
-    "ray-x/lsp_signature.nvim",
-    "weilbith/nvim-code-action-menu",
-    "unblevable/quick-scope",
+    {"ray-x/lsp_signature.nvim", event = "InsertEnter"},
+    {"weilbith/nvim-code-action-menu", cmd = 'CodeActionMenu',},
+    {"unblevable/quick-scope",
+        lazy = true,
+        event = "InsertEnter",
+    },
     {
         "tzachar/cmp-tabnine",
         enabled = use_ai_completion(),
         build =
-        "./install.sh"
+        "./install.sh",
     },
-    { "jcdickinson/codeium.nvim",     enabled = use_ai_completion(), config = {} },
-    { "m4xshen/autoclose.nvim",       config = true },
+    { "jcdickinson/codeium.nvim", enabled = use_ai_completion(), config = {} },
+    { "m4xshen/autoclose.nvim",   config = true, event = "InsertEnter" },
 }
 local lazy_opts = {}
 
