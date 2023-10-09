@@ -5,6 +5,7 @@ vim.g.maplocalleader = ","
 
 vim.cmd("source ~/dotfiles/common.vim")
 
+-- Plugin list {{{
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
@@ -28,6 +29,8 @@ local plugins = {
         init = function()
             keymap('n', '<leader>dd', function() require("duck").hatch() end, {})
             keymap('n', '<leader>dk', function() require("duck").cook() end, {})
+            keymap('n', '<leader>dh', function() require("duck").hatch("🐎") end, {})
+            keymap('n', '<leader>dc', function() require("duck").hatch("🐈") end, {})
         end,
         lazy = true,
     },
@@ -127,6 +130,7 @@ local plugins = {
 local lazy_opts = {}
 
 require("lazy").setup(plugins, lazy_opts)
+-- }}}
 
 -- runCmd {{{
 local runCmd_config = {
@@ -526,11 +530,6 @@ require("mason-lspconfig").setup_handlers {
     ["clangd"] = function()
         require("clangd_extensions").setup(clangd_opts)
     end,
-    -- ["robotframework_ls"] = function()
-    --   require'lspconfig'.robotframework_ls.setup({
-    --     root_dir = function() return "/home/mkindber/csp" end
-    --   })
-    -- end
 }
 
 keymap('n', '<Leader>lr', vim.lsp.buf.rename, { expr = false, noremap = true })
@@ -754,8 +753,9 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 -- }}}
 
 local signature_config = {
-    hint_enable = false,
+    hint_enable = true,
     max_width = 80,
+    floating_window = false,
 }
 require("lsp_signature").setup(signature_config)
 
