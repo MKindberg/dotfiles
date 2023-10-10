@@ -59,9 +59,10 @@ local plugins = {
     },
     "tpope/vim-sleuth", -- " Automatic detection of tabwidth,
     {
-        "sainnhe/sonokai",
-        config = function()
-            vim.cmd([[colorscheme sonokai]])
+        "Mkindberg/sonokai_mini",
+        init = function()
+            vim.g.sonokai_better_performance = 1
+            vim.cmd([[colorscheme sonokai_mini]])
             vim.cmd("highlight EndOfBuffer ctermbg=none")
             vim.cmd("highlight CursorLine cterm=bold ctermbg=black")
             vim.cmd("highlight Normal ctermbg=None")
