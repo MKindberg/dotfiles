@@ -126,7 +126,6 @@ local plugins = {
         "./install.sh",
     },
     { "jcdickinson/codeium.nvim", enabled = use_ai_completion(), config = {} },
-    { "m4xshen/autoclose.nvim",   config = true, event = "InsertEnter" },
 }
 local lazy_opts = {}
 
