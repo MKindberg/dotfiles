@@ -5,6 +5,168 @@ vim.g.maplocalleader = ","
 
 vim.cmd("source ~/dotfiles/common.vim")
 
+-- Telescope {{{
+local function setup_telescope()
+    return {
+        defaults = {
+            file_previewer = require 'telescope.previewers'.vim_buffer_cat.new,
+            grep_previewer = require 'telescope.previewers'.vim_buffer_vimgrep.new,
+            qflist_previewer = require 'telescope.previewers'.vim_buffer_qflist.new,
+        },
+    }
+end
+local function init_telescope()
+    keymap('n', '<Leader>p', '<cmd>Telescope find_files<cr>', { expr = false, noremap = true })
+    keymap('n', '<Leader>q', '<cmd>Telescope quickfix<cr>', { expr = false, noremap = true })
+    keymap('n', '<Leader>b', '<cmd>Telescope buffers<cr>', { expr = false, noremap = true })
+    keymap('n', '<Leader>/', '<cmd>Telescope live_grep<cr>', { expr = false, noremap = true })
+    keymap('n', '<Leader>/h', '<cmd>Telescope help_tags<cr>', { expr = false, noremap = true })
+    keymap('n', '<Leader>/t', '<cmd>Telescope treesitter<cr>', { expr = false, noremap = true })
+end
+
+-- }}}
+
+-- LuaSnip {{{
+local function setup_luasnip()
+    local cmp = require("cmp")
+    local ls = require("luasnip")
+    local snip = ls.snippet
+    local text = ls.text_node
+    ls.snippets = {
+        all = {
+        },
+        c = {
+            snip("cscript",
+                {
+                    text({ "#!/bin/bash", "tail -n +3 $0 | gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out" }),
+                }
+            )
+        },
+        cpp = {
+            snip("cscript",
+                {
+                    text({ "#!/bin/bash", "tail -n +3 $0 | g++ -std=c++17 -Wall -Werror -O3 -x c++ - && exec ./a.out" }),
+                }
+            )
+        },
+    }
+
+    ls.filetype_extend("cpp", { "c" })
+    local t = function(str)
+        return vim.api.nvim_replace_termcodes(str, true, true, true)
+    end
+    _G.tab_complete = function()
+        if cmp and cmp.visible() then
+            cmp.select_next_item()
+        elseif ls and ls.expand_or_jumpable() then
+            return t("<Plug>luasnip-expand-or-jump")
+        else
+            return t "<Tab>"
+        end
+        return ""
+    end
+    _G.s_tab_complete = function()
+        if cmp and cmp.visible() then
+            cmp.select_prev_item()
+        elseif ls and ls.jumpable(-1) then
+            return t("<Plug>luasnip-jump-prev")
+        else
+            return t "<S-Tab>"
+        end
+        return ""
+    end
+end
+
+local function init_luasnip()
+    keymap("i", "<Esc>n", "<Plug>luasnip-expand-or-jump", { expr = false })
+    keymap("s", "<Esc>n", "<Plug>luasnip-expand-or-jump", { expr = false })
+    keymap("i", "<Esc>p", "<Plug>luasnip-jump-prev", { expr = false })
+    keymap("s", "<Esc>p", "<Plug>luasnip-jump-prev", { expr = false })
+end
+-- }}}
+
+-- nvim-cmp {{{
+local function setup_cmp()
+    local cmp = require 'cmp'
+
+    local source_mapping = {
+        codeium = "[AI]",
+        luasnip = "[Snip]",
+        nvim_lsp = "[LSP]",
+        buffer = "[Buf]",
+        cmp_tabnine = "[TN]",
+        path = "[Path]",
+    }
+
+    return {
+        mapping = {
+            ['<C>n'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+            ['<C>p'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+            ['<Right>'] = cmp.mapping.close(),
+            ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        },
+        snippet = {
+            expand = function(args)
+                require 'luasnip'.lsp_expand(args.body)
+            end
+        },
+        sources = cmp.config.sources(
+            {
+                {
+                    name = 'codeium',
+                    keyword_length = 0,
+                },
+                {
+                    name = 'luasnip',
+                    keyword_length = 1,
+                },
+                {
+                    name = 'nvim_lsp',
+                    keyword_length = 1,
+                },
+                {
+                    name = 'cmp_tabnine',
+                    keyword_length = 1,
+                },
+                {
+                    name = 'buffer',
+                    keyword_length = 1,
+                },
+            }),
+        view = {
+            entries = "native"
+        },
+        experimental = {
+            ghost_text = true,
+        },
+        formatting = {
+            format = function(entry, vim_item)
+                local menu = source_mapping[entry.source.name]
+                if entry.source.name == 'cmp_tabnine' then
+                    if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
+                        menu = entry.completion_item.data.detail .. ' ' .. menu
+                    end
+                end
+                vim_item.menu = menu
+                return vim_item
+            end
+        },
+    }
+end
+-- }}}
+
+-- Tabnine {{{
+local function setup_tabnine()
+    return {
+        max_lines = 1000,
+        max_num_results = 20,
+        sort = true,
+        run_on_every_keystroke = true,
+        snippet_placeholder = '..',
+    }
+end
+-- }}}
+
 -- Plugin list {{{
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
@@ -24,6 +186,7 @@ local function use_ai_completion()
 end
 
 local plugins = {
+    "tweekmonster/startuptime.vim",
     {
         "tamton-aquib/duck.nvim",
         init = function()
@@ -69,7 +232,12 @@ local plugins = {
             vim.cmd("highlight NormalNC ctermbg=None")
         end,
     },
-    { "Yggdroot/indentLine",             init = function() vim.g.indentLine_char = '|' end }, -- " Show indentation markers,
+    {
+        "Yggdroot/indentLine", -- Show indentation markers,
+        init = function()
+            vim.g.indentLine_char = '|'
+        end,
+    },
     {
         "szw/vim-maximizer",
         init = function()
@@ -78,31 +246,54 @@ local plugins = {
         end,
         cmd = "MaximizerToggle",
     },
-    { "kylechui/nvim-surround",          config = true },
-    { "nvim-lua/popup.nvim",             lazy = true },
-    { "nvim-lua/plenary.nvim",           lazy = true },
-    { "nvim-telescope/telescope.nvim",   dependencies = { 'nvim-lua/plenary.nvim' } },
-    { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+    { "kylechui/nvim-surround", config = true },
+    { "nvim-lua/popup.nvim",    lazy = true },
+    { "nvim-lua/plenary.nvim",  lazy = true },
+    {
+        "nvim-telescope/telescope.nvim",
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        init = init_telescope,
+        opts = setup_telescope,
+        cmd = "Telescope",
+    },
+    { "nvim-treesitter/nvim-treesitter",             build = ":TSUpdate" },
     "nvim-treesitter/nvim-treesitter-refactor",
     "romgrk/nvim-treesitter-context",
-    "nvim-treesitter/nvim-treesitter-textobjects",
+    { "nvim-treesitter/nvim-treesitter-textobjects", event = "InsertEnter" },
     {
         "gennaro-tedesco/nvim-peekup", -- " Preview registers,
         keys = '""'
     },
     { "williamboman/mason.nvim",           config = true, cmd = { "Mason" } },
     { "williamboman/mason-lspconfig.nvim", config = true, },
-    "neovim/nvim-lspconfig",
-    { "L3MON4D3/LuaSnip",            event = "InsertEnter" },
-    "saadparwaiz1/cmp_luasnip",
-    "hrsh7th/nvim-cmp",
-    "hrsh7th/cmp-buffer",
-    "hrsh7th/cmp-cmdline",
-    "hrsh7th/cmp-path",
-    "hrsh7th/cmp-nvim-lsp",
+    { "neovim/nvim-lspconfig",             lazy = true },
+    {
+        "L3MON4D3/LuaSnip",
+        opts = setup_luasnip,
+        init = init_luasnip,
+        event = "InsertEnter"
+    },
+    {
+        "hrsh7th/nvim-cmp",
+        event = "InsertEnter",
+        opts = setup_cmp,
+        dependencies = {
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-cmdline",
+            "hrsh7th/cmp-path",
+            "hrsh7th/cmp-nvim-lsp",
+            "saadparwaiz1/cmp_luasnip",
+            "tzachar/cmp-tabnine",
+        },
+    },
+    { "hrsh7th/cmp-buffer",          lazy = true },
+    { "hrsh7th/cmp-cmdline",         lazy = true },
+    { "hrsh7th/cmp-path",            lazy = true },
+    { "hrsh7th/cmp-nvim-lsp",        lazy = true },
+    { "saadparwaiz1/cmp_luasnip",    lazy = true },
     { "p00f/clangd_extensions.nvim", lazy = true },
-    "nvim-lua/lsp-status.nvim",
-    { "simrat39/rust-tools.nvim",       lazy = true },
+    { "nvim-lua/lsp-status.nvim",    lazy = true },
+    { "simrat39/rust-tools.nvim",    lazy = true },
     {
         "numToStr/Comment.nvim",
         init = function()
@@ -112,8 +303,16 @@ local plugins = {
     },
     "nvim-lualine/lualine.nvim",
     { "kyazdani42/nvim-web-devicons",   config = true },
-    { "ray-x/lsp_signature.nvim",       event = "InsertEnter" },
-    { "weilbith/nvim-code-action-menu", cmd = 'CodeActionMenu', },
+    {
+        "ray-x/lsp_signature.nvim",
+        event = "InsertEnter",
+        opts = {
+            hint_enable = true,
+            max_width = 80,
+            floating_window = false,
+        },
+    },
+    { "weilbith/nvim-code-action-menu", cmd = 'CodeActionMenu', key = "<leader>la" },
     {
         "unblevable/quick-scope",
         lazy = true,
@@ -124,8 +323,15 @@ local plugins = {
         enabled = use_ai_completion(),
         build =
         "./install.sh",
+        opts = setup_tabnine,
+        lazy = true,
     },
-    { "jcdickinson/codeium.nvim", enabled = use_ai_completion(), config = {} },
+    {
+        "jcdickinson/codeium.nvim",
+        enabled = use_ai_completion(),
+        config = true,
+        event = "InsertEnter",
+    },
 }
 local lazy_opts = {}
 
@@ -213,193 +419,6 @@ set.foldmethod = 'expr'
 set.foldexpr = 'nvim_treesitter#foldexpr()'
 set.foldlevelstart = 20
 
--- }}}
-
--- Telescope {{{
-require('telescope').setup {
-    defaults = {
-        file_previewer = require 'telescope.previewers'.vim_buffer_cat.new,
-        grep_previewer = require 'telescope.previewers'.vim_buffer_vimgrep.new,
-        qflist_previewer = require 'telescope.previewers'.vim_buffer_qflist.new,
-    },
-}
-
-keymap('n', '<Leader>p', '<cmd>Telescope find_files<cr>', { expr = false, noremap = true })
-keymap('n', '<Leader>q', '<cmd>Telescope quickfix<cr>', { expr = false, noremap = true })
-keymap('n', '<Leader>b', '<cmd>Telescope buffers<cr>', { expr = false, noremap = true })
-keymap('n', '<Leader>/', '<cmd>Telescope live_grep<cr>', { expr = false, noremap = true })
-keymap('n', '<Leader>/h', '<cmd>Telescope help_tags<cr>', { expr = false, noremap = true })
-keymap('n', '<Leader>/t', '<cmd>Telescope treesitter<cr>', { expr = false, noremap = true })
-
--- }}}
-
--- nvim-cmp {{{
-local cmp = require 'cmp'
-
-local source_mapping = {
-    codeium = "[AI]",
-    luasnip = "[Snip]",
-    nvim_lsp = "[LSP]",
-    buffer = "[Buf]",
-    cmp_tabnine = "[TN]",
-    path = "[Path]",
-}
-
-cmp.setup({
-    mapping = {
-        ['<C>n'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-        ['<C>p'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-        ['<Right>'] = cmp.mapping.close(),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    },
-    snippet = {
-        expand = function(args)
-            require 'luasnip'.lsp_expand(args.body)
-        end
-    },
-    sources = cmp.config.sources(
-        {
-            {
-                name = 'codeium',
-                keyword_length = 0,
-            },
-            {
-                name = 'luasnip',
-                keyword_length = 1,
-            },
-            {
-                name = 'nvim_lsp',
-                keyword_length = 1,
-            },
-            {
-                name = 'cmp_tabnine',
-                keyword_length = 1,
-            },
-            {
-                name = 'buffer',
-                keyword_length = 1,
-            },
-        }),
-    view = {
-        entries = "native"
-    },
-    experimental = {
-        ghost_text = true,
-    },
-    formatting = {
-        format = function(entry, vim_item)
-            local menu = source_mapping[entry.source.name]
-            if entry.source.name == 'cmp_tabnine' then
-                if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
-                    menu = entry.completion_item.data.detail .. ' ' .. menu
-                end
-            end
-            vim_item.menu = menu
-            return vim_item
-        end
-    },
-})
-
-
--- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
--- cmp.setup.cmdline('/', {
---   sources = {
---     { name = 'buffer' }
---   }
--- })
---
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
--- cmp.setup.cmdline(':', {
---   sources = cmp.config.sources({
---     { name = 'path' }
---   }, {
---     { name = 'cmdline' }
---   })
--- })
--- }}}
-
--- Tabnine {{{
-if vim.api.nvim_eval('exists("use_ai_comp")') == true and vim.api.nvim_get_var("use_ai_comp") == 1 then
-    local tabnine = require('cmp_tabnine.config')
-    tabnine:setup({
-        max_lines = 1000,
-        max_num_results = 20,
-        sort = true,
-        run_on_every_keystroke = true,
-        snippet_placeholder = '..',
-    })
-end
--- }}}
-
--- LuaSnip {{{
-local function copy(args)
-    return args[1]
-end
-local ls = require("luasnip")
-local snip = ls.snippet
-local text = ls.text_node
-local insert = ls.insert_node
-local func = ls.function_node
-ls.snippets = {
-    all = {
-    },
-    c = {
-        snip("cscript",
-            {
-                text({ "#!/bin/bash", "tail -n +3 $0 | gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out" }),
-            }
-        )
-    },
-    cpp = {
-        snip("cscript",
-            {
-                text({ "#!/bin/bash", "tail -n +3 $0 | g++ -std=c++17 -Wall -Werror -O3 -x c++ - && exec ./a.out" }),
-            }
-        )
-    },
-}
-
-ls.filetype_extend("cpp", { "c" })
-local t = function(str)
-    return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-local check_back_space = function()
-    local col = vim.fn.col('.') - 1
-    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-        return true
-    else
-        return false
-    end
-end
-_G.tab_complete = function()
-    if cmp and cmp.visible() then
-        cmp.select_next_item()
-    elseif ls and ls.expand_or_jumpable() then
-        return t("<Plug>luasnip-expand-or-jump")
-    else
-        return t "<Tab>"
-    end
-    return ""
-end
-_G.s_tab_complete = function()
-    if cmp and cmp.visible() then
-        cmp.select_prev_item()
-    elseif ls and ls.jumpable(-1) then
-        return t("<Plug>luasnip-jump-prev")
-    else
-        return t "<S-Tab>"
-    end
-    return ""
-end
-
-keymap("i", "<Esc>n", "<Plug>luasnip-expand-or-jump", { expr = false })
-keymap("s", "<Esc>n", "<Plug>luasnip-expand-or-jump", { expr = false })
-keymap("i", "<Esc>p", "<Plug>luasnip-jump-prev", { expr = false })
-keymap("s", "<Esc>p", "<Plug>luasnip-jump-prev", { expr = false })
--- keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
--- keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
--- keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
--- keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 -- }}}
 
 -- Lsp {{{
@@ -752,12 +771,6 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 
 -- }}}
 
-local signature_config = {
-    hint_enable = true,
-    max_width = 80,
-    floating_window = false,
-}
-require("lsp_signature").setup(signature_config)
 
 
 function Hover()
