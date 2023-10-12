@@ -28,53 +28,28 @@ end
 
 -- LuaSnip {{{
 local function setup_luasnip()
-    local cmp = require("cmp")
     local ls = require("luasnip")
     local snip = ls.snippet
     local text = ls.text_node
-    ls.snippets = {
-        all = {
-        },
-        c = {
+    ls.add_snippets(
+        "c", {
             snip("cscript",
                 {
                     text({ "#!/bin/bash", "tail -n +3 $0 | gcc -std=c17 -Wall -Werror -O3 -x c - && exec ./a.out" }),
                 }
             )
-        },
-        cpp = {
+        })
+    ls.add_snippets(
+        "cpp", {
             snip("cscript",
                 {
                     text({ "#!/bin/bash", "tail -n +3 $0 | g++ -std=c++17 -Wall -Werror -O3 -x c++ - && exec ./a.out" }),
                 }
             )
-        },
-    }
+        }
+    )
 
-    ls.filetype_extend("cpp", { "c" })
-    local t = function(str)
-        return vim.api.nvim_replace_termcodes(str, true, true, true)
-    end
-    _G.tab_complete = function()
-        if cmp and cmp.visible() then
-            cmp.select_next_item()
-        elseif ls and ls.expand_or_jumpable() then
-            return t("<Plug>luasnip-expand-or-jump")
-        else
-            return t "<Tab>"
-        end
-        return ""
-    end
-    _G.s_tab_complete = function()
-        if cmp and cmp.visible() then
-            cmp.select_prev_item()
-        elseif ls and ls.jumpable(-1) then
-            return t("<Plug>luasnip-jump-prev")
-        else
-            return t "<S-Tab>"
-        end
-        return ""
-    end
+    require("luasnip.loaders.from_vscode").lazy_load()
 end
 
 local function init_luasnip()
@@ -107,7 +82,7 @@ local function setup_cmp()
         },
         snippet = {
             expand = function(args)
-                require 'luasnip'.lsp_expand(args.body)
+                require('luasnip').lsp_expand(args.body)
             end
         },
         sources = cmp.config.sources(
@@ -186,7 +161,7 @@ local function use_ai_completion()
 end
 
 local plugins = {
-    "tweekmonster/startuptime.vim",
+    { "tweekmonster/startuptime.vim", cmd = "StartupTime" },
     {
         "tamton-aquib/duck.nvim",
         init = function()
@@ -246,9 +221,9 @@ local plugins = {
         end,
         cmd = "MaximizerToggle",
     },
-    { "kylechui/nvim-surround", config = true },
-    { "nvim-lua/popup.nvim",    lazy = true },
-    { "nvim-lua/plenary.nvim",  lazy = true },
+    { "kylechui/nvim-surround",       config = true },
+    { "nvim-lua/popup.nvim",          lazy = true },
+    { "nvim-lua/plenary.nvim",        lazy = true },
     {
         "nvim-telescope/telescope.nvim",
         dependencies = { 'nvim-lua/plenary.nvim' },
@@ -271,29 +246,31 @@ local plugins = {
         "L3MON4D3/LuaSnip",
         opts = setup_luasnip,
         init = init_luasnip,
-        event = "InsertEnter"
+        event = "InsertEnter",
+        dependencies = { "friendly-snippets" },
     },
     {
         "hrsh7th/nvim-cmp",
         event = "InsertEnter",
         opts = setup_cmp,
         dependencies = {
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-cmdline",
-            "hrsh7th/cmp-path",
-            "hrsh7th/cmp-nvim-lsp",
-            "saadparwaiz1/cmp_luasnip",
-            "tzachar/cmp-tabnine",
+            "cmp-buffer",
+            "cmp-cmdline",
+            "cmp-path",
+            "cmp-nvim-lsp",
+            "cmp_luasnip",
+            "cmp-tabnine",
         },
     },
-    { "hrsh7th/cmp-buffer",          lazy = true },
-    { "hrsh7th/cmp-cmdline",         lazy = true },
-    { "hrsh7th/cmp-path",            lazy = true },
-    { "hrsh7th/cmp-nvim-lsp",        lazy = true },
-    { "saadparwaiz1/cmp_luasnip",    lazy = true },
-    { "p00f/clangd_extensions.nvim", lazy = true },
-    { "nvim-lua/lsp-status.nvim",    lazy = true },
-    { "simrat39/rust-tools.nvim",    lazy = true },
+    { "hrsh7th/cmp-buffer",           lazy = true },
+    { "hrsh7th/cmp-cmdline",          lazy = true },
+    { "hrsh7th/cmp-path",             lazy = true },
+    { "hrsh7th/cmp-nvim-lsp",         lazy = true },
+    { "saadparwaiz1/cmp_luasnip",     lazy = true, dependencies = "LuaSnip" },
+    { "p00f/clangd_extensions.nvim",  lazy = true },
+    { "nvim-lua/lsp-status.nvim",     lazy = true },
+    { "simrat39/rust-tools.nvim",     lazy = true },
+    { "rafamadriz/friendly-snippets", lazy = true },
     {
         "numToStr/Comment.nvim",
         init = function()
