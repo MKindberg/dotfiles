@@ -554,7 +554,7 @@ require("mason-lspconfig").setup_handlers {
 keymap('n', '<Leader>lr', vim.lsp.buf.rename, { expr = false, noremap = true })
 keymap('n', '<Leader>ls', vim.lsp.buf.references, { expr = false, noremap = true })
 keymap('n', 'gr', vim.lsp.buf.references, { expr = false, noremap = true })
-keymap('n', '<Leader>lf', vim.lsp.buf.format, { expr = false, noremap = true })
+keymap('', '<Leader>lf', vim.lsp.buf.format, { expr = false, noremap = true })
 keymap('n', '<Leader>ln', vim.diagnostic.goto_next, { expr = false, noremap = true })
 keymap('n', ']d', vim.diagnostic.goto_next, { expr = false, noremap = true })
 keymap('n', '<Leader>lp', vim.diagnostic.goto_prev, { expr = false, noremap = true })
