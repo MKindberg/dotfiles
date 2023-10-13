@@ -6,12 +6,12 @@ vim.g.maplocalleader = ","
 vim.cmd("source ~/dotfiles/common.vim")
 
 -- Telescope {{{
-local function setup_telescope()
+local function opts_telescope()
     return {
         defaults = {
-            file_previewer = require 'telescope.previewers'.vim_buffer_cat.new,
-            grep_previewer = require 'telescope.previewers'.vim_buffer_vimgrep.new,
-            qflist_previewer = require 'telescope.previewers'.vim_buffer_qflist.new,
+            file_previewer = require('telescope.previewers').vim_buffer_cat.new,
+            grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
+            qflist_previewer = require('telescope.previewers').vim_buffer_qflist.new,
         },
     }
 end
@@ -27,7 +27,7 @@ end
 -- }}}
 
 -- LuaSnip {{{
-local function setup_luasnip()
+local function config_luasnip()
     local ls = require("luasnip")
     local snip = ls.snippet
     local text = ls.text_node
@@ -61,8 +61,8 @@ end
 -- }}}
 
 -- nvim-cmp {{{
-local function setup_cmp()
-    local cmp = require 'cmp'
+local function opts_cmp()
+    local cmp = require('cmp')
 
     local source_mapping = {
         codeium = "[AI]",
@@ -131,15 +131,239 @@ end
 -- }}}
 
 -- Tabnine {{{
-local function setup_tabnine()
+local opts_tabnine = {
+    max_lines = 1000,
+    max_num_results = 20,
+    sort = true,
+    run_on_every_keystroke = true,
+    snippet_placeholder = '..',
+}
+-- }}}
+
+-- Lualine {{{
+local opts_lualine = {
+    options = {
+        icons_enabled = true,
+        theme = 'auto',
+        component_separators = { left = '', right = '' },
+        section_separators = { left = '', right = '' },
+        disabled_filetypes = {},
+        always_divide_middle = true,
+    },
+    sections = {
+        lualine_a = { 'mode' },
+        lualine_b = { 'diff', 'diagnostics' },
+        lualine_c = { { 'filename', file_status = true, path = 1 } },
+        lualine_x = { 'encoding', 'filetype' },
+        lualine_y = { 'progress' },
+        lualine_z = { 'location' }
+    },
+    inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = { 'filename' },
+        lualine_x = { 'location' },
+        lualine_y = {},
+        lualine_z = {}
+    },
+    tabline = {
+        lualine_a = { { 'buffers', mode = 4 } },
+        lualine_b = { 'branch' },
+        lualine_c = {},
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = { { 'tabs', mode = 2 } }
+    },
+    extensions = {}
+}
+-- }}}
+
+-- Treesitter {{{
+local opts_treesitter = {
+    highlight = {
+        enable = true,
+    },
+    auto_install = true,
+    indent = {
+        enable = true
+    },
+    -- refactor = {
+    --   highlight_definitions = { enable = true },
+    --   highlight_current_scope = { enable = false },
+    -- },
+    textobjects = {
+        select = {
+            enable = true,
+            keymaps = {
+                ["af"] = "@function.outer",
+                ["if"] = "@function.inner",
+                ["ac"] = "@class.outer",
+                ["ic"] = "@class.inner",
+                ["aa"] = "@parameter.outer",
+                ["ia"] = "@parameter.inner",
+                ["ak"] = "@comment.outer",
+                ["ik"] = "@comment.outer",
+            },
+        },
+        move = {
+            enable = true,
+            set_jumps = true,
+            goto_next_start = {
+                ["]m"] = "@function.outer",
+                ["]]"] = "@class.outer",
+            },
+            goto_next_end = {
+                ["]M"] = "@function.outer",
+                ["]["] = "@class.outer",
+            },
+            goto_previous_start = {
+                ["[m"] = "@function.outer",
+                ["[["] = "@class.outer",
+            },
+            goto_previous_end = {
+                ["[M"] = "@function.outer",
+                ["[]"] = "@class.outer",
+            },
+
+        },
+    },
+}
+local init_treesitter = function()
+    set.foldmethod = 'expr'
+    set.foldexpr = 'nvim_treesitter#foldexpr()'
+    set.foldlevelstart = 20
+end
+
+-- }}}
+
+-- Lsp {{{
+
+local function opts_mason_lspconfig()
+    -- Rust {{{
+
+    local rust_opts = {
+        tools = { -- rust-tools options
+            autoSetHints = true,
+            hover_actions = {
+                auto_focus = true,
+            },
+            inlay_hints = {
+                only_current_line = true,
+                show_parameter_hints = true,
+            },
+        },
+        -- all the opts to send to nvim-lspconfig
+        -- these override the defaults set by rust-tools.nvim
+        -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
+        server = {
+            -- on_attach is a callback called when the language server attachs to the buffer
+            -- on_attach = on_attach,
+            settings = {
+                -- to enable rust-analyzer settings visit:
+                -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+                ["rust_analyzer"] = {
+                    -- enable clippy on save
+                    checkOnSave = {
+                        command = "clippy"
+                    },
+                }
+            }
+        },
+    }
+    -- }}}
+
+    -- Lua {{{
+    local lua_opts = {
+        settings = {
+            Lua = {
+                runtime = {
+                    -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                    version = 'LuaJIT',
+                },
+                diagnostics = {
+                    -- Get the language server to recognize the `vim` global
+                    globals = { 'vim' },
+                },
+                workspace = {
+                    -- Make the server aware of Neovim runtime files
+                    library = vim.api.nvim_get_runtime_file("", true),
+                    checkThirdParty = false,
+                },
+                -- Do not send telemetry data containing a randomized but unique identifier
+                telemetry = {
+                    enable = false,
+                },
+            },
+        },
+    }
+    -- }}}
+
+    -- C/C++ {{{
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+    -- Used with the CursorHold event below to display inlay hints after a delay
+    vim.api.nvim_set_option("updatetime", 300)
+
+    local clangd_opts = {
+        capabilities = capabilities,
+        on_attach = function()
+            require("clangd_extensions").setup({
+                inlay_hints = {
+                    inline = false,
+                    only_current_line = true,
+                }
+            })
+            require("clangd_extensions.inlay_hints").setup_autocmd()
+            require("clangd_extensions.inlay_hints").set_inlay_hints()
+        end
+    }
+    -- }}}
+
     return {
-        max_lines = 1000,
-        max_num_results = 20,
-        sort = true,
-        run_on_every_keystroke = true,
-        snippet_placeholder = '..',
+        handlers = {
+            function(server_name) -- default handler
+                require("lspconfig")[server_name].setup {}
+            end,
+            ["lua_ls"] = function()
+                require('lspconfig').lua_ls.setup(lua_opts)
+            end,
+            ["rust_analyzer"] = function()
+                require("rust-tools").setup(rust_opts)
+            end,
+            ["clangd"] = function()
+                require("lspconfig").clangd.setup(clangd_opts)
+            end,
+        }
     }
 end
+
+local function init_lspconfig()
+    keymap('n', '<Leader>lr', vim.lsp.buf.rename, { expr = false, noremap = true })
+    keymap('n', '<Leader>ls', vim.lsp.buf.references, { expr = false, noremap = true })
+    keymap('n', 'gr', vim.lsp.buf.references, { expr = false, noremap = true })
+    keymap('', '<Leader>lf', vim.lsp.buf.format, { expr = false, noremap = true })
+    keymap('n', '<Leader>ln', vim.diagnostic.goto_next, { expr = false, noremap = true })
+    keymap('n', ']d', vim.diagnostic.goto_next, { expr = false, noremap = true })
+    keymap('n', '<Leader>lp', vim.diagnostic.goto_prev, { expr = false, noremap = true })
+    keymap('n', '[d', vim.diagnostic.goto_prev, { expr = false, noremap = true })
+    keymap('n', '<Leader>le', vim.diagnostic.open_float, { expr = false, noremap = true })
+    keymap('n', '<Leader>la', ":CodeActionMenu<CR>:syntax on<CR>", { expr = false, noremap = true })
+    keymap('n', '<Leader>lh', vim.lsp.buf.hover, { expr = false, noremap = true })
+    keymap('n', '<Leader>ld', vim.lsp.buf.definition, { expr = false, noremap = true })
+    keymap('n', 'gd', vim.lsp.buf.definition, { expr = false, noremap = true })
+    keymap('n', '<Leader>lD', vim.lsp.buf.declaration, { expr = false, noremap = true })
+    keymap('n', 'gD', vim.lsp.buf.declaration, { expr = false, noremap = true })
+    keymap('n', '<Leader>li', vim.lsp.buf.implementation, { expr = false, noremap = true })
+    keymap('n', '<Leader>lt', vim.lsp.buf.references, { expr = false, noremap = true })
+    keymap('n', '<Leader>lc', vim.lsp.codelens.run, { expr = false, noremap = true })
+end
+
+--
+--
+-- if(os.execute("bash -c 'command -v rust-analyzer'") == 0) then
+--   require('rust-tools').setup(opts)
+-- end
 -- }}}
 
 -- Plugin list {{{
@@ -228,23 +452,43 @@ local plugins = {
         "nvim-telescope/telescope.nvim",
         dependencies = { 'nvim-lua/plenary.nvim' },
         init = init_telescope,
-        opts = setup_telescope,
+        opts = opts_telescope,
         cmd = "Telescope",
     },
-    { "nvim-treesitter/nvim-treesitter",             build = ":TSUpdate" },
+    {
+        "nvim-treesitter/nvim-treesitter",
+        build = ":TSUpdate",
+        main = "nvim-treesitter.configs",
+        init = init_treesitter,
+        opts = opts_treesitter,
+    },
     "nvim-treesitter/nvim-treesitter-refactor",
     "romgrk/nvim-treesitter-context",
-    { "nvim-treesitter/nvim-treesitter-textobjects", event = "InsertEnter" },
+    {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        event = "InsertEnter"
+    },
     {
         "gennaro-tedesco/nvim-peekup", -- " Preview registers,
         keys = '""'
     },
-    { "williamboman/mason.nvim",           config = true, cmd = { "Mason" } },
-    { "williamboman/mason-lspconfig.nvim", config = true, },
-    { "neovim/nvim-lspconfig",             lazy = true },
+    {
+        "williamboman/mason.nvim",
+        config = true,
+        cmd = { "Mason" }
+    },
+    {
+        "williamboman/mason-lspconfig.nvim",
+        opts = opts_mason_lspconfig,
+    },
+    {
+        "neovim/nvim-lspconfig",
+        lazy = true,
+        init = init_lspconfig,
+    },
     {
         "L3MON4D3/LuaSnip",
-        opts = setup_luasnip,
+        config = config_luasnip,
         init = init_luasnip,
         event = "InsertEnter",
         dependencies = { "friendly-snippets" },
@@ -252,7 +496,7 @@ local plugins = {
     {
         "hrsh7th/nvim-cmp",
         event = "InsertEnter",
-        opts = setup_cmp,
+        opts = opts_cmp,
         dependencies = {
             "cmp-buffer",
             "cmp-cmdline",
@@ -278,8 +522,8 @@ local plugins = {
         end,
         config = true,
     },
-    "nvim-lualine/lualine.nvim",
-    { "kyazdani42/nvim-web-devicons",   config = true },
+    { "nvim-lualine/lualine.nvim",    opts = opts_lualine },
+    { "kyazdani42/nvim-web-devicons", config = true },
     {
         "ray-x/lsp_signature.nvim",
         event = "InsertEnter",
@@ -300,7 +544,7 @@ local plugins = {
         enabled = use_ai_completion(),
         build =
         "./install.sh",
-        opts = setup_tabnine,
+        opts = opts_tabnine,
         lazy = true,
     },
     {
@@ -340,186 +584,6 @@ function runCmd(line, linenr)
 end
 
 keymap('n', runCmd_config.keymap, '<cmd>0luado runCmd(line, linenr)<CR>', { expr = false, noremap = true })
--- }}}
-
--- Treesitter {{{
-require 'nvim-treesitter.configs'.setup {
-    highlight = {
-        enable = true,
-    },
-    auto_install = true,
-    indent = {
-        enable = true
-    },
-    -- refactor = {
-    --   highlight_definitions = { enable = true },
-    --   highlight_current_scope = { enable = false },
-    -- },
-    textobjects = {
-        select = {
-            enable = true,
-            keymaps = {
-                ["af"] = "@function.outer",
-                ["if"] = "@function.inner",
-                ["ac"] = "@class.outer",
-                ["ic"] = "@class.inner",
-                ["aa"] = "@parameter.outer",
-                ["ia"] = "@parameter.inner",
-                ["ak"] = "@comment.outer",
-                ["ik"] = "@comment.outer",
-            },
-        },
-        move = {
-            enable = true,
-            set_jumps = true,
-            goto_next_start = {
-                ["]m"] = "@function.outer",
-                ["]]"] = "@class.outer",
-            },
-            goto_next_end = {
-                ["]M"] = "@function.outer",
-                ["]["] = "@class.outer",
-            },
-            goto_previous_start = {
-                ["[m"] = "@function.outer",
-                ["[["] = "@class.outer",
-            },
-            goto_previous_end = {
-                ["[M"] = "@function.outer",
-                ["[]"] = "@class.outer",
-            },
-
-        },
-    },
-}
-set.foldmethod = 'expr'
-set.foldexpr = 'nvim_treesitter#foldexpr()'
-set.foldlevelstart = 20
-
--- }}}
-
--- Lsp {{{
-
--- Rust {{{
-
-local lsp_rust_opts = {
-    tools = { -- rust-tools options
-        autoSetHints = true,
-        hover_actions = {
-            auto_focus = true,
-        },
-        inlay_hints = {
-            only_current_line = true,
-            show_parameter_hints = true,
-        },
-    },
-    -- all the opts to send to nvim-lspconfig
-    -- these override the defaults set by rust-tools.nvim
-    -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
-    server = {
-        -- on_attach is a callback called when the language server attachs to the buffer
-        -- on_attach = on_attach,
-        settings = {
-            -- to enable rust-analyzer settings visit:
-            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-            ["rust_analyzer"] = {
-                -- enable clippy on save
-                checkOnSave = {
-                    command = "clippy"
-                },
-            }
-        }
-    },
-}
--- }}}
-
--- Lua {{{
-local lsp_lua_opts = {
-    settings = {
-        Lua = {
-            runtime = {
-                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-                version = 'LuaJIT',
-            },
-            diagnostics = {
-                -- Get the language server to recognize the `vim` global
-                globals = { 'vim' },
-            },
-            workspace = {
-                -- Make the server aware of Neovim runtime files
-                library = vim.api.nvim_get_runtime_file("", true),
-                checkThirdParty = false,
-            },
-            -- Do not send telemetry data containing a randomized but unique identifier
-            telemetry = {
-                enable = false,
-            },
-        },
-    },
-}
--- }}}
-
--- C/C++ {{{
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
--- Used with the CursorHold event below to display inlay hints after a delay
-vim.api.nvim_set_option("updatetime", 600)
-
-local lsp_clangd_opts = {
-    capabilities = capabilities,
-    on_attach = function()
-        require("clangd_extensions").setup({
-            inlay_hints = {
-                inline = false,
-                only_current_line = true,
-            }
-        })
-        require("clangd_extensions.inlay_hints").setup_autocmd()
-        require("clangd_extensions.inlay_hints").set_inlay_hints()
-    end
-}
--- }}}
-
-require("mason-lspconfig").setup_handlers {
-    function(server_name) -- default handler
-        require("lspconfig")[server_name].setup {}
-    end,
-    ["lua_ls"] = function()
-        require('lspconfig').lua_ls.setup(lsp_lua_opts)
-    end,
-    ["rust_analyzer"] = function()
-        require("rust-tools").setup(lsp_rust_opts)
-    end,
-    ["clangd"] = function()
-        require("lspconfig").clangd.setup(lsp_clangd_opts)
-    end,
-}
-
-keymap('n', '<Leader>lr', vim.lsp.buf.rename, { expr = false, noremap = true })
-keymap('n', '<Leader>ls', vim.lsp.buf.references, { expr = false, noremap = true })
-keymap('n', 'gr', vim.lsp.buf.references, { expr = false, noremap = true })
-keymap('', '<Leader>lf', vim.lsp.buf.format, { expr = false, noremap = true })
-keymap('n', '<Leader>ln', vim.diagnostic.goto_next, { expr = false, noremap = true })
-keymap('n', ']d', vim.diagnostic.goto_next, { expr = false, noremap = true })
-keymap('n', '<Leader>lp', vim.diagnostic.goto_prev, { expr = false, noremap = true })
-keymap('n', '[d', vim.diagnostic.goto_prev, { expr = false, noremap = true })
-keymap('n', '<Leader>le', vim.diagnostic.open_float, { expr = false, noremap = true })
-keymap('n', '<Leader>la', ":CodeActionMenu<CR>:syntax on<CR>", { expr = false, noremap = true })
-keymap('n', '<Leader>lh', vim.lsp.buf.hover, { expr = false, noremap = true })
-keymap('n', '<Leader>ld', vim.lsp.buf.definition, { expr = false, noremap = true })
-keymap('n', 'gd', vim.lsp.buf.definition, { expr = false, noremap = true })
-keymap('n', '<Leader>lD', vim.lsp.buf.declaration, { expr = false, noremap = true })
-keymap('n', 'gD', vim.lsp.buf.declaration, { expr = false, noremap = true })
-keymap('n', '<Leader>li', vim.lsp.buf.implementation, { expr = false, noremap = true })
-keymap('n', '<Leader>lt', vim.lsp.buf.references, { expr = false, noremap = true })
-keymap('n', '<Leader>lc', vim.lsp.codelens.run, { expr = false, noremap = true })
-
---
---
--- if(os.execute("bash -c 'command -v rust-analyzer'") == 0) then
---   require('rust-tools').setup(opts)
--- end
 -- }}}
 
 -- Preview {{{
@@ -582,49 +646,11 @@ keymap('n', preview_config.keybind, '<cmd>lua preview_file(vim.call("expand", "<
     { expr = false, noremap = true })
 -- }}}
 
--- Lualine {{{
-require('lualine').setup {
-    options = {
-        icons_enabled = true,
-        theme = 'auto',
-        component_separators = { left = '', right = '' },
-        section_separators = { left = '', right = '' },
-        disabled_filetypes = {},
-        always_divide_middle = true,
-    },
-    sections = {
-        lualine_a = { 'mode' },
-        lualine_b = { 'diff', 'diagnostics' },
-        lualine_c = { { 'filename', file_status = true, path = 1 } },
-        lualine_x = { 'encoding', 'filetype' },
-        lualine_y = { 'progress' },
-        lualine_z = { 'location' }
-    },
-    inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { 'filename' },
-        lualine_x = { 'location' },
-        lualine_y = {},
-        lualine_z = {}
-    },
-    tabline = {
-        lualine_a = { { 'buffers', mode = 4 } },
-        lualine_b = { 'branch' },
-        lualine_c = {},
-        lualine_x = {},
-        lualine_y = {},
-        lualine_z = { { 'tabs', mode = 2 } }
-    },
-    extensions = {}
-}
--- }}}
-
 -- Autocorrect {{{
 vim.cmd.abbrev("pritnf", "printf")
 -- }}}
 
---- Key binding {{{
+-- Key binding {{{
 
 keymap('n', '<leader><leader>', "za", { noremap = true })
 keymap('n', '<F5>', "<cmd>e<cr>", { noremap = true })
