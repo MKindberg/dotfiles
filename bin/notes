@@ -34,10 +34,10 @@ find_note() {
   elif [[ -x "$(command -v bat)" ]]; then
     PREVIEW="bat --style=plain --color=always"
   else
-    PREVIEW=cat
+    PREVIEW="cat"
   fi
   if [[ -x "$(command -v fzf)" ]]; then
-    file=$(ls "${NOTES_DIR}" | sed 's/\.md$//' | fzf --preview="${PREVIEW} ${NOTES_DIR}/{}.md")
+    file=$(find "$NOTES_DIR" -type f -printf "%f\n" | sed 's/\.md$//' | fzf --preview="${PREVIEW} ${NOTES_DIR}/{}.md")
     if [[ $? -ne 0 ]]; then
       exit 1
     fi
