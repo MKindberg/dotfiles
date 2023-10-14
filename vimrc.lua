@@ -187,10 +187,10 @@ local opts_treesitter = {
     indent = {
         enable = true
     },
-    -- refactor = {
-    --   highlight_definitions = { enable = true },
-    --   highlight_current_scope = { enable = false },
-    -- },
+    refactor = {
+      highlight_definitions = { enable = true },
+      highlight_current_scope = { enable = false },
+    },
     textobjects = {
         select = {
             enable = true,
@@ -359,11 +359,6 @@ local function init_lspconfig()
     keymap('n', '<Leader>lc', vim.lsp.codelens.run, { expr = false, noremap = true })
 end
 
---
---
--- if(os.execute("bash -c 'command -v rust-analyzer'") == 0) then
---   require('rust-tools').setup(opts)
--- end
 -- }}}
 
 -- Plugin list {{{
@@ -586,66 +581,6 @@ end
 keymap('n', runCmd_config.keymap, '<cmd>0luado runCmd(line, linenr)<CR>', { expr = false, noremap = true })
 -- }}}
 
--- Preview {{{
-preview_config = {
-    prefix = "",
-    as_comment = true,
-    max_lines = 15,
-    keybind = "gF",
-    hightlight_group = "Comment",
-}
-local preview_active = false
-function preview_file(filename)
-    local ns_id = vim.api.nvim_create_namespace('preview_file')
-    if (preview_active) then
-        vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
-        preview_active = false
-        return
-    end
-
-    local bnr = vim.fn.bufnr('%')
-    local line_num = vim.api.nvim_call_function("line", { "." }) - 1
-    local col_num = 0
-
-    local i = 1
-    local file = io.open(filename, "r")
-    local virt_text = {}
-
-    if (file ~= nil) then
-        line = file:read("*line")
-        while (line ~= nil) do
-            line = preview_config.prefix .. line
-            if (preview_config.as_comment) then
-                line = string.gsub(vim.api.nvim_buf_get_option(0, "commentstring"), "%%s", " " .. line .. " ")
-            end
-
-            virt_text[i] = { { line, preview_config.hightlight_group } }
-            i = i + 1
-
-            if i == preview_config.max_lines then
-                break
-            end
-
-            line = file:read("*line")
-        end
-
-        local opts = {
-            id = 1,
-            virt_lines = virt_text,
-        }
-        local mark_id = vim.api.nvim_buf_set_extmark(0, ns_id, line_num, col_num, opts)
-        preview_active = true
-
-        file:close()
-    else
-        print("Cannot open file '" .. filename .. "'")
-    end
-end
-
-keymap('n', preview_config.keybind, '<cmd>lua preview_file(vim.call("expand", "<cfile>"))<cr>',
-    { expr = false, noremap = true })
--- }}}
-
 -- Autocorrect {{{
 vim.cmd.abbrev("pritnf", "printf")
 -- }}}
@@ -741,23 +676,3 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 })
 
 -- }}}
-
-
-
-function Hover()
-    local width = vim.api.nvim_list_uis()[1]["width"] / 2
-    local height = vim.api.nvim_list_uis()[1]["height"] / 2
-
-    local row = vim.api.nvim_list_uis()[1]["height"] / 2 - height / 2
-    local col = vim.api.nvim_list_uis()[1]["width"] / 2 - width / 2
-    vim.api.nvim_open_win(0, true, {
-        relative = 'editor',
-        row = row,
-        col = col,
-        width = width,
-        height = height,
-        border = 'single'
-    })
-end
-
-vim.api.nvim_create_user_command('Hover', 'lua Hover()', {})
