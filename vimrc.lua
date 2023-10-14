@@ -436,6 +436,7 @@ local plugins = {
         main = "ibl",
         config = true
     },
+    {"hiphish/rainbow-delimiters.nvim"},
     {
         "szw/vim-maximizer",
         init = function()
