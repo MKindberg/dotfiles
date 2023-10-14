@@ -432,10 +432,9 @@ local plugins = {
         end,
     },
     {
-        "Yggdroot/indentLine", -- Show indentation markers,
-        init = function()
-            vim.g.indentLine_char = '|'
-        end,
+        "lukas-reineke/indent-blankline.nvim",
+        main = "ibl",
+        config = true
     },
     {
         "szw/vim-maximizer",
