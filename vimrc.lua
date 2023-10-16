@@ -6,15 +6,8 @@ vim.g.maplocalleader = ","
 vim.cmd("source ~/dotfiles/common.vim")
 
 -- Telescope {{{
-local function opts_telescope()
-    return {
-        defaults = {
-            file_previewer = require('telescope.previewers').vim_buffer_cat.new,
-            grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
-            qflist_previewer = require('telescope.previewers').vim_buffer_qflist.new,
-        },
-    }
-end
+local opts_telescope = {}
+
 local function init_telescope()
     keymap('n', '<Leader>p', '<cmd>Telescope find_files<cr>', { expr = false, noremap = true })
     keymap('n', '<Leader>q', '<cmd>Telescope quickfix<cr>', { expr = false, noremap = true })
@@ -237,7 +230,6 @@ end
 -- }}}
 
 -- Lsp {{{
-
 local function opts_mason_lspconfig()
     -- Rust {{{
 
@@ -319,11 +311,10 @@ local function opts_mason_lspconfig()
         end
     }
     -- }}}
-
     return {
         handlers = {
             function(server_name) -- default handler
-                require("lspconfig")[server_name].setup {}
+                require("lspconfig")[server_name].setup({})
             end,
             ["lua_ls"] = function()
                 require('lspconfig').lua_ls.setup(lua_opts)
@@ -340,8 +331,8 @@ end
 
 local function init_lspconfig()
     keymap('n', '<Leader>lr', vim.lsp.buf.rename, { expr = false, noremap = true })
-    keymap('n', '<Leader>ls', vim.lsp.buf.references, { expr = false, noremap = true })
-    keymap('n', 'gr', vim.lsp.buf.references, { expr = false, noremap = true })
+    keymap('n', '<Leader>ls', "<cmd>Telescope lsp_references<cr>", { expr = false, noremap = true })
+    keymap('n', 'gr', "<cmd>Telescope lsp_references<cr>", { expr = false, noremap = true })
     keymap('', '<Leader>lf', vim.lsp.buf.format, { expr = false, noremap = true })
     keymap('n', '<Leader>ln', vim.diagnostic.goto_next, { expr = false, noremap = true })
     keymap('n', ']d', vim.diagnostic.goto_next, { expr = false, noremap = true })
@@ -350,15 +341,14 @@ local function init_lspconfig()
     keymap('n', '<Leader>le', vim.diagnostic.open_float, { expr = false, noremap = true })
     keymap('n', '<Leader>la', ":CodeActionMenu<CR>:syntax on<CR>", { expr = false, noremap = true })
     keymap('n', '<Leader>lh', vim.lsp.buf.hover, { expr = false, noremap = true })
-    keymap('n', '<Leader>ld', vim.lsp.buf.definition, { expr = false, noremap = true })
-    keymap('n', 'gd', vim.lsp.buf.definition, { expr = false, noremap = true })
+    keymap('n', '<Leader>ld', "<cmd>Telescope diagnostics<cr>", { expr = false, noremap = true })
+    keymap('n', 'gd', "<cmd>Telescope lsp_definitions<cr>", { expr = false, noremap = true })
     keymap('n', '<Leader>lD', vim.lsp.buf.declaration, { expr = false, noremap = true })
     keymap('n', 'gD', vim.lsp.buf.declaration, { expr = false, noremap = true })
     keymap('n', '<Leader>li', vim.lsp.buf.implementation, { expr = false, noremap = true })
     keymap('n', '<Leader>lt', vim.lsp.buf.references, { expr = false, noremap = true })
     keymap('n', '<Leader>lc', vim.lsp.codelens.run, { expr = false, noremap = true })
 end
-
 -- }}}
 
 -- Plugin list {{{
