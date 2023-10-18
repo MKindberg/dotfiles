@@ -6,7 +6,20 @@ vim.g.maplocalleader = ","
 vim.cmd("source ~/dotfiles/common.vim")
 
 -- Telescope {{{
-local opts_telescope = {}
+local function config_telescope()
+    require('telescope').setup({
+        extensions = {
+            fzf = {
+                fuzzy = true,
+                override_generic_sorter = true,
+                override_file_sorter = true,
+            }
+        }
+    }
+    )
+    require('telescope').load_extension('fzf')
+end
+
 
 local function init_telescope()
     keymap('n', '<Leader>p', '<cmd>Telescope find_files<cr>', { expr = false, noremap = true })
@@ -181,8 +194,8 @@ local opts_treesitter = {
         enable = true
     },
     refactor = {
-      highlight_definitions = { enable = true },
-      highlight_current_scope = { enable = false },
+        highlight_definitions = { enable = true },
+        highlight_current_scope = { enable = false },
     },
     textobjects = {
         select = {
@@ -370,7 +383,7 @@ local function use_ai_completion()
 end
 
 local plugins = {
-    { "tweekmonster/startuptime.vim", cmd = "StartupTime" },
+    { "tweekmonster/startuptime.vim",   cmd = "StartupTime" },
     {
         "tamton-aquib/duck.nvim",
         init = function()
@@ -421,7 +434,7 @@ local plugins = {
         main = "ibl",
         config = true
     },
-    {"hiphish/rainbow-delimiters.nvim"},
+    { "hiphish/rainbow-delimiters.nvim" },
     {
         "szw/vim-maximizer",
         init = function()
@@ -430,14 +443,19 @@ local plugins = {
         end,
         cmd = "MaximizerToggle",
     },
-    { "kylechui/nvim-surround",       config = true },
-    { "nvim-lua/popup.nvim",          lazy = true },
-    { "nvim-lua/plenary.nvim",        lazy = true },
+    { "kylechui/nvim-surround", config = true },
+    { "nvim-lua/popup.nvim",    lazy = true },
+    { "nvim-lua/plenary.nvim",  lazy = true },
+    {
+        'nvim-telescope/telescope-fzf-native.nvim',
+        build = 'make',
+        lazy = true,
+    },
     {
         "nvim-telescope/telescope.nvim",
         dependencies = { 'nvim-lua/plenary.nvim' },
         init = init_telescope,
-        opts = opts_telescope,
+        config = config_telescope,
         cmd = "Telescope",
     },
     {
