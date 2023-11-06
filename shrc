@@ -163,6 +163,23 @@ g() {
   fi
 }
 
+backup() {
+  format="%F"
+  today="$(date +$format)"
+  today_dir="$HOME/.backup/$today"
+  if [ ! -d "$today_dir" ]; then
+    FILES_TO_BACKUP="$HOME/.zshrc:$HOME/.bashrc:$HOME/.tmux.conf:$HOME/.vimrc:$HOME/.gitconfig:$HOME/.config/nvim/init.vim"
+    echo "backing up $FILES_TO_BACKUP" into "$today_dir"
+    mkdir -p "$today_dir"
+    cp $(echo $FILES_TO_BACKUP | tr : ' ') "$today_dir"
+
+    old=$(date +"%F" -d "-3 week")
+    old_dir="$HOME/.backup/$old"
+    rm -rf "$old_dir"
+  fi
+}
+backup
+
 # }}}
 
 # Aliases {{{
