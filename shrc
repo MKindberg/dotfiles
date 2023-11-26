@@ -173,9 +173,11 @@ backup() {
     mkdir -p "$today_dir"
     cp $(echo $FILES_TO_BACKUP | tr : ' ') "$today_dir"
 
-    old=$(date +"%F" -d "-3 week")
-    old_dir="$HOME/.backup/$old"
-    rm -rf "$old_dir"
+    # Remove dirs older than 3 weeks
+    find "$HOME/.backup/" -ctime +21 -type d -exec rm -rf {} \;
+    # old=$(date +"%F" -d "-3 week")
+    # old_dir="$HOME/.backup/$old"
+    # rm -rf "$old_dir"
   fi
 }
 backup
