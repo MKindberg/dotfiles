@@ -188,14 +188,16 @@ local opts_lualine = {
 local opts_treesitter = {
     highlight = {
         enable = true,
+        disable = { "zig" },
     },
     auto_install = true,
     indent = {
-        enable = true
+        enable = true,
+        disable = { "zig" },
     },
     refactor = {
-        highlight_definitions = { enable = true },
-        highlight_current_scope = { enable = false },
+        highlight_definitions = { enable = true, disable = { "zig" } },
+        highlight_current_scope = { enable = false, disable = { "zig" } },
     },
     textobjects = {
         select = {
@@ -324,6 +326,16 @@ local function opts_mason_lspconfig()
         end
     }
     -- }}}
+
+    -- Zig {{{
+    local zig_opts = {
+        settings = {
+            warn_style = true,
+            enable_build_on_save = true,
+        }
+    }
+    -- }}}
+
     return {
         handlers = {
             function(server_name) -- default handler
@@ -337,6 +349,9 @@ local function opts_mason_lspconfig()
             end,
             ["clangd"] = function()
                 require("lspconfig").clangd.setup(clangd_opts)
+            end,
+            ["zls"] = function()
+                require("lspconfig").zls.setup(zig_opts)
             end,
         }
     }
@@ -383,6 +398,14 @@ local function use_ai_completion()
 end
 
 local plugins = {
+    {
+        "ziglang/zig.vim",
+        enable = true,
+        ft = "zig",
+        init = function()
+            vim.g.zig_fmt_autosave = 0
+        end,
+    },
     { "tweekmonster/startuptime.vim",   cmd = "StartupTime" },
     {
         "tamton-aquib/duck.nvim",
