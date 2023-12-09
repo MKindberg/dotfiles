@@ -2,6 +2,8 @@ local keymap = vim.keymap.set
 local set = vim.opt
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
+vim.opt.spell = true
+vim.opt.spelllang = { 'en_us' }
 
 vim.cmd("source ~/dotfiles/common.vim")
 
@@ -74,9 +76,11 @@ local function opts_cmp()
         codeium = "[AI]",
         luasnip = "[Snip]",
         nvim_lsp = "[LSP]",
+        nvim_lsp_signature_help = "[LSP]",
         buffer = "[Buf]",
-        cmp_tabnine = "[TN]",
+        cmp_tabnine = "[AI]",
         path = "[Path]",
+        spell = "[Spell]",
     }
 
     return {
@@ -95,23 +99,30 @@ local function opts_cmp()
             {
                 {
                     name = 'codeium',
-                    keyword_length = 0,
                 },
                 {
                     name = 'luasnip',
-                    keyword_length = 1,
                 },
                 {
                     name = 'nvim_lsp',
-                    keyword_length = 1,
+                },
+                {
+                    name = 'nvim_lsp_signature_help',
                 },
                 {
                     name = 'cmp_tabnine',
-                    keyword_length = 1,
                 },
                 {
                     name = 'buffer',
-                    keyword_length = 1,
+                },
+                {
+                    name = 'spell',
+                    option = {
+                        keep_all_entries = true,
+                        enable_in_context = function()
+                            return require('cmp.config.context').in_treesitter_capture('spell')
+                        end,
+                    },
                 },
             }),
         view = {
@@ -524,23 +535,33 @@ local plugins = {
         event = "InsertEnter",
         opts = opts_cmp,
         dependencies = {
-            "cmp-buffer",
-            "cmp-cmdline",
-            "cmp-path",
-            "cmp-nvim-lsp",
-            "cmp_luasnip",
-            "cmp-tabnine",
+            { "hrsh7th/cmp-buffer",                  lazy = true },
+            { "hrsh7th/cmp-cmdline",                 lazy = true },
+            { "hrsh7th/cmp-path",                    lazy = true },
+            { "hrsh7th/cmp-nvim-lsp",                lazy = true },
+            { "saadparwaiz1/cmp_luasnip",            lazy = true, dependencies = "LuaSnip" },
+            { "hrsh7th/cmp-nvim-lsp-signature-help", lazy = true },
+            { "f3fora/cmp-spell",                    lazy = true },
+            {
+                "tzachar/cmp-tabnine",
+                enabled = use_ai_completion(),
+                build =
+                "./install.sh",
+                opts = opts_tabnine,
+                lazy = true,
+            },
+            {
+                "jcdickinson/codeium.nvim",
+                enabled = use_ai_completion(),
+                config = true,
+                event = "InsertEnter",
+            },
         },
     },
-    { "hrsh7th/cmp-buffer",           lazy = true },
-    { "hrsh7th/cmp-cmdline",          lazy = true },
-    { "hrsh7th/cmp-path",             lazy = true },
-    { "hrsh7th/cmp-nvim-lsp",         lazy = true },
-    { "saadparwaiz1/cmp_luasnip",     lazy = true, dependencies = "LuaSnip" },
-    { "p00f/clangd_extensions.nvim",  lazy = true },
-    { "nvim-lua/lsp-status.nvim",     lazy = true },
-    { "simrat39/rust-tools.nvim",     lazy = true },
-    { "rafamadriz/friendly-snippets", lazy = true },
+    { "p00f/clangd_extensions.nvim",              lazy = true },
+    { "nvim-lua/lsp-status.nvim",                 lazy = true },
+    { "simrat39/rust-tools.nvim",                 lazy = true },
+    { "rafamadriz/friendly-snippets",             lazy = true },
     {
         "numToStr/Comment.nvim",
         init = function()
@@ -563,20 +584,6 @@ local plugins = {
     {
         "unblevable/quick-scope",
         lazy = true,
-        event = "InsertEnter",
-    },
-    {
-        "tzachar/cmp-tabnine",
-        enabled = use_ai_completion(),
-        build =
-        "./install.sh",
-        opts = opts_tabnine,
-        lazy = true,
-    },
-    {
-        "jcdickinson/codeium.nvim",
-        enabled = use_ai_completion(),
-        config = true,
         event = "InsertEnter",
     },
 }
