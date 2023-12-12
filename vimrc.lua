@@ -73,6 +73,7 @@ local function opts_cmp()
     local cmp = require('cmp')
 
     local source_mapping = {
+        copilot = "[AI]",
         codeium = "[AI]",
         luasnip = "[Snip]",
         nvim_lsp = "[LSP]",
@@ -85,9 +86,11 @@ local function opts_cmp()
 
     return {
         mapping = {
+
             ['<C>n'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
             ['<C>p'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
             ['<Right>'] = cmp.mapping.close(),
+            ['<C-f>'] = cmp.mapping.complete(),
             ['<CR>'] = cmp.mapping.confirm({ select = true }),
         },
         snippet = {
@@ -97,6 +100,7 @@ local function opts_cmp()
         },
         sources = cmp.config.sources(
             {
+                { name = "copilot", },
                 {
                     name = 'codeium',
                 },
@@ -404,8 +408,14 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local function use_ai_completion()
-    return vim.g.use_ai_comp == 1
+local function use_tabnine()
+    return vim.g.use_tabnine == 1
+end
+local function use_codeium()
+    return vim.g.use_codeium == 1
+end
+local function use_copilot()
+    return vim.g.use_copilot == 1
 end
 
 local plugins = {
@@ -544,7 +554,7 @@ local plugins = {
             { "f3fora/cmp-spell",                    lazy = true },
             {
                 "tzachar/cmp-tabnine",
-                enabled = use_ai_completion(),
+                enabled = use_tabnine(),
                 build =
                 "./install.sh",
                 opts = opts_tabnine,
@@ -552,9 +562,28 @@ local plugins = {
             },
             {
                 "jcdickinson/codeium.nvim",
-                enabled = use_ai_completion(),
+                enabled = use_codeium(),
                 config = true,
                 event = "InsertEnter",
+            },
+            {
+                "zbirenbaum/copilot-cmp",
+                enabled = use_copilot(),
+                config = function()
+                    require("copilot_cmp").setup()
+                end,
+                dependencies = {
+                    "zbirenbaum/copilot.lua",
+                    enabled = use_copilot(),
+                    cmd = "Copilot",
+                    event = "InsertEnter",
+                    config = function()
+                        require("copilot").setup({
+                            suggestion = { enabled = false },
+                            panel = { enabled = false },
+                        })
+                    end,
+                },
             },
         },
     },
