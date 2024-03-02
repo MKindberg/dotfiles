@@ -1,51 +1,54 @@
 # vim: set filetype=gitconfig
 [alias]
-	cp = cherry-pick
-	cpc = cherry-pick --continue
-  ci = commit
-  cia = commit --amend
-  co = checkout
-  br = branch
-  di = diff
-  re = rebase
-  rei = rebase -i
-  rec = rebase --continue
-  unstash = stash pop
-	unstage = reset HEAD --
-	unadd = reset HEAD --
-  su = submodule update
-  si = submodule init
-  xclean = clean -xdf -e GTAGS -e GRTAGS -e GPATH -e tags -e compile_commands.json
-[core]
-	editor = nvim
-[diff]
-  tool = nvimdiff
-[difftool "nvimdiff"]
-  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
-[merge]
-	tool = nvimdiff
-	conflictstyle = diff3
+    cp = cherry-pick
+    cpc = cherry-pick --continue
+    ci = commit
+    cia = commit --amend
+    co = checkout
+    br = branch
+    di = diff
+    re = rebase
+    rei = rebase -i
+    rec = rebase --continue
+    unstash = stash pop
+    unstage = reset HEAD --
+    unadd = reset HEAD --
+    su = submodule update
+    si = submodule init
+    xclean = clean -xdf -e GTAGS -e GRTAGS -e GPATH -e tags -e compile_commands.json
 [color]
-	ui = true
-	diff = auto
-	status = auto
-[grep]
-	lineNumber = true
-[help]
-	autocorrect = 30
+    ui = true
+    diff = auto
+    status = auto
 [color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
 [color "diff"]
-	meta = yellow
-	frag = magenta bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
+    meta = yellow
+    frag = magenta bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+[commit]
+    verbose = true
 [core]
-	pager = diff-so-fancy | less --tabs=4 -R
+    editor = nvim
+    pager = diff-so-fancy | less --tabs=4 -R
+[diff]
+    tool = nvimdiff
+[difftool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+[grep]
+    lineNumber = true
+[help]
+    autocorrect = 30
+[init]
+    defaultBranch = main
+[merge]
+    tool = nvimdiff
+    conflictstyle = zdiff3
 [pull]
-	rebase = true
+    rebase = true
