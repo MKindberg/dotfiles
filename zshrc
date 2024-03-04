@@ -6,6 +6,7 @@ autoload -U compinit
 compinit
 autoload -Uz zmv
 # Plugins {{{
+export ATUIN_NOBIND=1
 if [[ -a ~/.zi/bin/zi.zsh ]]; then
   source ~/.zi/bin/zi.zsh
 
@@ -24,6 +25,7 @@ if [[ -a ~/.zi/bin/zi.zsh ]]; then
 
   zi snippet https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
 
+  zi load atuinsh/atuin
 else
   echo "zi not installed"
 fi
@@ -137,6 +139,8 @@ bindkey '^[[Z' reverse-menu-complete
 bindkey '^[%' vi-match-bracket
 bindkey -s "^Z" "fg\n"
 bindkey '^_' backward-kill-word
+
+bindkey '^[r' atuin-up-search
 
 split-window() {
   tmux split-window -h "tmux select-pane -l; echo -e $1\\\n-----\\\n; $1; read"
