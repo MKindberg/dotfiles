@@ -30,6 +30,7 @@ local function init_telescope()
     keymap('n', '<Leader>/', '<cmd>Telescope live_grep<cr>', { expr = false, noremap = true })
     keymap('n', '<Leader>/h', '<cmd>Telescope help_tags<cr>', { expr = false, noremap = true })
     keymap('n', '<Leader>/t', '<cmd>Telescope treesitter<cr>', { expr = false, noremap = true })
+    keymap('n', '<Leader>/d', '<cmd>Telescope diagnostics<cr>', { expr = false, noremap = true })
 end
 
 -- }}}
@@ -91,7 +92,7 @@ local function opts_cmp()
             ['<C>p'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
             ['<Right>'] = cmp.mapping.close(),
             ['<C-f>'] = cmp.mapping.complete(),
-            ['<CR>'] = cmp.mapping.confirm({ select = true }),
+            ['§'] = cmp.mapping.confirm({ select = true }),
         },
         snippet = {
             expand = function(args)
@@ -133,7 +134,7 @@ local function opts_cmp()
             entries = "native"
         },
         experimental = {
-            ghost_text = true,
+            ghost_text = false,
         },
         formatting = {
             format = function(entry, vim_item)
@@ -487,9 +488,9 @@ local plugins = {
         end,
         cmd = "MaximizerToggle",
     },
-    { "kylechui/nvim-surround", config = true },
-    { "nvim-lua/popup.nvim",    lazy = true },
-    { "nvim-lua/plenary.nvim",  lazy = true },
+    { "kylechui/nvim-surround",         config = true },
+    { "nvim-lua/popup.nvim",            lazy = true },
+    { "nvim-lua/plenary.nvim",          lazy = true },
     {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make',
@@ -570,7 +571,7 @@ local plugins = {
                 "zbirenbaum/copilot-cmp",
                 enabled = use_copilot(),
                 config = function()
-                    require("copilot_cmp").setup()
+                    require("copilot_cmp").setup {}
                 end,
                 dependencies = {
                     "zbirenbaum/copilot.lua",
@@ -609,7 +610,7 @@ local plugins = {
             floating_window = false,
         },
     },
-    { "weilbith/nvim-code-action-menu", cmd = 'CodeActionMenu', key = "<leader>la" },
+    { "weilbith/nvim-code-action-menu", cmd = 'CodeActionMenu', keys = "<leader>la" },
     {
         "unblevable/quick-scope",
         lazy = true,
