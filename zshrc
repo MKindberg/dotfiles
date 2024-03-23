@@ -15,6 +15,9 @@ if [[ -a ~/.zi/bin/zi.zsh ]]; then
 
   zi light z-shell/F-Sy-H
 
+  zi ice from"gh-r" as"program"
+  zi light junegunn/fzf
+
   zi ice pick"zsh-autosuggestions.zsh" $TURBO
   zi light zsh-users/zsh-autosuggestions
 
