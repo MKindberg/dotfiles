@@ -615,6 +615,7 @@ local plugins = {
         lazy = true,
         event = "InsertEnter",
     },
+    {"wsdjeg/vim-fetch"},
 }
 local lazy_opts = {}
 
