@@ -24,9 +24,6 @@ if [[ -a $ZINIT_HOME ]]; then
   zinit ice pick"zsh-autosuggestions.zsh" $TURBO
   zinit light zsh-users/zsh-autosuggestions
 
-  zinit snippet https://github.com/junegunn/fzf/blob/master/shell/key-bindings.zsh
-  zinit snippet https://github.com/junegunn/fzf/blob/master/shell/completion.zsh
-
   zinit snippet https://github.com/rupa/z/blob/master/z.sh
 
   zinit snippet https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
@@ -35,6 +32,8 @@ if [[ -a $ZINIT_HOME ]]; then
 else
   echo "zinit not installed"
 fi
+# Set up fzf key bindings and fuzzy completion
+eval "$(fzf --zsh)"
 # }}}
 
 # Options {{{
