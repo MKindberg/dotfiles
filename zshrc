@@ -7,30 +7,33 @@ compinit
 autoload -Uz zmv
 # Plugins {{{
 export ATUIN_NOBIND=1
-if [[ -a ~/.zi/bin/zi.zsh ]]; then
-  source ~/.zi/bin/zi.zsh
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+if [[ -a $ZINIT_HOME ]]; then
+  source "${ZINIT_HOME}/zinit.zsh"
+  autoload -Uz _zinit
+  (( ${+_comps} )) && _comps[zinit]=_zinit
 
-  zi ice lucid as"program" pick"bin/git-dsf"
-  zi light z-shell/zsh-diff-so-fancy
+  zinit ice lucid as"program" pick"bin/git-dsf"
+  zinit light so-fancy/diff-so-fancy
 
-  zi light z-shell/F-Sy-H
+  zinit light zsh-users/zsh-syntax-highlighting
 
-  zi ice from"gh-r" as"program"
-  zi light junegunn/fzf
+  zinit ice from"gh-r" as"program"
+  zinit light junegunn/fzf
 
-  zi ice pick"zsh-autosuggestions.zsh" $TURBO
-  zi light zsh-users/zsh-autosuggestions
+  zinit ice pick"zsh-autosuggestions.zsh" $TURBO
+  zinit light zsh-users/zsh-autosuggestions
 
-  zi snippet https://github.com/junegunn/fzf/blob/master/shell/key-bindings.zsh
-  zi snippet https://github.com/junegunn/fzf/blob/master/shell/completion.zsh
+  zinit snippet https://github.com/junegunn/fzf/blob/master/shell/key-bindings.zsh
+  zinit snippet https://github.com/junegunn/fzf/blob/master/shell/completion.zsh
 
-  zi snippet https://github.com/rupa/z/blob/master/z.sh
+  zinit snippet https://github.com/rupa/z/blob/master/z.sh
 
-  zi snippet https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
+  zinit snippet https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
 
-  zi load atuinsh/atuin
+  zinit load atuinsh/atuin
 else
-  echo "zi not installed"
+  echo "zinit not installed"
 fi
 # }}}
 
