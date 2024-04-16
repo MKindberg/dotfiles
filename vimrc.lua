@@ -488,9 +488,9 @@ local plugins = {
         end,
         cmd = "MaximizerToggle",
     },
-    { "kylechui/nvim-surround",         config = true },
-    { "nvim-lua/popup.nvim",            lazy = true },
-    { "nvim-lua/plenary.nvim",          lazy = true },
+    { "kylechui/nvim-surround", config = true },
+    { "nvim-lua/popup.nvim",    lazy = true },
+    { "nvim-lua/plenary.nvim",  lazy = true },
     {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make',
@@ -588,17 +588,10 @@ local plugins = {
             },
         },
     },
-    { "p00f/clangd_extensions.nvim",              lazy = true },
-    { "nvim-lua/lsp-status.nvim",                 lazy = true },
-    { "simrat39/rust-tools.nvim",                 lazy = true },
-    { "rafamadriz/friendly-snippets",             lazy = true },
-    {
-        "numToStr/Comment.nvim",
-        init = function()
-            keymap({ '' }, '<leader>c', "gc", { remap = true })
-        end,
-        config = true,
-    },
+    { "p00f/clangd_extensions.nvim",  lazy = true },
+    { "nvim-lua/lsp-status.nvim",     lazy = true },
+    { "simrat39/rust-tools.nvim",     lazy = true },
+    { "rafamadriz/friendly-snippets", lazy = true },
     { "nvim-lualine/lualine.nvim",    opts = opts_lualine },
     { "kyazdani42/nvim-web-devicons", config = true },
     {
@@ -616,7 +609,7 @@ local plugins = {
         lazy = true,
         event = "InsertEnter",
     },
-    {"wsdjeg/vim-fetch"},
+    { "wsdjeg/vim-fetch" },
 }
 local lazy_opts = {}
 
@@ -694,6 +687,8 @@ keymap('n', "<localleader>3", "3gt", { noremap = true })
 keymap('n', "<localleader>4", "4gt", { noremap = true })
 keymap('n', "<localleader>5", "5gt", { noremap = true })
 keymap('n', "<localleader>6", "6gt", { noremap = true })
+
+keymap('', '<leader>c', "gc", { remap = true })
 --- }}}
 
 -- Settings {{{
@@ -708,6 +703,10 @@ vim.cmd("syntax match LeadingTab /^\\t\\+/")
 -- }}}
 
 -- Auto commands {{{
+
+vim.api.nvim_create_autocmd("FileType",
+    { pattern = { "c", "cpp" }, callback = function() set.commentstring = "// %s" end }
+)
 
 local au_group_all = vim.api.nvim_create_augroup("all_files", { clear = true })
 vim.api.nvim_create_autocmd({ 'BufLeave' }, {
