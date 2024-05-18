@@ -383,7 +383,7 @@ local function init_lspconfig()
     keymap('n', '<Leader>lp', vim.diagnostic.goto_prev, { expr = false, noremap = true })
     keymap('n', '[d', vim.diagnostic.goto_prev, { expr = false, noremap = true })
     keymap('n', '<Leader>le', vim.diagnostic.open_float, { expr = false, noremap = true })
-    keymap('n', '<Leader>la', ":CodeActionMenu<CR>:syntax on<CR>", { expr = false, noremap = true })
+    keymap('n', '<Leader>la', require('actions-preview').code_actions, { expr = false, noremap = true })
     keymap('n', '<Leader>lh', vim.lsp.buf.hover, { expr = false, noremap = true })
     keymap('n', '<Leader>ld', "<cmd>Telescope diagnostics<cr>", { expr = false, noremap = true })
     keymap('n', 'gd', "<cmd>Telescope lsp_definitions<cr>", { expr = false, noremap = true })
@@ -603,7 +603,7 @@ local plugins = {
             floating_window = false,
         },
     },
-    { "weilbith/nvim-code-action-menu", cmd = 'CodeActionMenu', keys = "<leader>la" },
+    { "aznhe21/actions-preview.nvim", keys = "<leader>la" },
     {
         "unblevable/quick-scope",
         lazy = true,
