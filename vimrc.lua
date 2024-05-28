@@ -392,6 +392,8 @@ local function init_lspconfig()
     keymap('n', '<Leader>li', vim.lsp.buf.implementation, { expr = false, noremap = true })
     keymap('n', '<Leader>lt', vim.lsp.buf.references, { expr = false, noremap = true })
     keymap('n', '<Leader>lc', vim.lsp.codelens.run, { expr = false, noremap = true })
+    keymap('i', '<C-h>', vim.lsp.buf.signature_help, { expr = false, noremap = true })
+    keymap('i', '<C-k>', vim.lsp.buf.hover, { expr = false, noremap = true })
 end
 -- }}}
 
@@ -551,7 +553,6 @@ local plugins = {
             { "hrsh7th/cmp-path",                    lazy = true },
             { "hrsh7th/cmp-nvim-lsp",                lazy = true },
             { "saadparwaiz1/cmp_luasnip",            lazy = true, dependencies = "LuaSnip" },
-            { "hrsh7th/cmp-nvim-lsp-signature-help", lazy = true },
             { "f3fora/cmp-spell",                    lazy = true },
             {
                 "tzachar/cmp-tabnine",
@@ -582,27 +583,27 @@ local plugins = {
                         require("copilot").setup({
                             suggestion = { enabled = false },
                             panel = { enabled = false },
+                            server_opts_overrides = {
+                                settings = {
+                                    advanced = {
+                                        length = 2,
+                                        listCount = 2,
+                                        inlineSuggestCount = 2,
+                                    }
+                                },
+                            }
                         })
                     end,
                 },
             },
         },
     },
-    { "p00f/clangd_extensions.nvim",  lazy = true },
-    { "nvim-lua/lsp-status.nvim",     lazy = true },
-    { "simrat39/rust-tools.nvim",     lazy = true },
-    { "rafamadriz/friendly-snippets", lazy = true },
-    { "nvim-lualine/lualine.nvim",    opts = opts_lualine },
-    { "kyazdani42/nvim-web-devicons", config = true },
-    {
-        "ray-x/lsp_signature.nvim",
-        event = "InsertEnter",
-        opts = {
-            hint_enable = true,
-            max_width = 80,
-            floating_window = false,
-        },
-    },
+    { "p00f/clangd_extensions.nvim",              lazy = true },
+    { "nvim-lua/lsp-status.nvim",                 lazy = true },
+    { "simrat39/rust-tools.nvim",                 lazy = true },
+    { "rafamadriz/friendly-snippets",             lazy = true },
+    { "nvim-lualine/lualine.nvim",                opts = opts_lualine },
+    { "kyazdani42/nvim-web-devicons",             config = true },
     { "aznhe21/actions-preview.nvim", keys = "<leader>la" },
     {
         "unblevable/quick-scope",
