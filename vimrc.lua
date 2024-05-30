@@ -524,7 +524,12 @@ local plugins = {
     },
     {
         "williamboman/mason.nvim",
-        config = true,
+        config = {
+            registries = {
+                "github:mkindberg/censor-ls",
+                "github:mason-org/mason-registry",
+            },
+        },
         cmd = { "Mason" }
     },
     {
@@ -745,3 +750,13 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 })
 
 -- }}}
+
+local client = vim.lsp.start_client { name = "censor-ls", cmd = { "censor-ls" }, }
+
+if not client then
+    vim.notify("Failed to start censor-ls")
+else
+    vim.api.nvim_create_autocmd("FileType",
+        { pattern = "markdown", callback = function() vim.lsp.buf_attach_client(0, client) end }
+    )
+end
