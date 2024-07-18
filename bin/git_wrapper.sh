@@ -43,7 +43,7 @@ git_add() {
         if [[ $FZF_PREVIEW == 0 ]]; then
             files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 )
         else
-            files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always {}')
+            files=$(git ls-files -m -o --exclude-standard -x "*" | fzf -m -0 --preview 'git diff --color=always --no-ext-diff {} ')
         fi
         [[ -n "$files" ]] && echo "$files" | xargs -I{} git add {} && git status --short --untracked=no
     else
@@ -85,7 +85,7 @@ git_show() {
     if [[ $# -gt 0 ]]; then
         rev=$1
     fi
-    file=$(git show --format=oneline --name-only "$rev" | fzf --preview "git diff --color=always ${rev}~1 $rev ${root}/{} | diff-so-fancy" --bind "enter:execute($EDITOR ${root}{})")
+    file=$(git show --format=oneline --name-only "$rev" | fzf --preview "git diff --no-ext-diff --color=always ${rev}~1 $rev ${root}/{} | diff-so-fancy" --bind "enter:execute($EDITOR ${root}{})")
 }
 
 git_grep() {
