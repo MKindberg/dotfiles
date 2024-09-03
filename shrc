@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Setup things that are common in bash and zsh
 
 # Variables {{{
@@ -68,11 +68,23 @@ learnx() {
 
 function up {
   newDir=$PWD
-  for (( c=0; c<$1; c++ ))
-  do
-    newDir=$newDir/..
-  done
-  cd "$newDir" || return
+  if [ "$1" -ge 0 ] 2> /dev/null; then
+    for (( c=0; c<$1; c++ ))
+    do
+      newDir=$newDir/..
+    done
+    cd "$newDir" || exit 1
+  else
+    while [[ "$newDir" != / ]]; do
+      if [[ $(basename "$newDir") == "$1" ]]; then
+        cd "$newDir" || exit 1
+        return
+      else
+        newDir=$(dirname "$newDir")
+      fi
+    done
+    echo "Could not find directory matching $1"
+  fi
 }
 
 function cdd () {
@@ -234,5 +246,7 @@ fi
 alias fn='find -name'
 
 alias cim='vim'
+
+alias notify_when_done='tmux set-option status-style bg=red,fg=black && echo -e "\n-------------- done --------------" && read && tmux set-option status-style fg=black,bg=green'
 # }}}
 
