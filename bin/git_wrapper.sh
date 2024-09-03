@@ -10,7 +10,7 @@ git_checkout_remote() {
         sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
     target=$(
         (echo "$tags"; echo "$branches") |
-        fzf-tmux -l30 -- --no-hscroll --ansi +m -d "\t" -n 2 --preview='') || return
+        fzf --no-hscroll --ansi +m -d "\t" -n 2 --preview='') || return
     target=$(echo "$target" | awk '{print $2}')
     git checkout "$target"
 }
@@ -57,14 +57,15 @@ git_diff() {
     elif [[ $FZF_PREVIEW == 0 ]]; then
         git diff --color=always "$@"
     else
-        local files cmd
-        cmd="git diff --color=always $* {} | diff-so-fancy"
+        local files cmd root
+        root=$(git rev-parse --show-toplevel)
+        cmd="git diff --color=always $* ${root}/{} | diff-so-fancy"
         if [ $# -eq 0 ]; then
             files=$(git ls-files -m -o --exclude-standard -x "*")
         else
             files=$(git log --name-only --pretty=oneline --full-index "$1..HEAD" | grep -vE '^[0-9a-f]{40} ' | sort | uniq)
         fi
-        echo "$files" | fzf -0 --preview "$cmd" --bind "enter:execute($EDITOR {})"
+        echo "$files" | fzf -0 --preview "$cmd" --bind "enter:execute(${EDITOR} ${root}/{})"
     fi
 }
 
@@ -85,7 +86,7 @@ git_show() {
     if [[ $# -gt 0 ]]; then
         rev=$1
     fi
-    file=$(git show --format=oneline --name-only "$rev" | fzf --preview "git diff --no-ext-diff --color=always ${rev}~1 $rev ${root}/{} | diff-so-fancy" --bind "enter:execute($EDITOR ${root}{})")
+    git show --format=oneline --name-only "$rev" | fzf --preview "git diff --no-ext-diff --color=always ${rev}~1 $rev ${root}/{} | diff-so-fancy" --bind "enter:execute(${EDITOR} ${root}/{})"
 }
 
 git_grep() {
