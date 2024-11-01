@@ -394,6 +394,9 @@ local function init_lspconfig()
     keymap('n', '<Leader>lc', vim.lsp.codelens.run, { expr = false, noremap = true })
     keymap('i', '<C-h>', vim.lsp.buf.signature_help, { expr = false, noremap = true })
     keymap('i', '<C-k>', vim.lsp.buf.hover, { expr = false, noremap = true })
+
+    vim.lsp.inlay_hint.enable()
+    vim.cmd("highlight LspInlayHint ctermfg=darkgrey")
 end
 -- }}}
 
