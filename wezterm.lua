@@ -87,12 +87,34 @@ config.keys = {
         mods = 'LEADER|CTRL',
         action = act.AdjustPaneSize { 'Down', 5, },
     },
+    {
+        key = 'c',
+        mods = 'LEADER',
+        action = act.SpawnTab { DomainName = 'unix' },
+    },
+    {
+        key = 'p',
+        mods = 'LEADER',
+        action = act.ActivateTabRelative(-1),
+    },
+    {
+        key = 'n',
+        mods = 'LEADER',
+        action = act.ActivateTabRelative(1),
+    },
 }
+for i = 1, 9 do
+    table.insert(config.keys, {
+        key = tostring(i),
+        mods = 'LEADER',
+        action = act.ActivateTab(i - 1),
+    })
+end
 
 config.unix_domains = {
-  {
-    name = 'unix',
-  },
+    {
+        name = 'unix',
+    },
 }
 
 -- This causes `wezterm` to act as though it was started as
