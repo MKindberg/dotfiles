@@ -13,6 +13,7 @@ INCLUDE_STRINGS=(
   [tmux]="source-file $dot_dir/tmux.conf"
   [vim]="source $dot_dir/vimrc"
   [nvim]="luafile $dot_dir/vimrc.lua"
+  [wezterm]="dofile \"$dot_dir/wezterm.lua\""
 )
 
 declare -A DOTFILES
@@ -23,6 +24,7 @@ DOTFILES=(
   [tmux]="$HOME/.tmux.conf"
   [vim]="$HOME/.vimrc"
   [nvim]="$HOME/.config/nvim/init.vim"
+  [wezterm]="$HOME/.wezterm.lua"
 )
 
 declare -A GREP_PATTERNS
@@ -40,26 +42,25 @@ install() {
   read -rp "Do you want to install $name to $file? (y/n/e/a) " -n 1
   echo # newline
   # Abort
-  if [[ $REPLY =~ ^[Aa]$ ]]; then
+  if [[ $REPLY =~ ^[Aa]$ ]]; then # Abort
     exit
-  fi
-  # No
-  if [[ $REPLY =~ ^[Nn]$ ]]; then
-    return
-  fi
-  # Edit
-  if [[ $REPLY =~ ^[Ee]$ ]]; then
+  elif [[ $REPLY =~ ^[Ee]$ ]]; then # Edit
     read -rp "Enter new file name: "
     echo # newline
     file="$REPLY"
+  elif [[ $REPLY =~ ^[Yy]$ ]]; then # Yes
+    : # Nothing to do here
+  else # No
+    return
   fi
-  # Yes
+
   if eval "grep -x \"$pat\" $file" &> /dev/null; then
     echo "Skipping $name, already installed"
     return
   fi
 
-  if test -f "$file"; then
+  mkdir -p $(dirname $file)
+  if test -s "$file"; then
     eval "sed -i \"1i $str\" $file"
   else
     echo -e "$str" > "$file"
