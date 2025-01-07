@@ -14,6 +14,7 @@ INCLUDE_STRINGS=(
   [vim]="source $dot_dir/vimrc"
   [nvim]="luafile $dot_dir/vimrc.lua"
   [wezterm]="dofile \"$dot_dir/wezterm.lua\""
+  [ghostty]="config-file = \"$dot_dir/ghostty_config\""
 )
 
 declare -A DOTFILES
@@ -25,6 +26,7 @@ DOTFILES=(
   [vim]="$HOME/.vimrc"
   [nvim]="$HOME/.config/nvim/init.vim"
   [wezterm]="$HOME/.wezterm.lua"
+  [ghostty]="$HOME/.config/ghostty/config"
 )
 
 declare -A GREP_PATTERNS
