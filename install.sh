@@ -13,8 +13,8 @@ INCLUDE_STRINGS=(
   [tmux]="source-file $dot_dir/tmux.conf"
   [vim]="source $dot_dir/vimrc"
   [nvim]="luafile $dot_dir/vimrc.lua"
-  [wezterm]="dofile \"$dot_dir/wezterm.lua\""
-  [ghostty]="config-file = \"$dot_dir/ghostty_config\""
+  [wezterm]="dofile '$dot_dir/wezterm.lua'"
+  [ghostty]="config-file = $dot_dir/ghostty_config"
 )
 
 declare -A DOTFILES
@@ -41,6 +41,10 @@ install() {
   file="${DOTFILES[$name]}"
   str="${INCLUDE_STRINGS[$name]}"
   pat="${GREP_PATTERNS[$name]}"
+  if eval "grep -x \"$pat\" $file" &> /dev/null; then
+    echo "$name installed"
+    return
+  fi
   read -rp "Do you want to install $name to $file? (y/n/e/a) " -n 1
   echo # newline
   # Abort
@@ -53,11 +57,6 @@ install() {
   elif [[ $REPLY =~ ^[Yy]$ ]]; then # Yes
     : # Nothing to do here
   else # No
-    return
-  fi
-
-  if eval "grep -x \"$pat\" $file" &> /dev/null; then
-    echo "Skipping $name, already installed"
     return
   fi
 
