@@ -469,6 +469,11 @@ local plugins = {
     },
     "tpope/vim-sleuth", -- " Automatic detection of tabwidth,
     {
+        "mkindberg/ghostty-ls",
+        config = true,
+        ft = "ghostty"
+    },
+    {
         "Mkindberg/sonokai_mini",
         init = function()
             vim.g.sonokai_better_performance = 1
@@ -530,6 +535,7 @@ local plugins = {
         config = {
             registries = {
                 "github:mkindberg/censor-ls",
+                "github:mkindberg/ghostty-ls",
                 "github:mason-org/mason-registry",
             },
         },
