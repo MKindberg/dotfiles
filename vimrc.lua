@@ -433,18 +433,8 @@ local plugins = {
             vim.g.zig_fmt_autosave = 0
         end,
     },
-    { "tweekmonster/startuptime.vim",   cmd = "StartupTime" },
-    {
-        "tamton-aquib/duck.nvim",
-        init = function()
-            keymap('n', '<leader>dd', function() require("duck").hatch() end, {})
-            keymap('n', '<leader>dk', function() require("duck").cook() end, {})
-            keymap('n', '<leader>dh', function() require("duck").hatch("🐎") end, {})
-            keymap('n', '<leader>dc', function() require("duck").hatch("🐈") end, {})
-        end,
-        lazy = true,
-    },
-    "junegunn/fzf", -- { 'do': { -> fzf#install() } },
+    { "tweekmonster/startuptime.vim",   cmd = "StartupTime" }, -- Meassure startup time
+    "junegunn/fzf",                                            -- { 'do': { -> fzf#install() } },
     {
         "junegunn/fzf.vim",
         init = function()
@@ -453,6 +443,7 @@ local plugins = {
         end
     },
     {
+        -- Git commands
         "tpope/vim-fugitive",
         init = function()
             keymap('n', '<leader>g', '<cmd>Git<cr>', { expr = false, noremap = true })
@@ -474,6 +465,7 @@ local plugins = {
         ft = "ghostty"
     },
     {
+        -- Theme
         "Mkindberg/sonokai_mini",
         init = function()
             vim.g.sonokai_better_performance = 1
@@ -485,12 +477,14 @@ local plugins = {
         end,
     },
     {
+        -- Indentation guides
         "lukas-reineke/indent-blankline.nvim",
         main = "ibl",
         config = true
     },
-    { "hiphish/rainbow-delimiters.nvim" },
+    { "hiphish/rainbow-delimiters.nvim" }, -- colored parentheses
     {
+        -- Maximize splits
         "szw/vim-maximizer",
         init = function()
             keymap('n', '<leader>m', "<cmd>MaximizerToggle<cr>",
@@ -498,15 +492,16 @@ local plugins = {
         end,
         cmd = "MaximizerToggle",
     },
-    { "kylechui/nvim-surround", config = true },
-    { "nvim-lua/popup.nvim",    lazy = true },
-    { "nvim-lua/plenary.nvim",  lazy = true },
+    { "kylechui/nvim-surround", config = true }, -- Motions for adding and removing parentheses etc
+    { "nvim-lua/popup.nvim",    lazy = true },   -- Needed by other plugins
+    { "nvim-lua/plenary.nvim",  lazy = true },   -- Needed by other plugins
     {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make',
         lazy = true,
     },
     {
+        -- Fuzzy finder
         "nvim-telescope/telescope.nvim",
         dependencies = { 'nvim-lua/plenary.nvim' },
         init = init_telescope,
@@ -514,6 +509,7 @@ local plugins = {
         cmd = "Telescope",
     },
     {
+        -- Syntax highlight
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         main = "nvim-treesitter.configs",
@@ -521,16 +517,19 @@ local plugins = {
         opts = opts_treesitter,
     },
     "nvim-treesitter/nvim-treesitter-refactor",
-    "romgrk/nvim-treesitter-context",
+    "romgrk/nvim-treesitter-context", -- Show function header etc when scrolling
     {
+        -- More motions
         "nvim-treesitter/nvim-treesitter-textobjects",
         event = "InsertEnter"
     },
     {
-        "gennaro-tedesco/nvim-peekup", -- " Preview registers,
+        -- Preview registers,
+        "gennaro-tedesco/nvim-peekup",
         keys = '""'
     },
     {
+        -- Download lsps
         "williamboman/mason.nvim",
         config = {
             registries = {
@@ -542,15 +541,18 @@ local plugins = {
         cmd = { "Mason" }
     },
     {
+        -- Autostart lsps
         "williamboman/mason-lspconfig.nvim",
         opts = opts_mason_lspconfig,
     },
     {
+        -- Configure lsps
         "neovim/nvim-lspconfig",
         lazy = true,
         init = init_lspconfig,
     },
     {
+        -- Snippets
         "L3MON4D3/LuaSnip",
         config = config_luasnip,
         init = init_luasnip,
@@ -558,6 +560,7 @@ local plugins = {
         dependencies = { "friendly-snippets" },
     },
     {
+        -- Completions
         "hrsh7th/nvim-cmp",
         event = "InsertEnter",
         opts = opts_cmp,
@@ -569,6 +572,7 @@ local plugins = {
             { "saadparwaiz1/cmp_luasnip", lazy = true, dependencies = "LuaSnip" },
             { "f3fora/cmp-spell",         lazy = true },
             {
+                -- AI completion
                 "tzachar/cmp-tabnine",
                 enabled = use_tabnine(),
                 build =
@@ -577,12 +581,14 @@ local plugins = {
                 lazy = true,
             },
             {
+                -- AI completion
                 "jcdickinson/codeium.nvim",
                 enabled = use_codeium(),
                 config = true,
                 event = "InsertEnter",
             },
             {
+                -- AI completion
                 "zbirenbaum/copilot-cmp",
                 enabled = use_copilot(),
                 config = function()
@@ -612,19 +618,20 @@ local plugins = {
             },
         },
     },
-    { "p00f/clangd_extensions.nvim",  lazy = true },
-    { "nvim-lua/lsp-status.nvim",     lazy = true },
-    { "simrat39/rust-tools.nvim",     lazy = true },
-    { "rafamadriz/friendly-snippets", lazy = true },
-    { "nvim-lualine/lualine.nvim",    opts = opts_lualine },
-    { "kyazdani42/nvim-web-devicons", config = true },
-    { "aznhe21/actions-preview.nvim", keys = "<leader>la" },
+    { "p00f/clangd_extensions.nvim",  lazy = true }, -- More clangd features
+    { "nvim-lua/lsp-status.nvim",     lazy = true }, -- Lsp info in statusline
+    { "simrat39/rust-tools.nvim",     lazy = true }, -- More rust features
+    { "rafamadriz/friendly-snippets", lazy = true }, -- Collection of snippets
+    { "nvim-lualine/lualine.nvim",    opts = opts_lualine }, -- Statusline
+    { "kyazdani42/nvim-web-devicons", config = true }, -- Better icons
+    { "aznhe21/actions-preview.nvim", keys = "<leader>la" }, -- Better code action selector
     {
+        -- Highlight character to jump to with f
         "unblevable/quick-scope",
         lazy = true,
         event = "InsertEnter",
     },
-    { "wsdjeg/vim-fetch" },
+    { "wsdjeg/vim-fetch" }, -- Open files with file:line
 }
 local lazy_opts = {}
 
