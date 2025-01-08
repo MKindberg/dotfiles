@@ -618,12 +618,12 @@ local plugins = {
             },
         },
     },
-    { "p00f/clangd_extensions.nvim",  lazy = true }, -- More clangd features
-    { "nvim-lua/lsp-status.nvim",     lazy = true }, -- Lsp info in statusline
-    { "simrat39/rust-tools.nvim",     lazy = true }, -- More rust features
-    { "rafamadriz/friendly-snippets", lazy = true }, -- Collection of snippets
+    { "p00f/clangd_extensions.nvim",  lazy = true },         -- More clangd features
+    { "nvim-lua/lsp-status.nvim",     lazy = true },         -- Lsp info in statusline
+    { "simrat39/rust-tools.nvim",     lazy = true },         -- More rust features
+    { "rafamadriz/friendly-snippets", lazy = true },         -- Collection of snippets
     { "nvim-lualine/lualine.nvim",    opts = opts_lualine }, -- Statusline
-    { "kyazdani42/nvim-web-devicons", config = true }, -- Better icons
+    { "kyazdani42/nvim-web-devicons", config = true },       -- Better icons
     { "aznhe21/actions-preview.nvim", keys = "<leader>la" }, -- Better code action selector
     {
         -- Highlight character to jump to with f
@@ -632,6 +632,14 @@ local plugins = {
         event = "InsertEnter",
     },
     { "wsdjeg/vim-fetch" }, -- Open files with file:line
+    {
+        -- Better lsp logs
+        "mhanberg/output-panel.nvim",
+        cmd =  "OutputPanel",
+        config = function()
+            require("output_panel").setup()
+        end
+    }
 }
 local lazy_opts = {}
 
