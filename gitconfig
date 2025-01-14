@@ -51,7 +51,7 @@
 [grep]
     lineNumber = true
 [help]
-    autocorrect = 30
+    autocorrect = prompt
 [init]
     defaultBranch = main
 [merge]
