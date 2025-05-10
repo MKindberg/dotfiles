@@ -275,14 +275,14 @@ local function opts_mason_lspconfig()
                 show_parameter_hints = true,
             },
         },
-        -- all the opts to send to nvim-lspconfig
+        -- All the opts to send to nvim-lspconfig
         -- these override the defaults set by rust-tools.nvim
         -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
         server = {
-            -- on_attach is a callback called when the language server attachs to the buffer
+            -- on_attach is a callback called when the language server attaches to the buffer
             -- on_attach = on_attach,
             settings = {
-                -- to enable rust-analyzer settings visit:
+                -- To enable rust-analyzer settings visit:
                 -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
                 ["rust_analyzer"] = {
                     -- enable clippy on save
@@ -326,7 +326,7 @@ local function opts_mason_lspconfig()
     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
     -- Used with the CursorHold event below to display inlay hints after a delay
-    vim.api.nvim_set_option("updatetime", 300)
+    vim.api.nvim_set_option_value("updatetime", 300, {})
 
     local clangd_opts = {
         capabilities = capabilities,
@@ -365,10 +365,10 @@ local function init_lspconfig()
     keymap('n', 'gr', "<cmd>Telescope lsp_references<cr>", { expr = false, noremap = true })
     keymap('', '<Leader>lf', vim.lsp.buf.format, { expr = false, noremap = true })
     keymap('v', '<Leader>lf', vim.lsp.buf.format, { silent = true, buffer = 0 })
-    keymap('n', '<Leader>ln', vim.diagnostic.goto_next, { expr = false, noremap = true })
-    keymap('n', ']d', vim.diagnostic.goto_next, { expr = false, noremap = true })
-    keymap('n', '<Leader>lp', vim.diagnostic.goto_prev, { expr = false, noremap = true })
-    keymap('n', '[d', vim.diagnostic.goto_prev, { expr = false, noremap = true })
+    keymap('n', '<Leader>ln', function() vim.diagnostic.jump { count = 1, float = true } end, { expr = false, noremap = true })
+    keymap('n', ']d', function() vim.diagnostic.jump {count = 1, float = true} end, { expr = false, noremap = true })
+    keymap('n', '<Leader>lp', function() vim.diagnostic.jump {count = -1, float = true} end, { expr = false, noremap = true })
+    keymap('n', '[d', function() vim.diagnostic.jump {count = -1, float = true} end, { expr = false, noremap = true })
     keymap('n', '<Leader>le', vim.diagnostic.open_float, { expr = false, noremap = true })
     keymap('n', '<Leader>la', require('actions-preview').code_actions, { expr = false, noremap = true })
     keymap('n', '<Leader>lh', vim.lsp.buf.hover, { expr = false, noremap = true })
@@ -517,7 +517,7 @@ local plugins = {
     {
         -- Download lsps
         "williamboman/mason.nvim",
-        config = {
+        opts = {
             registries = {
                 "github:mkindberg/censor-ls",
                 "github:mkindberg/ghostty-ls",
@@ -622,7 +622,7 @@ local plugins = {
     {
         -- Better lsp logs
         "mhanberg/output-panel.nvim",
-        cmd =  "OutputPanel",
+        cmd = "OutputPanel",
         config = function()
             require("output_panel").setup()
         end
