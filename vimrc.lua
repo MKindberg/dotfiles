@@ -352,25 +352,11 @@ local function opts_mason_lspconfig()
     }
     -- }}}
 
-    return {
-        handlers = {
-            function(server_name) -- default handler
-                require("lspconfig")[server_name].setup({})
-            end,
-            ["lua_ls"] = function()
-                require('lspconfig').lua_ls.setup(lua_opts)
-            end,
-            ["rust_analyzer"] = function()
-                require("rust-tools").setup(rust_opts)
-            end,
-            ["clangd"] = function()
-                require("lspconfig").clangd.setup(clangd_opts)
-            end,
-            ["zls"] = function()
-                require("lspconfig").zls.setup(zig_opts)
-            end,
-        }
-    }
+    vim.lsp.config('lua_ls', lua_opts)
+    vim.lsp.config('clangd', rust_opts)
+    vim.lsp.config('rust_analyzer', clangd_opts)
+    vim.lsp.config('zls', zig_opts)
+    return {}
 end
 
 local function init_lspconfig()
@@ -544,6 +530,7 @@ local plugins = {
         -- Autostart lsps
         "williamboman/mason-lspconfig.nvim",
         opts = opts_mason_lspconfig,
+        dependencies = { "mason.nvim", "nvim-lspconfig" },
     },
     {
         -- Configure lsps
