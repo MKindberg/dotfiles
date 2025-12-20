@@ -248,5 +248,8 @@ alias fn='find -name'
 alias cim='vim'
 
 alias notify_when_done='tmux set-option status-style bg=red,fg=black && echo -e "\n-------------- done --------------" && read && tmux set-option status-style fg=black,bg=green'
+
+alias tmpdir='cd "$(mktemp -d)"'
+alias tmpfile='vim "$(mktemp)"'
 # }}}
 
