@@ -224,6 +224,16 @@ local opts_treesitter = {
             },
 
         },
+        lsp_interop = {
+            enable = true,
+            border = 'none',
+            floating_preview_opts = {},
+            peek_definition_code = {
+                ["<leader>df"] = "@function.outer",
+                ["<leader>dF"] = "@class.outer",
+            },
+        },
+
     },
 }
 local init_treesitter = function()
@@ -479,7 +489,7 @@ local plugins = {
     {
         -- More motions
         "nvim-treesitter/nvim-treesitter-textobjects",
-        event = "InsertEnter"
+        branch = "main",
     },
     {
         -- Preview registers,
