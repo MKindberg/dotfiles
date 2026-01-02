@@ -434,10 +434,10 @@ local plugins = {
     },
     {
         -- Theme
-        "Mkindberg/sonokai_mini",
+        "sainnhe/sonokai",
         init = function()
             vim.g.sonokai_better_performance = 1
-            vim.cmd([[colorscheme sonokai_mini]])
+            vim.cmd([[colorscheme sonokai]])
             vim.cmd("highlight EndOfBuffer ctermbg=none")
             vim.cmd("highlight CursorLine cterm=bold ctermbg=black")
             vim.cmd("highlight Normal ctermbg=None")
