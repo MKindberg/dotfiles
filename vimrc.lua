@@ -80,7 +80,6 @@ local function opts_cmp()
         nvim_lsp = "[LSP]",
         nvim_lsp_signature_help = "[LSP]",
         buffer = "[Buf]",
-        cmp_tabnine = "[AI]",
         path = "[Path]",
         spell = "[Spell]",
     }
@@ -115,9 +114,6 @@ local function opts_cmp()
                     name = 'nvim_lsp_signature_help',
                 },
                 {
-                    name = 'cmp_tabnine',
-                },
-                {
                     name = 'buffer',
                 },
                 {
@@ -136,30 +132,8 @@ local function opts_cmp()
         experimental = {
             ghost_text = false,
         },
-        formatting = {
-            format = function(entry, vim_item)
-                local menu = source_mapping[entry.source.name]
-                if entry.source.name == 'cmp_tabnine' then
-                    if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
-                        menu = entry.completion_item.data.detail .. ' ' .. menu
-                    end
-                end
-                vim_item.menu = menu
-                return vim_item
-            end
-        },
     }
 end
--- }}}
-
--- Tabnine {{{
-local opts_tabnine = {
-    max_lines = 1000,
-    max_num_results = 20,
-    sort = true,
-    run_on_every_keystroke = true,
-    snippet_placeholder = '..',
-}
 -- }}}
 
 -- Lualine {{{
@@ -400,11 +374,9 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local function use_tabnine()
-    return vim.g.use_tabnine == 1
-end
-local function use_codeium()
-    return vim.g.use_codeium == 1
+local function use_windsurf()
+    return false
+    -- return vim.g.use_windsurf == 1
 end
 local function use_copilot()
     return vim.g.use_copilot == 1
@@ -560,19 +532,24 @@ local plugins = {
             { "f3fora/cmp-spell",         lazy = true },
             {
                 -- AI completion
-                "tzachar/cmp-tabnine",
-                enabled = use_tabnine(),
-                build =
-                "./install.sh",
-                opts = opts_tabnine,
-                lazy = true,
-            },
-            {
-                -- AI completion
-                "jcdickinson/codeium.nvim",
-                enabled = use_codeium(),
-                config = true,
+                "Exafunction/windsurf.nvim",
+                enabled = use_windsurf(),
+                config = function()
+                    require("codeium").setup {
+                        virtual_text = {
+                            enabled = true,
+                            key_bindings = {
+                                accept = "§",
+                                clear = "½",
+                            }
+                        },
+                    }
+                end,
                 event = "InsertEnter",
+                dependencies = {
+                    "nvim-lua/plenary.nvim",
+                    "hrsh7th/nvim-cmp",
+                },
             },
             {
                 -- AI completion
