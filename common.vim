@@ -35,8 +35,6 @@ set list
 
 set noerrorbells
 
-set pastetoggle=<F12>
-
 set wildmenu
 
 let g:vim_json_conceal=0
