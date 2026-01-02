@@ -92,6 +92,7 @@ alias 8='cd -8'
 alias 9='cd -9'
 
 alias reload='source ~/.zshrc'
+alias zshrc='nvim ~/.zshrc'
 # }}}
 
 # Prompt {{{
