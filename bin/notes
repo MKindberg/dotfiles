@@ -3,32 +3,44 @@ set -e
 
 usage() {
 cat << EOF
-usage: notes [mode] [note_name]
+usage: notes [mode] [arguments]
 Quickly create, view or edit notes
 
-If note_name is left out fzf will be opened to select (if available)
+If a note name is required but left out, fzf will be used to select one.
+The default mode is 'open'.
 
 Modes:
   a -- Append
-    Any text written after name of note will be appended to it.
+    Usage: notes a <note_name> [text_to_append]
+    Any text after the note name will be appended to it.
   aa -- Find and append
-    Same as append but file will be selected via fzf
+    Usage: notes aa [text_to_append]
+    Select a note with fzf and append the given text.
   d -- Delete
-    Remove selected note
+    Usage: notes d [note_name]
+    Remove selected note.
   r -- Read
-    Print content of note on stdout
-  o -- Open
-    Open note in '$EDITOR'
+    Usage: notes r [note_name]
+    Print content of note on stdout.
+  o -- Open (Default)
+    Usage: notes o [note_name]
+    Open note in '$EDITOR'.
   s -- Open in split
-    Open note in '$EDITOR' in tmux split if running in tmux, otherwise same as 'o'
+    Usage: notes s [note_name]
+    Open note in a tmux split if available, otherwise opens in the current pane.
   l -- List
-    List all available notes
+    List all available notes.
   n -- Nickname
-    Create a nickname for a note
+    Usage: notes n <nickname> [note_name]
+    Create a nickname (symlink) for a note.
 EOF
 }
 
 find_note() {
+  if ! [[ -x "$(command -v fzf)" ]]; then
+    echo "fzf is not installed, which is required for finding notes." >&2
+    exit 1
+  fi
   if [[ -x "$(command -v unbuffer)" && -x "$(command -v glow)" ]]; then
     PREVIEW="unbuffer glow"
   elif [[ -x "$(command -v bat)" ]]; then
@@ -37,8 +49,10 @@ find_note() {
     PREVIEW="cat"
   fi
   if [[ -x "$(command -v fzf)" ]]; then
-    file=$(find "$NOTES_DIR" -type f -printf "%f\n" | sed 's/\.md$//' | fzf --preview="${PREVIEW} ${NOTES_DIR}/{}.md")
-    if [[ $? -ne 0 ]]; then
+    # Quote the preview command to handle filenames with spaces
+    # Exit if fzf is cancelled (non-zero exit) or if the selection is empty
+    file=$(find "$NOTES_DIR" -type f -printf "%f\n" | sed 's/\.md$//' | fzf --preview="${PREVIEW} \"${NOTES_DIR}/{}.md\"")
+    if [[ $? -ne 0 || -z "$file" ]]; then
       exit 1
     fi
     echo "${file}.md"
@@ -54,7 +68,7 @@ if [[ -z "$NOTES_DIR" ]]; then
 fi
 
 if [[ ! -d "$NOTES_DIR" ]]; then
-  mkdir $NOTES_DIR
+  mkdir -p "$NOTES_DIR"
 fi
 
 mode="open"
@@ -83,20 +97,20 @@ case ${1} in
     if [[ -n $TMUX ]]; then
       mode="split"
     else
-      echo "Must run in tmux to split"
+      echo "Must run in tmux to split" >&2
       mode="open"
     fi
     shift
     ;;
   l) # List
-    ls $NOTES_DIR --color --file-type
+    ls "$NOTES_DIR" --color --file-type
     exit 0
     ;;
   n)
     mode="nickname"
     shift
     if [[ $# == 0 ]]; then
-      "n requires at least 1 argument"
+      echo "n requires at least 1 argument" >&2
       exit 1
     fi
     nickname=$1
@@ -135,7 +149,7 @@ case ${mode} in
     $EDITOR "$file"
     ;;
   split)
-    tmux split-window -h "$EDITOR $file"
+    tmux split-window -h "$EDITOR" "$file"
     ;;
   nickname)
     ln -fs "$file" "${NOTES_DIR}/$nickname"
