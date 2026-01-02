@@ -708,6 +708,16 @@ vim.cmd("syntax match LeadingTab /^\\t\\+/")
 
 -- Auto commands {{{
 
+vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"},
+    {
+        pattern = { "*.ghostty", "*ghostty/config" },
+        callback = function()
+            set.filetype = "ghostty"
+            set.commentstring = "# %s"
+        end
+    }
+)
+
 vim.api.nvim_create_autocmd("FileType",
     { pattern = { "c", "cpp" }, callback = function() set.commentstring = "// %s" end }
 )
