@@ -650,6 +650,7 @@ keymap('n', runCmd_config.keymap, '<cmd>0luado runCmd(line, linenr)<CR>', { expr
 
 -- Autocorrect {{{
 vim.cmd.abbrev("pritnf", "printf")
+vim.cmd.abbrev("cosnt", "const")
 -- }}}
 
 -- Key binding {{{
