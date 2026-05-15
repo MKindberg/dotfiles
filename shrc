@@ -251,5 +251,9 @@ alias notify_when_done='tmux set-option status-style bg=red,fg=black && echo -e 
 
 alias tmpdir='cd "$(mktemp -d)"'
 alias tmpfile='vim "$(mktemp)"'
+
+alias mv='mv $(fzf) $(find -type d -not -path "*/.*" | fzf)'
+alias cp='cp $(fzf) $(find -type d -not -path "*/.*" | fzf)'
+alias rm='rm $(fzf)'
 # }}}
 
