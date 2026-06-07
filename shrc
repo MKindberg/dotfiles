@@ -192,7 +192,6 @@ backup() {
     # rm -rf "$old_dir"
   fi
 }
-backup
 
 # }}}
 
