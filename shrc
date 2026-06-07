@@ -68,6 +68,19 @@ learnx() {
 
 function up {
   newDir=$PWD
+  if [[ $# == 0 ]]; then
+    dirList="$PWD"
+    while [[ "$newDir" != / ]]; do
+      newDir=$(dirname "$newDir")
+      dirList="$dirList\n$newDir"
+    done
+    dir=$(echo $dirList | fzf +m +s --preview="ls {}")
+    if [[ -n $dir ]]; then
+      cd $dir
+    fi
+    return
+  fi
+
   if [ "$1" -ge 0 ] 2> /dev/null; then
     for (( c=0; c<$1; c++ ))
     do
