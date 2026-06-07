@@ -2,38 +2,21 @@
 
 source ~/dotfiles/shrc
 
-autoload -U compinit
-compinit
-autoload -Uz zmv
-# Plugins {{{
-export ATUIN_NOBIND=1
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-if [[ -a $ZINIT_HOME ]]; then
-  source "${ZINIT_HOME}/zinit.zsh"
-  autoload -Uz _zinit
-  (( ${+_comps} )) && _comps[zinit]=_zinit
-
-  zinit ice lucid as"program" pick"bin/git-dsf"
-  zinit light so-fancy/diff-so-fancy
-
-  zinit light zsh-users/zsh-syntax-highlighting
-
-  zinit ice from"gh-r" as"program"
-  zinit light junegunn/fzf
-
-  zinit ice pick"zsh-autosuggestions.zsh" $TURBO
-  zinit light zsh-users/zsh-autosuggestions
-
-  zinit snippet https://github.com/rupa/z/blob/master/z.sh
-
-  zinit snippet https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
-
-  zinit load atuinsh/atuin
+autoload -Uz compinit
+if [[ -n ~/.zcompdump(#qNmh-24) ]]; then
+  compinit -C
 else
-  echo "zinit not installed"
+  compinit
 fi
+# autoload -Uz zmv  # More powerful version of mv
+# Plugins {{{
+
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/lib/git-core/git-sh-prompt
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --zsh)"
+
 # }}}
 
 # Options {{{
@@ -146,39 +129,38 @@ bindkey '^[%' vi-match-bracket
 bindkey -s "^Z" "fg\n"
 bindkey '^_' backward-kill-word
 
-bindkey '^[r' atuin-up-search
-
-split-window() {
-  tmux split-window -h "tmux select-pane -l; echo -e $1\\\n-----\\\n; $1; read"
-}
-stty -ixon # Unbind current ctrl+s behavior
-launch-in-split() { # Launch command in new tmux split
-  if [[ -n "$TMUX" ]]; then
-    BUFFER="split-window \"$BUFFER\""
-    zle accept-line
-  fi
-}
-zle -N launch-in-split
-bindkey "^s" launch-in-split
-
-split-window2() {
-  tmux split-window -h "tmux select-pane -l; echo -e $1\\\n-----\\\n; $1"
-}
-launch-in-split2() { # Launch command in new tmux split
-  if [[ -n "$TMUX" ]]; then
-    BUFFER="split-window2 \"$BUFFER\""
-    zle accept-line
-  fi
-}
-zle -N launch-in-split2
-bindkey "^[^S" launch-in-split2
+# split-window() {
+#   tmux split-window -h "tmux select-pane -l; echo -e $1\\\n-----\\\n; $1; read"
+# }
+# stty -ixon # Unbind current ctrl+s behavior
+# launch-in-split() { # Launch command in new tmux split
+#   if [[ -n "$TMUX" ]]; then
+#     BUFFER="split-window \"$BUFFER\""
+#     zle accept-line
+#   fi
+# }
+# zle -N launch-in-split
+# bindkey "^s" launch-in-split
+#
+# split-window2() {
+#   tmux split-window -h "tmux select-pane -l; echo -e $1\\\n-----\\\n; $1"
+# }
+# launch-in-split2() { # Launch command in new tmux split
+#   if [[ -n "$TMUX" ]]; then
+#     BUFFER="split-window2 \"$BUFFER\""
+#     zle accept-line
+#   fi
+# }
+# zle -N launch-in-split2
+# bindkey "^[^S" launch-in-split2
 # }}}
 
 # Completion {{{
 zstyle ':completion:*' completer _extensions _complete _approximate
 zstyle ':completion:*' use-cache on
 
-zstyle ':completion:*' menu select=2 eval "$(dircolors -b)" search=yes
+# eval "$(dircolors -b)"  # Adds more colors to ls
+zstyle ':completion:*' menu select=2 search=yes
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 zstyle ':completion:*' special-dirs true
