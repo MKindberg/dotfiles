@@ -88,6 +88,12 @@ GIT_PS1_SHOWUPSTREAM="auto"
 GIT_PS1_SHOWCOLORHINTS=1
 
 function preexec() {
+  history_file="$HOME/.history/$PWD/history"
+  mkdir -p $(dirname $history_file)
+  touch ${history_file}_tmp ${history_file}
+  grep -v -x -F "$1" $history_file > ${history_file}_tmp && mv ${history_file}_tmp ${history_file}
+  echo "$1" >> $history_file
+
   timer=${timer:-$SECONDS}
 }
 
@@ -128,6 +134,15 @@ bindkey '^[[Z' reverse-menu-complete
 bindkey '^[%' vi-match-bracket
 bindkey -s "^Z" "fg\n"
 bindkey '^_' backward-kill-word
+
+local-history-widget() {
+  local selected
+  selected=$(cat $HOME/.history/$PWD/history 2>/dev/null | fzf) || return
+  BUFFER="$selected"
+  CURSOR=${#BUFFER}
+}
+zle -N local-history-widget
+bindkey '^[r' local-history-widget
 
 # split-window() {
 #   tmux split-window -h "tmux select-pane -l; echo -e $1\\\n-----\\\n; $1; read"
