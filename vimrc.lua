@@ -300,7 +300,6 @@ local function opts_mason_lspconfig()
     -- }}}
 
     -- C/C++ {{{
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
     -- Used with the CursorHold event below to display inlay hints after a delay
@@ -389,6 +388,7 @@ local function use_copilot()
 end
 
 local plugins = {
+    "airblade/vim-gitgutter",
     {
         "ziglang/zig.vim",
         enable = true,
@@ -476,16 +476,19 @@ local plugins = {
         -- Syntax highlight
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        main = "nvim-treesitter.configs",
         init = init_treesitter,
         opts = opts_treesitter,
+        branch = "main",
     },
-    "nvim-treesitter/nvim-treesitter-refactor",
-    "romgrk/nvim-treesitter-context", -- Show function header etc when scrolling
+    {
+        "romgrk/nvim-treesitter-context", -- Show function header etc when scrolling
+        dependencies = "nvim-treesitter/nvim-treesitter",
+    },
     {
         -- More motions
         "nvim-treesitter/nvim-treesitter-textobjects",
         branch = "main",
+        dependencies = "nvim-treesitter/nvim-treesitter",
     },
     {
         -- Preview registers,
@@ -588,13 +591,13 @@ local plugins = {
             },
         },
     },
-    { "p00f/clangd_extensions.nvim",  lazy = true },         -- More clangd features
-    { "nvim-lua/lsp-status.nvim",     lazy = true },         -- Lsp info in statusline
-    { "simrat39/rust-tools.nvim",     lazy = true },         -- More rust features
-    { "rafamadriz/friendly-snippets", lazy = true },         -- Collection of snippets
-    { "nvim-lualine/lualine.nvim",    opts = opts_lualine }, -- Statusline
-    { "kyazdani42/nvim-web-devicons", config = true },       -- Better icons
-    { "aznhe21/actions-preview.nvim", keys = "<leader>la" }, -- Better code action selector
+    { "p00f/clangd_extensions.nvim",  lazy = true },                     -- More clangd features
+    { "nvim-lua/lsp-status.nvim",     lazy = true },                     -- Lsp info in statusline
+    { "simrat39/rust-tools.nvim",     lazy = true },                     -- More rust features
+    { "rafamadriz/friendly-snippets", lazy = true },                     -- Collection of snippets
+    { "nvim-lualine/lualine.nvim",    opts = opts_lualine },             -- Statusline
+    { "kyazdani42/nvim-web-devicons", config = true },                   -- Better icons
+    { "aznhe21/actions-preview.nvim", lazy = true },                     -- Better code action selector
     {
         -- Highlight character to jump to with f
         "unblevable/quick-scope",
@@ -705,7 +708,7 @@ vim.cmd("syntax match LeadingTab /^\\t\\+/")
 
 -- Auto commands {{{
 
-vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"},
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" },
     {
         pattern = { "*.ghostty", "*ghostty/config" },
         callback = function()
@@ -756,12 +759,3 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 
 -- }}}
 
-local client = vim.lsp.start_client { name = "censor-ls", cmd = { "censor-ls" }, }
-
-if not client then
-    vim.notify("Failed to start censor-ls")
-else
-    vim.api.nvim_create_autocmd("FileType",
-        { pattern = "markdown", callback = function() vim.lsp.buf_attach_client(0, client) end }
-    )
-end
