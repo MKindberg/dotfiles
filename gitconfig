@@ -7,7 +7,7 @@
     co = checkout
     br = branch
     di = diff
-    #dlog = -c diff.external=difft log -p --ext-diff
+    # dlog = -c diff.external=difft log -p --ext-diff
     dt = difftool
     re = rebase
     rei = rebase -i
@@ -18,17 +18,15 @@
     su = submodule update
     si = submodule init
     xclean = clean -xdf -e GTAGS -e GRTAGS -e GPATH -e tags -e compile_commands.json
+
 [branch]
-    sort = -committerdate
+    sort = committerdate
+
 [color]
     ui = true
     diff = auto
     status = auto
-[color "diff-highlight"]
-    oldNormal = red bold
-    oldHighlight = red bold 52
-    newNormal = green bold
-    newHighlight = green bold 22
+
 [color "diff"]
     meta = yellow
     frag = magenta bold
@@ -36,37 +34,44 @@
     old = red bold
     new = green bold
     whitespace = red reverse
+
 [commit]
     verbose = true
+
 [core]
     editor = nvim
     pager = diff-so-fancy | less --tabs=4 -R
     whitespace = trailing-space,space-before-tab,
-#[diff]
-#    tool = difftastic
-#    external = difft --display side-by-side-show-both
+
 [difftool "nvimdiff"]
     cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
-#[difftool "difftastic"]
-#    cmd = difft --display side-by-side-show-both "$LOCAL" "$REMOTE"
+
 [difftool]
     prompt = false
+
 [grep]
     lineNumber = true
+
 [help]
     autocorrect = prompt
+
 [init]
     defaultBranch = main
+
 [maintenance]
     auto = true
     strategy = incremental
+
 [merge]
     tool = nvimdiff
     conflictstyle = zdiff3
+
 [pager]
     difftool = true
+
 [pull]
     rebase = true
+
 [tag]
     sort = -version:refname
 
