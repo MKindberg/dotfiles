@@ -178,16 +178,10 @@ local opts_lualine = {
 local opts_treesitter = {
     highlight = {
         enable = true,
-        disable = { "zig" },
     },
     auto_install = true,
     indent = {
         enable = true,
-        disable = { "zig" },
-    },
-    refactor = {
-        highlight_definitions = { enable = true, disable = { "zig" } },
-        highlight_current_scope = { enable = false, disable = { "zig" } },
     },
     textobjects = {
         select = {
