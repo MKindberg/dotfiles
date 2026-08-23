@@ -88,11 +88,7 @@ GIT_PS1_SHOWUPSTREAM="auto"
 GIT_PS1_SHOWCOLORHINTS=1
 
 function preexec() {
-  history_file="$HOME/.history/$PWD/history"
-  mkdir -p $(dirname $history_file)
-  touch ${history_file}_tmp ${history_file}
-  grep -v -x -F "$1" $history_file > ${history_file}_tmp && mv ${history_file}_tmp ${history_file}
-  echo "$1" >> $history_file
+  retrace --add "$1"
 
   timer=${timer:-$SECONDS}
 }
@@ -137,7 +133,7 @@ bindkey '^_' backward-kill-word
 
 local-history-widget() {
   local selected
-  selected=$(cat $HOME/.history/$PWD/history 2>/dev/null | fzf) || return
+  selected=$(retrace | fzf --tac) || return
   BUFFER="$selected"
   CURSOR=${#BUFFER}
 }
