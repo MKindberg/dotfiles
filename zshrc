@@ -22,7 +22,6 @@ zstyle ':vcs_info:git:*' actionformats '%F{green}(%b|%a)%f%c%u'   # %a = rebase/
 
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/lib/git-core/git-sh-prompt
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --zsh)"
 
@@ -127,7 +126,21 @@ bindkey -e
 bindkey '^[' vi-cmd-mode
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^[%' vi-match-bracket
-bindkey -s "^Z" "fg\n"
+ctrl-z() {
+  if [[ -z "$(jobs)" ]]; then
+    return
+  fi
+  local saved_buffer=$BUFFER
+  local saved_cursor=$CURSOR
+  BUFFER=''
+  zle redisplay
+  fg
+  BUFFER=$saved_buffer
+  CURSOR=$saved_cursor
+  zle redisplay
+}
+zle -N ctrl-z
+bindkey '^Z' ctrl-z
 bindkey '^_' backward-kill-word
 
 local-history-widget() {
