@@ -11,6 +11,15 @@ fi
 # autoload -Uz zmv  # More powerful version of mv
 # Plugins {{{
 
+autoload -Uz vcs_info
+
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' unstagedstr '%F{red}*%f'
+zstyle ':vcs_info:*' stagedstr '%F{yellow}+%f'
+zstyle ':vcs_info:git:*' formats       '%F{green}(%b)%f%c%u'
+zstyle ':vcs_info:git:*' actionformats '%F{green}(%b|%a)%f%c%u'   # %a = rebase/merge/etc in progress
+
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/lib/git-core/git-sh-prompt
@@ -38,20 +47,9 @@ setopt INC_APPEND_HISTORY
 # }}}
 
 # Variables {{{
-
-CASE_SENSITIVE="true" # Case insensitive completion
-
-ENABLE_CORRECTION="true" # Command autocorrection
 # }}}
 
 # Functions {{{
-function PS1_pscount {
-  ps -a | wc -l
-}
-
-__git_files () {
-  _wanted files expl 'local files' _files
-}
 # }}}
 
 # Aliases {{{
@@ -94,8 +92,9 @@ function preexec() {
 }
 
 function precmd() {
+  vcs_info
   if [ $timer ]; then
-    if [[ $(($SECONDS - $timer)) > 10 ]]; then
+    if [[ $(($SECONDS - $timer)) -gt 5 ]]; then
       timer_show=$(($SECONDS - $timer))s
     else
       timer_show=""
@@ -118,7 +117,7 @@ r_prompt() {
 
 PROMPT='
 %B%F{blue}${dirs}
-%F{white}$(r_prompt)%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}`__git_ps1` %b%F{yellow}${timer_show}%B
+%F{white}$(r_prompt)%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}${vcs_info_msg_0_}%b%F{yellow}${timer_show}%B
 %F{yellow}%D{%H:%M}%}%b${ret_num}${ret_status}%b%k%f '
 
 # }}}
@@ -182,6 +181,4 @@ zstyle ':completion:*:*:*:*:descriptions' format '%F{green}-- %d --%f'
 zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
 zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
 zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
-
-zstyle ':autocomplete:tab:*' widget-style menu-complete
 # }}}
