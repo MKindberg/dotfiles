@@ -619,33 +619,6 @@ local lazy_opts = {}
 require("lazy").setup(plugins, lazy_opts)
 -- }}}
 
--- runCmd {{{
-local runCmd_config = {
-    trigger = "Run with:",
-    keymap = "<M-r>",
-}
-function runCmd(line, linenr)
-    local cmd
-    local start, stop = line:find(runCmd_config.trigger)
-    if (stop ~= nil) then
-        cmd = string.sub(line, stop + 1, -1)
-    else
-        cmd = "./" .. vim.fn.expand("%")
-    end
-    cmd = string.gsub(cmd, "^%s+", "")
-    cmd = string.gsub(cmd, "%s+$", "")
-
-    print("Executing", cmd)
-    if (string.sub(cmd, 1, 1) == ':') then
-        vim.api.nvim_command(string.sub(cmd, 2, -1))
-    else
-        vim.api.nvim_command("!" .. cmd)
-    end
-end
-
-keymap('n', runCmd_config.keymap, '<cmd>0luado runCmd(line, linenr)<CR>', { expr = false, noremap = true })
--- }}}
-
 -- Autocorrect {{{
 vim.cmd.abbrev("pritnf", "printf")
 vim.cmd.abbrev("cosnt", "const")
