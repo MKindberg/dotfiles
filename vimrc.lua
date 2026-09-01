@@ -2,7 +2,6 @@ local keymap = vim.keymap.set
 local set = vim.opt
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
-vim.opt.spell = true
 vim.opt.spelllang = { 'en_us' }
 
 vim.cmd("source ~/dotfiles/common.vim")
@@ -300,7 +299,7 @@ local function opts_mason_lspconfig()
     -- }}}
 
     -- C/C++ {{{
-    capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+    local capabilities = require('cmp_nvim_lsp')
 
     -- Used with the CursorHold event below to display inlay hints after a delay
     vim.api.nvim_set_option_value("updatetime", 300, {})
@@ -330,8 +329,8 @@ local function opts_mason_lspconfig()
     -- }}}
 
     vim.lsp.config('lua_ls', lua_opts)
-    vim.lsp.config('clangd', rust_opts)
-    vim.lsp.config('rust_analyzer', clangd_opts)
+    vim.lsp.config('clangd', clangd_opts)
+    vim.lsp.config('rust_analyzer', rust_opts)
     vim.lsp.config('zls', zig_opts)
     return {}
 end
@@ -379,14 +378,6 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local function use_windsurf()
-    return false
-    -- return vim.g.use_windsurf == 1
-end
-local function use_copilot()
-    return vim.g.use_copilot == 1
-end
-
 local plugins = {
     "airblade/vim-gitgutter",
     {
@@ -403,7 +394,7 @@ local plugins = {
         "junegunn/fzf.vim",
         init = function()
             keymap('n', '<C-P>', "<cmd>Files<cr>", { noremap = true })
-            keymap('n', '<&>', "<cmd>Lines<cr>", { noremap = true })
+            keymap('n', '&', "<cmd>Lines<cr>", { noremap = true })
         end
     },
     {
@@ -539,56 +530,6 @@ local plugins = {
             { "hrsh7th/cmp-nvim-lsp",     lazy = true },
             { "saadparwaiz1/cmp_luasnip", lazy = true, dependencies = "LuaSnip" },
             { "f3fora/cmp-spell",         lazy = true },
-            {
-                -- AI completion
-                "Exafunction/windsurf.nvim",
-                enabled = use_windsurf(),
-                config = function()
-                    require("codeium").setup {
-                        virtual_text = {
-                            enabled = true,
-                            key_bindings = {
-                                accept = "§",
-                                clear = "½",
-                            }
-                        },
-                    }
-                end,
-                event = "InsertEnter",
-                dependencies = {
-                    "nvim-lua/plenary.nvim",
-                    "hrsh7th/nvim-cmp",
-                },
-            },
-            {
-                -- AI completion
-                "zbirenbaum/copilot-cmp",
-                enabled = use_copilot(),
-                config = function()
-                    require("copilot_cmp").setup {}
-                end,
-                dependencies = {
-                    "zbirenbaum/copilot.lua",
-                    enabled = use_copilot(),
-                    cmd = "Copilot",
-                    event = "InsertEnter",
-                    config = function()
-                        require("copilot").setup({
-                            suggestion = { enabled = false },
-                            panel = { enabled = false },
-                            server_opts_overrides = {
-                                settings = {
-                                    advanced = {
-                                        length = 2,
-                                        listCount = 2,
-                                        inlineSuggestCount = 2,
-                                    }
-                                },
-                            }
-                        })
-                    end,
-                },
-            },
         },
     },
     { "p00f/clangd_extensions.nvim",  lazy = true },                     -- More clangd features
@@ -639,7 +580,7 @@ keymap('n', 'ä', "$", { noremap = true })
 keymap('n', 'ö', "^", { noremap = true })
 
 keymap('n', '<A-n>', "<cmd>cn<cr>", { noremap = true })
-keymap('n', '<A-p>', "<cmd>cn<cr>", { noremap = true })
+keymap('n', '<A-p>', "<cmd>cp<cr>", { noremap = true })
 
 -- Open vimrc
 keymap('n', "<leader>ev", "<cmd>vsplit $MYVIMRC<cr>", { noremap = true })
