@@ -101,22 +101,27 @@ function precmd() {
     unset timer
   fi
   dirs="$(dirs -v | tr '\t' ' ' | tr '\n' '\t' | cut -f 2,3,4,5)"
+
+  r_prompt_str=""
+  if (( ${#jobstates} )); then
+    local -a parts
+    local k
+    for k in ${(onk)jobtexts}; do
+      parts+=("[$k] \"${jobtexts[$k]}\"")
+    done
+    local jobs_str="${(j: | :)parts}"
+    if (( ${#jobs_str} > COLUMNS - 1 )); then
+      jobs_str=${jobs_str: -$((COLUMNS - 1))}
+    fi
+    r_prompt_str="${(l:COLUMNS:: :)jobs_str}"$'\r'
+  fi
  }
 local ret_status="%(?:%{%F{green}:%F{red}%})\$"
 local ret_num="%(?: :%F{red} [%?] )"
 
-r_prompt() {
-  setopt localoptions extendedglob
-  if [[ "$(jobs)" != "" ]]; then
-    jobs_str=$(jobs | sed -nr 's/(\S+)\s+\S+\s+\S+\s+(.*)/ \1 "\2" /p' | tr '\n' '|')
-    ((len=${#${jobs_str}}-1))
-    printf "%${COLUMNS}s\r" ${jobs_str:0:$len}
-  fi
-}
-
 PROMPT='
 %B%F{blue}${dirs}
-%F{white}$(r_prompt)%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}${vcs_info_msg_0_}%b%F{yellow}${timer_show}%B
+%F{white}${r_prompt_str}%B%F{green}%n@%m %F{cyan}%~/ %F{magenta}${vcs_info_msg_0_}%b%F{yellow}${timer_show}%B
 %F{yellow}%D{%H:%M}%}%b${ret_num}${ret_status}%b%k%f '
 
 # }}}
