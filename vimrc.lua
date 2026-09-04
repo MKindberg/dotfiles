@@ -173,66 +173,74 @@ local opts_lualine = {
 }
 -- }}}
 
--- Treesitter {{{
 local opts_treesitter = {
-    highlight = {
-        enable = true,
-    },
-    auto_install = true,
-    indent = {
-        enable = true,
-    },
-    textobjects = {
+    install_dir = vim.fn.stdpath('data') .. '/site',
+}
+
+local init_treesitter = function()
+    vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+            local lang = vim.treesitter.language.get_lang(args.match) or args.match
+            if not vim.tbl_contains(require('nvim-treesitter').get_installed(), lang) then
+                if vim.tbl_contains(require('nvim-treesitter').get_available(), lang) then
+                    require('nvim-treesitter').install(lang)
+                end
+                return
+            end
+
+            vim.treesitter.start()
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            vim.wo[0][0].foldmethod = 'expr'
+            vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+        end,
+    })
+    set.foldlevelstart = 20
+end
+
+local init_treesitter_textobjects = function()
+    require('nvim-treesitter-textobjects').setup({
         select = {
-            enable = true,
-            keymaps = {
-                ["af"] = "@function.outer",
-                ["if"] = "@function.inner",
-                ["ac"] = "@class.outer",
-                ["ic"] = "@class.inner",
-                ["aa"] = "@parameter.outer",
-                ["ia"] = "@parameter.inner",
-                ["ak"] = "@comment.outer",
-                ["ik"] = "@comment.outer",
-            },
+            lookahead = true,
         },
         move = {
-            enable = true,
             set_jumps = true,
-            goto_next_start = {
-                ["]m"] = "@function.outer",
-                ["]]"] = "@class.outer",
-            },
-            goto_next_end = {
-                ["]M"] = "@function.outer",
-                ["]["] = "@class.outer",
-            },
-            goto_previous_start = {
-                ["[m"] = "@function.outer",
-                ["[["] = "@class.outer",
-            },
-            goto_previous_end = {
-                ["[M"] = "@function.outer",
-                ["[]"] = "@class.outer",
-            },
-
         },
-        lsp_interop = {
-            enable = true,
-            border = 'none',
-            floating_preview_opts = {},
-            peek_definition_code = {
-                ["<leader>df"] = "@function.outer",
-                ["<leader>dF"] = "@class.outer",
-            },
-        },
+    })
 
-    },
-}
-local init_treesitter = function()
-    set.foldmethod = 'expr'
-    set.foldexpr = 'nvim_treesitter#foldexpr()'
-    set.foldlevelstart = 20
+    local select = require('nvim-treesitter-textobjects.select')
+    local move = require('nvim-treesitter-textobjects.move')
+
+    local select_keymaps = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+        ["aa"] = "@parameter.outer",
+        ["ia"] = "@parameter.inner",
+        ["ak"] = "@comment.outer",
+        ["ik"] = "@comment.outer",
+    }
+    for lhs, query in pairs(select_keymaps) do
+        keymap({ 'x', 'o' }, lhs, function() select.select_textobject(query, 'textobjects') end,
+            { expr = false, noremap = true })
+    end
+
+    local move_keymaps = {
+        ["]m"] = { move.goto_next_start, "@function.outer" },
+        ["]]"] = { move.goto_next_start, "@class.outer" },
+        ["]M"] = { move.goto_next_end, "@function.outer" },
+        ["]["] = { move.goto_next_end, "@class.outer" },
+        ["[m"] = { move.goto_previous_start, "@function.outer" },
+        ["[["] = { move.goto_previous_start, "@class.outer" },
+        ["[M"] = { move.goto_previous_end, "@function.outer" },
+        ["[]"] = { move.goto_previous_end, "@class.outer" },
+        ["]k"] = { move.goto_next_start, "@comment.outer" },
+        ["[k"] = { move.goto_previous_start, "@comment.outer" },
+    }
+    for lhs, fn_query in pairs(move_keymaps) do
+        local fn, query = fn_query[1], fn_query[2]
+        keymap({ 'n', 'x', 'o' }, lhs, function() fn(query, "textobjects") end, { expr = false, noremap = true })
+    end
 end
 
 -- }}}
@@ -299,7 +307,7 @@ local function opts_mason_lspconfig()
     -- }}}
 
     -- C/C++ {{{
-    local capabilities = require('cmp_nvim_lsp')
+    local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
     -- Used with the CursorHold event below to display inlay hints after a delay
     vim.api.nvim_set_option_value("updatetime", 300, {})
@@ -467,6 +475,7 @@ local plugins = {
         -- Syntax highlight
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
+        lazy = false, -- main branch does not support lazy-loading
         init = init_treesitter,
         opts = opts_treesitter,
         branch = "main",
@@ -480,6 +489,7 @@ local plugins = {
         "nvim-treesitter/nvim-treesitter-textobjects",
         branch = "main",
         dependencies = "nvim-treesitter/nvim-treesitter",
+        config = init_treesitter_textobjects,
     },
     {
         -- Preview registers,
