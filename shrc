@@ -62,10 +62,6 @@ function go {
   fi
 }
 
-learnx() {
-  exec elinks -dump "https://learnxinyminutes.com/docs/$1/" | less
-}
-
 function up {
   newDir=$PWD
   if [[ $# == 0 ]]; then
@@ -100,11 +96,6 @@ function up {
   fi
 }
 
-function cdd () {
-    cd "$1" || return
-    ls
-}
-
 function root {
   local gitroot
   gitroot=$(git rev-parse --show-toplevel 2> /dev/null)
@@ -113,13 +104,6 @@ function root {
   else
     cd /
   fi
-}
-
-# cd to a directory and run ls in the upper-left pane
-split_cd(){
-  PANE=$(tmux list-panes | grep 0: | rev | cut -d ' ' -f 1 | rev)
-  cd "$@" || return
-  tmux respawn-pane -k -t "$PANE" "ls --color $PWD && read"
 }
 
 colorize_less() {
@@ -188,24 +172,6 @@ g() {
   fi
 }
 
-backup() {
-  format="%F"
-  today="$(date +$format)"
-  today_dir="$HOME/.backup/$today"
-  if [ ! -d "$today_dir" ]; then
-    FILES_TO_BACKUP="$HOME/.zshrc:$HOME/.bashrc:$HOME/.tmux.conf:$HOME/.vimrc:$HOME/.gitconfig:$HOME/.config/nvim/init.vim"
-    echo "backing up $FILES_TO_BACKUP" into "$today_dir"
-    mkdir -p "$today_dir"
-    cp $(echo $FILES_TO_BACKUP | tr : ' ') "$today_dir"
-
-    # Remove dirs older than 3 weeks
-    find "$HOME/.backup/" -ctime +21 -type d -exec rm -rf {} \;
-    # old=$(date +"%F" -d "-3 week")
-    # old_dir="$HOME/.backup/$old"
-    # rm -rf "$old_dir"
-  fi
-}
-
 # }}}
 
 # Aliases {{{
@@ -258,8 +224,6 @@ fi
 alias fn='find -name'
 
 alias cim='vim'
-
-alias notify_when_done='tmux set-option status-style bg=red,fg=black && echo -e "\n-------------- done --------------" && read && tmux set-option status-style fg=black,bg=green'
 
 alias tmpdir='cd "$(mktemp -d)"'
 alias tmpfile='vim "$(mktemp)"'
