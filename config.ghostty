@@ -44,6 +44,16 @@ keybind = alt+seven=goto_tab:7
 keybind = alt+eight=goto_tab:8
 keybind = alt+nine=goto_tab:9
 
+keybind = shift+space>one=goto_tab:1
+keybind = shift+space>two=goto_tab:2
+keybind = shift+space>three=goto_tab:3
+keybind = shift+space>four=goto_tab:4
+keybind = shift+space>five=goto_tab:5
+keybind = shift+space>six=goto_tab:6
+keybind = shift+space>seven=goto_tab:7
+keybind = shift+space>eight=goto_tab:8
+keybind = shift+space>nine=goto_tab:9
+
 # Other
 keybind = ctrl+shift+comma=reload_config
 keybind = ctrl+shift+c=copy_to_clipboard
